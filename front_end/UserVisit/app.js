@@ -1,0 +1,60 @@
+App({
+
+  globalData: {
+    systemInfo: {},
+  },
+
+  onLaunch: function () {
+    console.log("onLaunch")
+    this.wxLogin().then(res => {
+      //读取本地缓存
+      console.log(wx.getStorageSync('userid'))
+      console.log(wx.getStorageSync('openid'))
+      console.log(wx.getStorageSync('session_key'))
+    });
+    var that = this
+    wx.getSystemInfo({
+      success: function (res) {
+        that.globalData.systemInfo = {
+          windowWidth: res.windowWidth,
+          windowHeigth: res.windowHeight
+        };
+      },
+    });
+  },
+
+  wxLogin: function () {
+    var that = this
+    return new Promise((resolve, reject) => {
+      // 登录
+      wx.login({
+        success: res => {
+          if (res.code) {
+            // 发送 res.code 到后台换取 openId, sessionKey, unionId
+            wx.request({
+              url: 'http://localhost:8090/login/wxlogin',
+              data: {
+                code: res.code
+              },
+              success: function (res) {
+                if (res.statusCode == 200) {
+                  //存入本地缓存
+                  wx.setStorageSync('userid', res.data.data.id)
+                  wx.setStorageSync('openid', res.data.data.open_id)
+                  wx.setStorageSync('session_key', res.data.data.session_key)
+                } else {
+                  console.log(res.errMsg)
+                }
+                resolve(res);
+              }
+            })
+          } else {
+            console.log('登录失败！' + res.errMsg)
+            reject('error');
+          }
+        }
+      })
+    })
+  },
+
+})

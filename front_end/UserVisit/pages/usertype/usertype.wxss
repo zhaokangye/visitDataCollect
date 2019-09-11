@@ -1,0 +1,38 @@
+/* pages/usertype/usertype.wxss */
+.page-flex{
+  display: flex;
+  flex-direction: column; 
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+.domesticbtn{
+  border: 2rpx black solid;
+  font-size: 50rpx;
+  background-color: rgb(166, 165, 243);
+  width: 60%;
+  height: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.overseasbtn{
+  border: 2rpx black solid;
+  font-size: 50rpx;
+  background-color: rgb(161, 220, 243);
+  width: 60%;
+  height: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.btn-flex{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 50%;
+}

@@ -1,0 +1,15 @@
+{
+  "pages": [
+    "pages/usertype/usertype",
+    "pages/domestic/domestic",
+    "pages/overseas/overseas",
+    "pages/finish/finish"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#EDEDED",
+    "navigationBarTitleText": "用户访问数据统计",
+    "navigationBarTextStyle": "black"
+  },
+  "sitemapLocation": "sitemap.json"
+}

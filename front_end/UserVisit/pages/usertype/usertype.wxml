@@ -1,0 +1,9 @@
+<!--pages/usertype/usertype.wxml-->
+<view class="page-flex">
+  <view class="btn-flex">
+    <button class="domesticbtn" bindtap="domestic_btn">国内用户</button>
+  </view>
+  <view class="btn-flex">
+    <button class="overseasbtn" bindtap="overseas_btn">外籍用户</button>
+  </view>
+</view>
