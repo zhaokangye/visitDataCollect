@@ -102,16 +102,15 @@ Page({
   showTopTips: function () {
     var an = this.data.accompany_number;
     var pr = this.data.permanent_residence;
-    var that = this;
 
     // 判断国内用户或外籍用户
     var agelast;
     var nationnalitylast;
-    if(isAbroad==0){
-      agelast = this.data.age[ageIndex];
+    if(this.data.isAbroad==0){
+      agelast = this.data.age[this.data.ageIndex];
       nationnalitylast = "";
     }
-    else if(isAbroad==1){
+    else if(this.data.isAbroad==1){
       agelast = "";
       nationnalitylast = this.data.nationality;
     }
@@ -162,7 +161,7 @@ Page({
         isEmpty: true,
       }),
       setTimeout(function () {
-        that.setData({
+        this.setData({
           isEmpty: false
         });
       }, 3000);
