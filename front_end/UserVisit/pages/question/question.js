@@ -1,5 +1,6 @@
 // pages/domestic/domestic.js
 var util = require("../../utils/util.js");
+
 Page({
 
   /**
@@ -23,15 +24,17 @@ Page({
 
     accompany_number: 0,
     permanent_residence: "",
+    nationality: "",
 
     isEmpty: false,
+    isAbroad: 1,
 
     date: "2016-09-01",
   },
 
   bindAgeChange: function (e) {
     console.log('picker age 发生选择改变，携带值为', e.detail.value);
-
+    
     this.setData({
       ageIndex: e.detail.value
     })
@@ -42,6 +45,13 @@ Page({
 
     this.setData({
       genderIndex: e.detail.value
+    })
+  },
+
+  bindNaChange: function (e) {
+    console.log('输入内容', e.detail.value);
+    this.setData({
+      nationality: e.detail.value
     })
   },
 
@@ -93,6 +103,18 @@ Page({
     var an = this.data.accompany_number;
     var pr = this.data.permanent_residence;
     var that = this;
+
+    // 判断国内用户或外籍用户
+    var agelast;
+    var nationnalitylast;
+    if(isAbroad==0){
+      agelast = this.data.age[ageIndex];
+      nationnalitylast = "";
+    }
+    else if(isAbroad==1){
+      agelast = "";
+      nationnalitylast = this.data.nationality;
+    }
     
     if(an > 0 && pr != ""){
       // this.setData({
@@ -106,6 +128,34 @@ Page({
       // }),
       wx.navigateTo({
         url: '../finish/finish',
+      })
+      // url请求
+      wx.request({
+        url: '',
+        data: {
+          sum: [{
+            userid:"",
+            age: agelast,
+            gender: this.data.gender[this.data.genderIndex],
+            nationality: nationnalitylast,
+            accompany_number: an,
+            permanent_residence: pr,
+            quest_type: this.data.qt[this.data.qtIndex],
+            visit_location: this.data.vl[this.data.vlIndex],
+            is_special_visit: this.data.isv[this.data.isvIndex],
+            date: this.data.date,
+          }]
+        },
+        method: 'POST',
+        header: {
+          "Content-type": "application/x-www-form-urlencoded"
+        },
+        success: function (res) {
+          console.log('success')
+        },
+        fail: function (res) {
+          console.log('fail')
+        },
       })
     }else{
       this.setData({
@@ -134,7 +184,10 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
+    var app = getApp();
+    this.setData({
+      isAbroad: app.globalData.isAbroad
+    });
   },
 
   /**

@@ -1,13 +1,24 @@
-<!--pages/overseas/overseas.wxml-->
+<!--pages/domestic/domestic.wxml-->
 <view class="page">
   <view class="page__hd">
-    <view class="page__title">外籍用户</view>
+    <view class="page__title">国内用户</view>
   </view>
   <view class="page__bd">
     <view class="weui-toptips weui-toptips_warn" wx:if="{{isEmpty}}">错误提示</view>
     <view class="weui-cells__title">请填写或选择以下内容</view>
     <view class="weui-cells weui-cells_after-title">
-      <!-- 性别 -->
+      <!-- 年龄段/age -->
+      <view class="weui-cell weui-cell_select" wx:if="{{isAbroad==0}}">
+          <view class="weui-cell__hd weui-cell__hd_in-select-after">
+              <view class="weui-label">年龄段</view>
+          </view>
+          <view class="weui-cell__bd">
+              <picker bindchange="bindAgeChange" value="{{ageIndex}}" range="{{age}}">
+                  <view class="weui-select weui-select_in-select-after">{{age[ageIndex]}}</view>
+              </picker>
+          </view>
+      </view>
+      <!-- 性别/gender -->
       <view class="weui-cell weui-cell_select">
           <view class="weui-cell__hd weui-cell__hd_in-select-after">
               <view class="weui-label">性别</view>
@@ -18,8 +29,8 @@
             </picker>
           </view>
       </view>
-      <!-- 国籍 -->
-      <view class="weui-cell">
+      <!-- 国籍/nationality -->
+      <view class="weui-cell" wx:if="{{isAbroad==1}}">
         <view class="weui-cell__hd">
           <view class="weui-label">国籍</view>
         </view>
@@ -42,7 +53,7 @@
           <view class="weui-label">常住地</view>
         </view>
         <view class="weui-cell__bd">
-          <input class="weui-input" bindinput="bindPrChange" placeholder="请输入常住地"></input>
+          <input class="weui-input" bindinput="bindPrChange" placeholder="请输入常住地" type="text"></input>
         </view>
       </view>
       <!-- 问题类别/question_type -->
@@ -78,7 +89,7 @@
               </picker>
           </view>
       </view>
-      <!-- 日期读取 -->
+      <!-- 日期读取/date -->
       <view class="weui-cell ">
         <view class="weui-cell__hd">
             <view class="weui-label">日期</view>
@@ -91,11 +102,10 @@
       </view>
     </view>
     
-    <!-- 确认按钮 -->
+    <!-- 按钮 -->
     <view class="weui-btn-area">
       <button class="weui-btn" type="primary" bindtap="showTopTips">确定</button>
     </view>
   </view>
 </view>
-
 

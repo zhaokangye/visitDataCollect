@@ -2,6 +2,7 @@ App({
 
   globalData: {
     systemInfo: {},
+    isAbroad: 0,
   },
 
   onLaunch: function () {

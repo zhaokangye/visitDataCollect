@@ -9,14 +9,18 @@ Page({
   },
 
   domestic_btn:function(e){
+    var app = getApp();
+    app.globalData.isAbroad = 0;
     wx.navigateTo({
-      url: '../domestic/domestic',
+      url: '../question/question',
     })
   },
 
   overseas_btn:function(e){
+    var app = getApp();
+    app.globalData.isAbroad = 1;
     wx.navigateTo({
-      url: '../overseas/overseas',
+      url: '../question/question',
     })
   },
 
