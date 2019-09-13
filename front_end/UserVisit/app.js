@@ -9,9 +9,8 @@ App({
     console.log("onLaunch")
     this.wxLogin().then(res => {
       //读取本地缓存
-      console.log(wx.getStorageSync('userid'))
-      console.log(wx.getStorageSync('openid'))
-      console.log(wx.getStorageSync('session_key'))
+      console.log("用户id为"+wx.getStorageSync('userid'))
+      console.log("session_key为"+wx.getStorageSync('session_key'))
     });
     var that = this
     wx.getSystemInfo({

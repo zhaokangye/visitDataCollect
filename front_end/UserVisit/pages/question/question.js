@@ -30,6 +30,8 @@ Page({
     isAbroad: 1,
 
     date: "2016-09-01",
+
+    question:{}
   },
 
   bindAgeChange: function (e) {
@@ -100,22 +102,8 @@ Page({
   },
 
   showTopTips: function () {
-    var an = this.data.accompany_number;
-    var pr = this.data.permanent_residence;
-
-    // 判断国内用户或外籍用户
-    var agelast;
-    var nationnalitylast;
-    if(this.data.isAbroad==0){
-      agelast = this.data.age[this.data.ageIndex];
-      nationnalitylast = "";
-    }
-    else if(this.data.isAbroad==1){
-      agelast = "";
-      nationnalitylast = this.data.nationality;
-    }
-    
-    if(an > 0 && pr != ""){
+    this.collectData();
+    // if(question.an > 0 && question.pr != ""){
       // this.setData({
       //   ageIndex: 0,
       //   qtIndex: 0,
@@ -125,25 +113,11 @@ Page({
       //   accompany_number: 0,
       //   permanent_residence: "",
       // }),
-      wx.navigateTo({
-        url: '../finish/finish',
-      })
       // url请求
       wx.request({
-        url: '',
+        url: 'http://localhost:8090/question/saveQuestion',
         data: {
-          sum: [{
-            userid:"",
-            age: agelast,
-            gender: this.data.gender[this.data.genderIndex],
-            nationality: nationnalitylast,
-            accompany_number: an,
-            permanent_residence: pr,
-            quest_type: this.data.qt[this.data.qtIndex],
-            visit_location: this.data.vl[this.data.vlIndex],
-            is_special_visit: this.data.isv[this.data.isvIndex],
-            date: this.data.date,
-          }]
+          question: JSON.stringify(this.data.question)
         },
         method: 'POST',
         header: {
@@ -151,23 +125,24 @@ Page({
         },
         success: function (res) {
           console.log('success')
+          wx.navigateTo({
+            url: '../finish/finish',
+          })
         },
         fail: function (res) {
           console.log('fail')
         },
       })
-    }else{
-      this.setData({
-        isEmpty: true,
-      }),
-      setTimeout(function () {
-        this.setData({
-          isEmpty: false
-        });
-      }, 3000);
-    }
-    console.log('accompany_number',an);
-    console.log('permanent_residence',pr);
+    // }else{
+    //   this.setData({
+    //     isEmpty: true,
+    //   }),
+    //   setTimeout(function () {
+    //     this.setData({
+    //       isEmpty: false
+    //     });
+    //   }, 3000);
+    // }
   },
   /**
    * 生命周期函数--监听页面加载
@@ -189,45 +164,39 @@ Page({
     });
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
+  collectData:function(){
+    var an = this.data.accompany_number;
+    var pr = this.data.permanent_residence;
 
-  },
+    // 判断国内用户或外籍用户
+    var agelast;
+    var nationnalitylast;
+    if (this.data.isAbroad == 0) {
+      agelast = this.data.age[this.data.ageIndex];
+      nationnalitylast = "";
+    }
+    else if (this.data.isAbroad == 1) {
+      agelast = "";
+      nationnalitylast = this.data.nationality;
+    }
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+    var that=this
+    that.setData({
+      question:{
+        userId: wx.getStorageSync("userid"),
+        age: agelast,
+        gender: this.data.gender[this.data.genderIndex],
+        isAbroad:this.data.isAbroad,
+        nationality: nationnalitylast,
+        accompanyNumber: an,
+        permanentResidence: pr,
+        questionType: this.data.qt[this.data.qtIndex],
+        visitLocation: this.data.vl[this.data.vlIndex],
+        isSpecialVisit: this.data.isv[this.data.isvIndex],
+        visitDate: this.data.date,
+      }
+    })
+    console.log(that.data.question)
   }
+
 })

@@ -3,6 +3,7 @@
     "pages/usertype/usertype",
     "pages/domestic/domestic",
     "pages/overseas/overseas",
+    "pages/question/question",
     "pages/finish/finish"
   ],
   "window": {
