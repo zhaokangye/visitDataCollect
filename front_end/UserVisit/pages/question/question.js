@@ -103,17 +103,23 @@ Page({
 
   showTopTips: function () {
     this.collectData();
-    // if(question.an > 0 && question.pr != ""){
-      // this.setData({
-      //   ageIndex: 0,
-      //   qtIndex: 0,
-      //   vlIndex: 0,
-      //   isvIndex: 0,
-      //   genderIndex: 0,
-      //   accompany_number: 0,
-      //   permanent_residence: "",
-      // }),
-      // url请求
+    // 判断空
+    if(this.data.question.nationality == ""){
+      console.log("nationality null");
+      var dialogContent = '国籍不能为空';
+      this.openConfirm(dialogContent);
+    }
+    else if(this.data.question.accompanyNumber == ""){
+      console.log("accompanyNumber null");
+      var dialogContent = '同行人数不能为空';
+      this.openConfirm(dialogContent);
+    }
+    else if(this.data.question.permanentResidence == ""){
+      console.log("permanentResidence null");
+      var dialogContent = '常住地不能为空';
+      this.openConfirm(dialogContent);
+    }
+    else{
       wx.request({
         url: 'http://localhost:8090/question/saveQuestion',
         data: {
@@ -130,9 +136,23 @@ Page({
           })
         },
         fail: function (res) {
-          console.log('fail')
+          console.log('connect fail')
+          var dialogContent = '已提交';
+          this.openConfirm(dialogContent);
         },
       })
+    }
+      // this.setData({
+      //   ageIndex: 0,
+      //   qtIndex: 0,
+      //   vlIndex: 0,
+      //   isvIndex: 0,
+      //   genderIndex: 0,
+      //   accompany_number: 0,
+      //   permanent_residence: "",
+      // }),
+      // url请求
+      
     // }else{
     //   this.setData({
     //     isEmpty: true,
@@ -143,6 +163,23 @@ Page({
     //     });
     //   }, 3000);
     // }
+  },
+  // 对话框
+  openConfirm: function (dialogContent) {
+    wx.showModal({
+      title: '错误提示',
+      content: dialogContent,
+      confirmText: "确定",
+      cancelText: "取消",
+      success: function (res) {
+        console.log(res);
+        if (res.confirm) {
+          console.log('用户点击确定')
+        } else {
+          console.log('用户点击取消')
+        }
+      }
+    });
   },
   /**
    * 生命周期函数--监听页面加载
@@ -173,10 +210,10 @@ Page({
     var nationnalitylast;
     if (this.data.isAbroad == 0) {
       agelast = this.data.age[this.data.ageIndex];
-      nationnalitylast = "";
+      nationnalitylast = "null";
     }
     else if (this.data.isAbroad == 1) {
-      agelast = "";
+      agelast = "null";
       nationnalitylast = this.data.nationality;
     }
 
