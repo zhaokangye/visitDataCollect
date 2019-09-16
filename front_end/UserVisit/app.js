@@ -32,7 +32,7 @@ App({
           if (res.code) {
             // 发送 res.code 到后台换取 openId, sessionKey, unionId
             wx.request({
-              url: 'http://localhost:8090/login/wxlogin',
+              url: 'http://47.101.143.247:8080/visit-0.0.1-SNAPSHOT/login/wxlogin',
               data: {
                 code: res.code
               },
