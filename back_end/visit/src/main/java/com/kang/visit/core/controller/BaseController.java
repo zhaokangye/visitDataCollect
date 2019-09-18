@@ -3,6 +3,7 @@ package com.kang.visit.core.controller;
 import com.kang.visit.core.error.BusinessException;
 import com.kang.visit.core.error.EmBusinessError;
 import com.kang.visit.core.response.CommonReturnType;
+import org.apache.shiro.authz.AuthorizationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -20,6 +21,9 @@ public class BaseController {
             BusinessException bussinessException=(BusinessException)ex;
             responseData.put("errCode",bussinessException.getErrCode());
             responseData.put("errMsg",bussinessException.getErrMsg());
+        }else if(ex instanceof AuthorizationException){
+            responseData.put("errCode",401);
+            responseData.put("errMsg",ex.getMessage());
         }else{
             responseData.put("errCode", EmBusinessError.UNKNOW_ERROR.getErrCode());
             responseData.put("errMsg",EmBusinessError.UNKNOW_ERROR.getErrMsg());

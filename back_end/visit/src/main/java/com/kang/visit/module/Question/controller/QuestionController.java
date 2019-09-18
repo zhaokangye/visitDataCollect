@@ -1,9 +1,13 @@
 package com.kang.visit.module.Question.controller;
 
+import com.kang.visit.core.controller.BaseController;
 import com.kang.visit.module.Question.entity.Question;
 import com.kang.visit.core.response.CommonReturnType;
 import com.alibaba.fastjson.JSONObject;
 import com.kang.visit.module.Question.service.QuestionService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/question")
-public class QuestionController {
+public class QuestionController extends BaseController {
 
     @Autowired
     private QuestionService questionService;
@@ -25,6 +29,7 @@ public class QuestionController {
         return CommonReturnType.create(questionEntity.getId());
     }
 
+    @RequiresRoles("admin")
     @RequestMapping("/visitCount")
     @ResponseBody
     public CommonReturnType visitCount(){
@@ -32,6 +37,7 @@ public class QuestionController {
         return CommonReturnType.create(counts);
     }
 
+    @RequiresRoles("admin")
     @RequestMapping("/isAbroadCount")
     @ResponseBody
     public CommonReturnType isAbroadCount(){
@@ -39,6 +45,7 @@ public class QuestionController {
         return CommonReturnType.create(counts);
     }
 
+    @RequiresRoles("admin")
     @RequestMapping("/visitLocationCount")
     @ResponseBody
     public CommonReturnType visitLocationCount(){
@@ -46,6 +53,7 @@ public class QuestionController {
         return CommonReturnType.create(counts);
     }
 
+    @RequiresRoles("admin")
     @RequestMapping("/questionTypeCount")
     @ResponseBody
     public CommonReturnType questionTypeCount(){
@@ -53,6 +61,7 @@ public class QuestionController {
         return CommonReturnType.create(counts);
     }
 
+    @RequiresRoles("admin")
     @RequestMapping("/isSpecialVisitCount")
     @ResponseBody
     public CommonReturnType isSpecialVisitCount(){
@@ -60,6 +69,7 @@ public class QuestionController {
         return CommonReturnType.create(counts);
     }
 
+    @RequiresRoles("admin")
     @RequestMapping("/totalAccompanyNumber")
     @ResponseBody
     public CommonReturnType totalAccompanyNumber(){
