@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kang.visit.module.question.dao.QuestionMapper">
+
+    <select id="visitCount" resultType="java.util.Map">
+        select userId,count(1) as count
+        from question
+        group by userId
+    </select>
+
+    <select id="isAbroadCount" resultType="java.util.Map">
+        select isAbroad,count(1) as count
+        from question
+        group by isAbroad
+    </select>
+
+    <select id="visitLocationCount" resultType="java.util.Map">
+        select visitLocation,count(1) as count
+        from question
+        group by visitLocation
+    </select>
+
+    <select id="questionTypeCount" resultType="java.util.Map">
+        select questionType,count(1) as count
+        from question
+        group by questionType
+    </select>
+
+    <select id="isSpecialVisitCount" resultType="java.util.Map">
+        select isSpecialVisit,count(1) as count
+        from question
+        group by isSpecialVisit
+    </select>
+
+    <select id="totalAccompanyNumber" resultType="java.util.Map">
+        select sum(accompanyNumber) as count
+        from question
+    </select>
+
+</mapper>
+
+
