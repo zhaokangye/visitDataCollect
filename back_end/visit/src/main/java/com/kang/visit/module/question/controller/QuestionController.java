@@ -41,6 +41,14 @@ public class QuestionController extends BaseController {
     }
 
     @RequiresRoles("admin")
+    @RequestMapping("/isMutilVist")
+    @ResponseBody
+    public CommonReturnType isMutilVist(){
+        List<Map<String,Object>> counts=questionService.isMutilVist();
+        return CommonReturnType.create(counts);
+    }
+
+    @RequiresRoles("admin")
     @RequestMapping("/isAbroadCount")
     @ResponseBody
     public CommonReturnType isAbroadCount(){

@@ -11,6 +11,8 @@ import java.util.Map;
 public interface QuestionMapper extends BaseMapper<Question> {
     List<Map<String,Object>> visitCount();
 
+    Map<String,Object> isMutilVist();
+
     List<Map<String,Object>> isAbroadCount();
 
     List<Map<String,Object>> visitLocationCount();

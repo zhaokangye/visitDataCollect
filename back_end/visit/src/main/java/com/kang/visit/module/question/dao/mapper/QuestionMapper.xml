@@ -8,16 +8,24 @@
         group by userId
     </select>
 
+    <select id="isMutilVist" resultType="java.util.Map">
+        select count(if(table1.count=1,true,null)) as firstVisit,count(if(table1.count!=1,true,null)) as mutilVisit
+        from
+        (select userId,count(1) as count
+         from question
+         group by userId) as table1
+    </select>
+
     <select id="isAbroadCount" resultType="java.util.Map">
-        select isAbroad,count(1) as count
+        select isAbroad name,count(1) as value
         from question
         group by isAbroad
     </select>
 
     <select id="visitLocationCount" resultType="java.util.Map">
-        select visitLocation,count(1) as count
+        select case when isAbroad=0 then '国内' else '国外' end as name,count(1) as value
         from question
-        group by visitLocation
+        group by isAbroad
     </select>
 
     <select id="questionTypeCount" resultType="java.util.Map">
@@ -27,7 +35,7 @@
     </select>
 
     <select id="isSpecialVisitCount" resultType="java.util.Map">
-        select isSpecialVisit,count(1) as count
+        select isSpecialVisit as name,count(1) as value
         from question
         group by isSpecialVisit
     </select>
