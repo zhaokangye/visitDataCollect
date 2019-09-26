@@ -10,36 +10,39 @@ Page({
     // age: ["20以下", "21-30", "31-40","41-50","51-60","60以上"],
     age: '',
     ageType: '年龄段', 
+    ageField: 'age',
     ageIndex: 0,
 
     // qt: ["忘记密码", "账号被盗", "账号被封", "微信支付", "微信公众号", "小程序","QQ","游戏","权力机关调证","其他"],
     qt: '',
     qtType: '问题类型',
+    qtField: 'questionType',
     qtIndex: 0,
 
     // vl:["TIT","南通","媒体港"],
     vl: '',
     vlType: '来访位置',
+    vlField: 'visitLocation',
     vlIndex: 0,
 
     isv: ["是", "否"],
     // isv: '',
-    isvType: '是否特殊上访',
     isvIndex: 0,
 
     // gender: ["男","女"],
     gender: '',
     genderType: '性别',
+    genderField: 'gender',
     genderIndex: 0,
 
     vt: ["首次", "二次"],
     // vt: '',
-    vtType: '来访类型',
     vtIndex: 0,
 
     // solution: ["指引登记", "指引深圳", "现场解决"],
     solution: '',
     solutionType: '解决方式',
+    solutionField: 'soulution',
     solutionIndex: 0,
 
     accompany_number: 0,
@@ -50,8 +53,9 @@ Page({
     isAbroad: 1,
 
     date: "",
+    localdate: "",
 
-    question:{}
+    question:{},
   },
 
   bindAgeChange: function (e) {
@@ -163,9 +167,6 @@ Page({
         },
         success: function (res) {
           console.log('success')
-          wx.navigateTo({
-            url: '../finish/finish',
-          })
           
         },
         fail: function (res) {
@@ -175,21 +176,11 @@ Page({
           
         },
       })
+      dialogContent = '提交成功';
     }
     // 弹出消息框
     console.log(dialogContent);
     that.openConfirm(dialogContent);
-      
-    // }else{
-    //   this.setData({
-    //     isEmpty: true,
-    //   }),
-    //   setTimeout(function () {
-    //     this.setData({
-    //       isEmpty: false
-    //     });
-    //   }, 3000);
-    // }
   },
 
   helloTest:function(){
@@ -198,16 +189,17 @@ Page({
   // 对话框
   openConfirm: function (dialogContent) {
     wx.showModal({
-      title: '错误提示',
+      title: '提示',
       content: dialogContent,
       confirmText: "确定",
-      cancelText: "取消",
+      showCancel: false,
       success: function (res) {
         console.log(res);
         if (res.confirm) {
           console.log('用户点击确定')
-        } else {
-          console.log('用户点击取消')
+          wx.navigateTo({
+            url: '../usertype/usertype',
+          })
         }
       }
     });
@@ -219,6 +211,7 @@ Page({
     var DATE = util.formatDate(new Date());
     this.setData({
       date: DATE,
+      localdate: DATE,
     });
     this.ageGetNC();
     this.genderGetNC();
@@ -239,9 +232,9 @@ Page({
 
   /** getNameCode **/
   ageGetNC: function() {
-    // var that = this
-    this.getOption(this.data.ageType).then(res => {
-      this.setData({
+    var that = this
+    that.getOption(that.data.ageType).then(res => {
+      that.setData({
         age: res,
       })
     })
@@ -285,7 +278,7 @@ Page({
           // url: '',
           data: {
             // dictType: JSON.stringify(type)
-            dictType: type
+            dictType: type,
           },
           header: {
             "Content-type": "application/x-www-form-urlencoded",
@@ -326,6 +319,16 @@ Page({
       nationnalitylast = this.data.nationality;
     }
 
+    // 获取日期与具体时间
+    var visitDate;
+    if(this.data.date==this.data.localdate){
+      visitDate = this.data.date + ' ' + util.formatTime(new Date());
+    }
+    else{
+      visitDate = this.data.date + ' ' + '00:00:00';
+    }
+    console.log(visitDate);
+
     var that=this
     that.setData({
       question:{
@@ -341,7 +344,7 @@ Page({
         isSpecialVisit: this.data.isv[this.data.isvIndex],
         visitType: this.data.vt[this.data.vtIndex],
         solution: this.data.solution[this.data.solutionIndex].code,
-        visitDate: this.data.date,
+        visitDate: visitDate,
       }
     })
     console.log(that.data.question)

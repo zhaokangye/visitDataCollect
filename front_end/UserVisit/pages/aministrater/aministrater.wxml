@@ -2,7 +2,7 @@
 <!--pages/domestic/domestic.wxml-->
 <view class="page">
   <view class="page__hd">
-    <view class="page__title">增删改查</view>
+    <view class="page__title">修改</view>
   </view>
   <view class="page__bd">
     <view class="weui-cells__title">请选择日期和需要更改的问题</view>
@@ -28,86 +28,10 @@
             </picker>
         </view>
       </view>
-      <!-- 年龄段/age -->
-      <view class="weui-cell weui-cell_select">
-          <view class="weui-cell__hd weui-cell__hd_in-select-after">
-          </view>
-          <view class="weui-cell__bd">
-            <view class="weui-select weui-select_in-select-after" bindtap="ageNavigate">年龄段</view>
-          </view>
-      </view>
-      <!-- 性别/gender -->
-      <view class="weui-cell weui-cell_select">
-          <view class="weui-cell__hd weui-cell__hd_in-select-after">
-          </view>
-          <view class="weui-cell__bd">
-            <view class="weui-select weui-select_in-select-after" bindtap="genderNavigate">性别</view>
-          </view>
-      </view>
-      <!-- 国籍/nationality -->
-      <view class="weui-cell weui-cell_select">
-          <view class="weui-cell__hd weui-cell__hd_in-select-after">
-          </view>
-          <view class="weui-cell__bd">
-            <view class="weui-select weui-select_in-select-after" bindtap="nationalityNavigate">国籍</view>
-          </view>
-      </view>
-      <!-- 来访人数/accompany_number -->
-      <view class="weui-cell weui-cell_select">
-          <view class="weui-cell__hd weui-cell__hd_in-select-after">
-          </view>
-          <view class="weui-cell__bd">
-            <view class="weui-select weui-select_in-select-after" bindtap="accompanyNumberNavigate">来访人数</view>
-          </view>
-      </view>
-      <!-- 常住地/permanent_residence -->
-      <view class="weui-cell weui-cell_select">
-          <view class="weui-cell__hd weui-cell__hd_in-select-after">
-          </view>
-          <view class="weui-cell__bd">
-            <view class="weui-select weui-select_in-select-after" bindtap="permanentResidenceNavigate">常住地</view>
-          </view>
-      </view>
-      <!-- 问题类别/question_type -->
-      <view class="weui-cell weui-cell_select">
-          <view class="weui-cell__hd weui-cell__hd_in-select-after">
-          </view>
-          <view class="weui-cell__bd">
-            <view class="weui-select weui-select_in-select-after" bindtap="questionTypeNavigate">问题类别</view>
-          </view>
-      </view>
-      <!-- 来访位置/visit_location -->
-      <view class="weui-cell weui-cell_select">
-          <view class="weui-cell__hd weui-cell__hd_in-select-after">
-          </view>
-          <view class="weui-cell__bd">
-            <view class="weui-select weui-select_in-select-after" bindtap="visitLocationNavigate">来访位置</view>
-          </view>
-      </view>
-      <!-- 是否为特殊上访/is_special_visit -->
-      <view class="weui-cell weui-cell_select">
-          <view class="weui-cell__hd weui-cell__hd_in-select-after">
-          </view>
-          <view class="weui-cell__bd">
-            <view class="weui-select weui-select_in-select-after" bindtap="isSpecialVisitNavigate">是否特殊上访</view>
-          </view>
-      </view>
-      <!-- 来访类型/visitType -->
-      <view class="weui-cell weui-cell_select">
-          <view class="weui-cell__hd weui-cell__hd_in-select-after">
-          </view>
-          <view class="weui-cell__bd">
-            <view class="weui-select weui-select_in-select-after" bindtap="visitTypeNavigate">来访类型</view>
-          </view>
-      </view>
-      <!-- 解决方式/solution -->
-      <view class="weui-cell weui-cell_select">
-          <view class="weui-cell__hd weui-cell__hd_in-select-after">
-          </view>
-          <view class="weui-cell__bd">
-            <view class="weui-select weui-select_in-select-after" bindtap="solutionNavigate">解决方式</view>
-          </view>
-      </view>
+    </view>
+    <!-- 按钮 -->
+    <view class="weui-btn-area">
+      <button class="weui-btn" type="primary" bindtap="showTopTips">确定</button>
     </view>
   </view>
 </view>

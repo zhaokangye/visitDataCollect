@@ -2,7 +2,10 @@
   "pages": [
     "pages/usertype/usertype",
     "pages/question/question",
-    "pages/finish/finish"
+    "pages/chart/chart",
+    "pages/aministrater/aministrater",
+    "pages/dataChange/dataChange",
+    "pages/dataChoose/dataChoose"
   ],
   "window": {
     "backgroundTextStyle": "light",

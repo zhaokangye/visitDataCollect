@@ -22,4 +22,5 @@
   <ec-canvas class="bar-horizontal" id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar2 }}" bind:init="bar2OnInit"></ec-canvas>
   <ec-canvas class="bar-horizontal" id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar3 }}" bind:init="bar3OnInit"></ec-canvas>
   <ec-canvas class="bar-vertical" id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar4 }}" bind:init="bar_quesOnInit"></ec-canvas>
+  <ec-canvas class="pie-vertical" id="mychart-dom-multi-pie" canvas-id="mychart-multi-pie" ec="{{ ecpie_solution }}" bind:init="pieSolutionOnInit" ></ec-canvas>
 </view>

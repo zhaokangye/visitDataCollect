@@ -4,26 +4,17 @@ var util = require("../../utils/util.js");
 const app = getApp();
 var pages = getCurrentPages();
 
-var question_word = '/question';
-
-var aan_word = '/totalAccompanyNumber';
+var question_word = '/question/countGroupByField';
 
 var piechart;
-var pc_word = '/visitLocationCount';
 
 var bar1chart;
 var bar2chart;
 var bar3chart;
-var bc1_word = '/isAbroadCount';
-var bc2_word = '/visitTypeCount';
-var bc3_word = '/isSpecialVisitCount';
 
 var bar_queschart;
-var bqc_word = '/questionTypeCount'
 
-// 当前日期
-var date_begin;
-var date_last;
+var piesolutionchart;
 
 Page({
   // function
@@ -40,106 +31,84 @@ Page({
    */
   onLoad: function (options) {
     var DATE = util.formatDate(new Date());
-    
-    date_begin = DATE;
-    date_last = DATE;
     this.setData({
       date_begin: DATE,
       date_last: DATE,
-      
       // allAccompanyNumber: requestGetData(date_begin, date_last, question_word+aan_word)[0].value,
     });
-
+    var data = this.collectData(this.data.accompanyNumberField, this.data.date_begin, this.data.date_last);
+    this.requestGetData(data, question_word).then(res => {
+      console.log(res);
+      if(res.status!="fail"){
+        this.setData({
+          allAccompanyNumber: res.data[0].value
+        })
+      }
+      else{
+        this.setData({
+          allAccompanyNumber: 0
+        })
+      }
+    });
   },
 
   /** 更新日期后立刻更新数据 **/
   /* 前半段 */
   bindDate_BeginChange: function (e) {
-    this.setData({
-      date_begin: e.detail.value
-    })
-    date_begin = e.detail.value
-
-    //accompanyNumber
-    this.requestGetData(this.data.date_begin, this.data.date_last, question_word + aan_word).then(res => {
+    console.log('begin', this.legalDate(e.detail.value, this.data.date_last))
+    if(this.legalDate(e.detail.value, this.data.date_last)==true){
       this.setData({
-        allAccompanyNumber: res[0].value
+        date_begin: e.detail.value
       })
-    });
-
-    // piechart
-    this.requestGetData(this.data.date_begin, this.data.date_last, question_word + pc_word).then(res => {
-      setPieOption(piechart, res)
-    });
-
-    // barchart
-    this.requestGetData(this.data.date_begin, this.data.date_last, question_word + bc1_word).then(res => {
-      setBarOption(bar1chart, res)
-    });
-    this.requestGetData(this.data.date_begin, this.data.date_last, question_word + bc2_word).then(res => {
-      setBarOption(bar2chart, res)
-    });
-    this.requestGetData(this.data.date_begin, this.data.date_last, question_word + bc3_word).then(res => {
-      setBarOption(bar3chart, res)
-    });
-
-    //bar_queschart
-    this.requestGetData(this.data.date_begin, this.data.date_last, question_word + bqc_word).then(res => {
-      setBar_QuesOption(bar_queschart, res)
-    })
+      this.refleshChart();
+    }
   },
   /* 后半段 */
   bindDate_LastChange: function (e) {
-    this.setData({
-      date_last: e.detail.value
-    })
-    date_last = e.detail.value
-
-    //accompanyNumber
-    this.requestGetData(this.data.date_begin, this.data.date_last, question_word + aan_word).then(res => {
+    console.log('last', this.legalDate(this.data.date_begin, e.detail.value))
+    if (this.legalDate(this.data.date_begin, e.detail.value)==true) {
       this.setData({
-        allAccompanyNumber: res[0].value
+        date_last: e.detail.value
       })
-    });
-
-    // piechart
-    this.requestGetData(this.data.date_begin, this.data.date_last, question_word + pc_word).then(res => {
-      setPieOption(piechart, res)
-    });
-
-    // barchart
-    this.requestGetData(this.data.date_begin, this.data.date_last, question_word + bc1_word).then(res => {
-      setBarOption(bar1chart, res)
-    });
-    this.requestGetData(this.data.date_begin, this.data.date_last, question_word + bc2_word).then(res => {
-      setBarOption(bar2chart, res)
-    });
-    this.requestGetData(this.data.date_begin, this.data.date_last, question_word + bc3_word).then(res => {
-      setBarOption(bar3chart, res)
-    });
-
-    //bar_queschart
-    this.requestGetData(this.data.date_begin, this.data.date_last, question_word + bqc_word).then(res => {
-      setBar_QuesOption(bar_queschart, res)
-    })
-  },
-
-  /** 得到当前日期 **/
-  getDate_Begin: function () {
-    console.log(this.data.date_begin)
-    return this.data.date_begin
-  },
-  getDate_Last: function () {
-    console.log(this.data.date_last)
-    return this.data.date_last
+      this.refleshChart();
+    }
   },
 
   /** data段 **/
   data: {
-    allAccompanyNumber: 0,
+    allAccompanyNumber: "",
+    accompanyNumberType: '来访人数',
+    accompanyNumberField: 'accompanyNumber',
+
+    // vl:["TIT","南通","媒体港"],
+    vlType: '来访位置',
+    vlField: 'visitLocation',
+
+    // 国内外
+    isAbroad: [{dictName: '国内'}, {dictName: '外籍'}],
+    isAbroadType: '国内外',
+    isAbroadField: 'isAbroad',
+
+    vt: [{dictName: "首次"}, {dictName: "二次"}],
+    vtType: '来访类型',
+    vtField: 'visitType',
+
+    isv: [{dictName: "是"}, {dictName: "否"}],
+    isvType: '是否特殊上访',
+    isvField: 'isSpecialVisit',
+
+    // qt: ["忘记密码", "账号被盗", "账号被封", "微信支付", "微信公众号", "小程序","QQ","游戏","权力机关调证","其他"],
+    qtType: '问题类型',
+    qtField: 'questionType',
+
+    // solution: ["指引登记", "指引深圳", "现场解决"],
+    solutionType: '解决方式',
+    solutionField: 'solution',
+
     date_begin: "",
     date_last: "",
     date_index: 0,
+    collectdate: "",
     // 来访位置
     ecpie: {
 
@@ -159,8 +128,14 @@ Page({
     // 问题分类
     ecbar4: {
       
-    }
+    },
+    // 解决方式
+    ecpie_solution: {
+
+    },
   },
+
+ 
 
   
   /** 饼图 **/
@@ -173,17 +148,23 @@ Page({
       width: width,
       height: height
     });
-    this.requestGetData(this.data.date_begin, this.data.date_last, question_word + pc_word).then(res => {
-      canvas.setChart(piechart);
-      piechart.setOption(this.getPieOption(res));
-      console.log('piechart already', res)
-      return piechart;
+    var data = this.collectData(this.data.vlField, this.data.date_begin, this.data.date_last);
+    this.requestGetData(data, question_word).then(res => {
+      this.getOption(this.data.vlType).then(e => {
+        console.log('piechart data', res, e)
+        var restmp = this.checkEnoughOption(res, e);
+        canvas.setChart(piechart);
+        piechart.setOption(this.getPieOption(restmp));
+        console.log('piechart already', restmp)
+        return piechart;
+      })
+      
     });
   },
 
   /* 动态更改参数 */
   setPieOption: function (chart, source) {
-    chart.clear();
+    // chart.clear();
     chart.setOption(this.getPieOption(source));
   },
 
@@ -265,10 +246,13 @@ Page({
       height: height
     });
     // var pages = getCurrentPages()
-    this.requestGetData(this.data.date_begin, this.data.date_last, question_word + bc1_word).then(res => {
+    var data = this.collectData(this.data.isAbroadField, this.data.date_begin, this.data.date_last);
+    this.requestGetData(data, question_word).then(res => {
+      console.log('bar1chart data',res, this.data.isAbroad);
+      var restmp = this.checkEnoughOption(res, this.data.isAbroad);
       canvas.setChart(bar1chart);
-      bar1chart.setOption(this.getBarOption(res));
-      console.log('bar1chart already', res)
+      bar1chart.setOption(this.getBarOption(restmp));
+      console.log('bar1chart already', restmp)
       return bar1chart;
     });
     // setTimeout(function(){}, 2000);
@@ -279,10 +263,13 @@ Page({
       height: height
     });
     // var pages = getCurrentPages()
-    this.requestGetData(this.data.date_begin, this.data.date_last, question_word + bc2_word).then(res => {
+    var data = this.collectData(this.data.vtField, this.data.date_begin, this.data.date_last);
+    this.requestGetData(data, question_word).then(res => {
+      console.log('bar2chart data', res, this.data.vt);
+      var restmp = this.checkEnoughOption(res, this.data.vt);
       canvas.setChart(bar2chart);
-      bar2chart.setOption(this.getBarOption(res));
-      console.log('bar2chart already', res)
+      bar2chart.setOption(this.getBarOption(restmp));
+      console.log('bar2chart already', restmp)
       return bar2chart;
     });
     // setTimeout(function(){}, 2000);
@@ -293,10 +280,13 @@ Page({
       height: height
     });
     // var pages = getCurrentPages()
-    this.requestGetData(this.data.date_begin, this.data.date_last, question_word + bc3_word).then(res => {
+    var data = this.collectData(this.data.isvField, this.data.date_begin, this.data.date_last);
+    this.requestGetData(data, question_word).then(res => {
+      console.log('bar3chart data', res, this.data.isv);
+      var restmp = this.checkEnoughOption(res, this.data.isv);
       canvas.setChart(bar3chart);
-      bar3chart.setOption(this.getBarOption(res));
-      console.log('bar3chart already', res)
+      bar3chart.setOption(this.getBarOption(restmp));
+      console.log('bar3chart already', restmp)
       return bar3chart;
     });
     // setTimeout(function(){}, 2000);
@@ -304,7 +294,7 @@ Page({
 
   /* 动态更改参数 */
   setBarOption: function (chart, source) {
-    chart.clear();
+    // chart.clear();
     chart.setOption(this.getBarOption(source))
   },
 
@@ -396,17 +386,21 @@ Page({
     });
     // source
     // var pages = getCurrentPages()
-    this.requestGetData(this.data.date_begin, this.data.date_last, question_word + bqc_word).then(res => {
-      canvas.setChart(bar_queschart);
-      bar_queschart.setOption(this.getBar_QuesOption(res));
-      console.log('bar_queschart already',res)
-      return bar_queschart;
+    var data = this.collectData(this.data.qtField, this.data.date_begin, this.data.date_last);
+    this.requestGetData(data, question_word).then(res => {
+      this.getOption(this.data.qtType).then(e => {
+        var restmp = this.checkEnoughOption(res, e);
+        canvas.setChart(bar_queschart);
+        bar_queschart.setOption(this.getBar_QuesOption(restmp));
+        console.log('bar_queschart already', restmp)
+        return bar_queschart;
+      });
     });
   },
 
   /* 动态更改参数 */
   setBar_QuesOption: function (chart, source) {
-    chart.clear();
+    // chart.clear();
     chart.setOption(this.getBar_QuesOption(source));
   },
 
@@ -428,23 +422,10 @@ Page({
     }
     return {
       backgroundColor: "#EDEDED",
-      color: ['#5095f3', '#000f84', '#EE0000', '#C67171', '#DA70D6', '#D02090', '#CDAD00', '#CD8162', '#BF3EFF', '#000000'],
       grid: {
         top: 20,
-        right: 90,
-        button: 10,
+        button: 20,
         // containLabel: true
-      },
-      // dataset: {
-      //   source: [
-      //     name,
-      //     data,
-      //   ]
-      // },
-      legend: {
-        top: 20,
-        right: 0,
-        orient: 'vertical'
       },
       tooltip: {},
       xAxis: {
@@ -452,15 +433,18 @@ Page({
         data: name,
         axisTick:{
           alignWithLabel:true
-        }
+        },
+        axisLabel:{
+          interval:0,
+          rotate: -45,
+          fontSize:12.5,
+        },
       },
       yAxis: {
         type: 'value',
 
       },
-      // 问题类别中共有10个选项
       series: [
-        // 1
         {
           type: 'bar',
           data: data,
@@ -473,130 +457,51 @@ Page({
             }
           }
         },
-        // // 2
-        // {
-        //   type: 'bar',
-        //   label: {
-        //     normal: {
-        //       show: true,
-        //       formatter: params => {
-        //         return params.data[params.dataIndex + 1]
-        //       },
-        //     }
-        //   }
-        // },
-        // // 3
-        // {
-        //   type: 'bar',
-        //   label: {
-        //     normal: {
-        //       show: true,
-        //       formatter: params => {
-        //         return params.data[params.dataIndex + 1]
-        //       },
-        //     }
-        //   }
-        // },
-        // // 4
-        // {
-        //   type: 'bar',
-        //   label: {
-        //     normal: {
-        //       show: true,
-        //       formatter: params => {
-        //         return params.data[params.dataIndex + 1]
-        //       },
-        //     }
-        //   }
-        // },
-        // // 5
-        // {
-        //   type: 'bar',
-        //   label: {
-        //     normal: {
-        //       show: true,
-        //       formatter: params => {
-        //         return params.data[params.dataIndex + 1]
-        //       },
-        //     }
-        //   }
-        // },
-        // // 6
-        // {
-        //   type: 'bar',
-        //   label: {
-        //     normal: {
-        //       show: true,
-        //       formatter: params => {
-        //         return params.data[params.dataIndex + 1]
-        //       },
-        //     }
-        //   }
-        // },
-        // // 7
-        // {
-        //   type: 'bar',
-        //   label: {
-        //     normal: {
-        //       show: true,
-        //       formatter: params => {
-        //         return params.data[params.dataIndex + 1]
-        //       },
-        //     }
-        //   }
-        // },
-        // // 8
-        // {
-        //   type: 'bar',
-        //   label: {
-        //     normal: {
-        //       show: true,
-        //       formatter: params => {
-        //         return params.data[params.dataIndex + 1]
-        //       },
-        //     }
-        //   }
-        // },
-        // // 9
-        // {
-        //   type: 'bar',
-        //   label: {
-        //     normal: {
-        //       show: true,
-        //       formatter: params => {
-        //         return params.data[params.dataIndex + 1]
-        //       },
-        //     }
-        //   }
-        // },
-        // // 10
-        // {
-        //   type: 'bar',
-        //   label: {
-        //     normal: {
-        //       show: true,
-        //       formatter: params => {
-        //         return params.data[params.dataIndex + 1]
-        //       },
-        //     }
-        //   }
-        // },
       ]
     };
   },
 
+  /*** 解决方式饼图 */
+  /* 初始化 */
+  pieSolutionOnInit(e) {
+    return this.initPieSolutionChart(e.detail.canvas, e.detail.width, e.detail.height)
+  },
+  initPieSolutionChart: function (canvas, width, height) {
+    piesolutionchart = echarts.init(canvas, null, {
+      width: width,
+      height: height
+    });
+    var data = this.collectData(this.data.solutionField, this.data.date_begin, this.data.date_last);
+    this.requestGetData(data, question_word).then(res => {
+      this.getOption(this.data.solutionType).then(e => {
+        console.log('piesolutionchart data', res, e)
+        var restmp = this.checkEnoughOption(res, e);
+        canvas.setChart(piesolutionchart);
+        piesolutionchart.setOption(this.getPieOption(restmp));
+        console.log('piechart already', restmp)
+        return piesolutionchart;
+      })
+
+    });
+  },
+
+  /* 动态更改参数 */
+  setPieOption: function (chart, source) {
+    // chart.clear();
+    chart.setOption(this.getPieOption(source));
+  },
+
   /** 请求图的数据  **/
   /* 参数：日期前半段, 日期后半段, 请求的图表 */
-  requestGetData: function (date_begin, date_last, request_chart) {
-    console.log(typeof date_begin, typeof date_last);
+  requestGetData: function (data, request_chart) {
+    // console.log(typeof date_begin, typeof date_last);
     return new Promise(function (resolve, reject) {
       var source
       wx.request({
         url: 'http://47.101.143.247:8080/visit-0.0.1-SNAPSHOT' + request_chart,
         // url: '',
-        data: {
-          startdate: JSON.stringify(date_begin),
-          enddate: JSON.stringify(date_last),
+        data:{
+          params: JSON.stringify(data)
         },
         header: {
           "Content-type": "application/x-www-form-urlencoded",
@@ -605,24 +510,183 @@ Page({
         method: 'POST',
 
         success: function (res) {
-          console.log(date_begin, date_last, request_chart)
+          console.log("success")
+          
+          resolve(res.data)
+        },
+        fail: function (res) {
           console.log(res)
+          console.log('fail')
+          reject(source)
+        },
+        complete: function (res) {
+          if (res.data.status == 'fail') {
+            console.log(data.dictType, res.data.data.errMsg)
+          }
+          console.log("complete")
+        },
+      })
+    })
+    // return source
+  },
 
-          // source = res.data.data
+   /* 日期与请求数据封装 */
+  collectData: function (fieldGet, date_begin, date_last) {
+      return {
+        field: fieldGet,
+        startDate: date_begin, 
+        endDate: date_last,
+      }
+   },
+
+  /* 判断日期段是否合法 */
+  legalDate: function (date_begin, date_last) {
+    var start_date = new Date(date_begin.replace(/-/g, "/"));
+    var end_date = new Date(date_last.replace(/-/g, "/"));
+    var diff = end_date.getTime() - start_date.getTime();
+
+    console.log('diff',diff);
+    if(diff>=0){
+      return true;
+    }
+    else{
+      return false;
+    }
+  },
+
+   /** 日期变更，刷新图表 **/
+   refleshChart: function () {
+     var data
+     //accompanyNumber
+     data = this.collectData(this.data.accompanyNumberField, this.data.date_begin, this.data.date_last);
+     this.requestGetData(data, question_word).then(res => {
+       console.log(res);
+       this.setData({
+         allAccompanyNumber: res.data[0].value
+       })
+     });
+
+    //  piechart
+    // visitLocation
+     data = this.collectData(this.data.vlField, this.data.date_begin, this.data.date_last);
+     this.requestGetData(data, question_word).then(res => {
+       this.getOption(this.data.vlType).then(e => {
+         var restmp = this.checkEnoughOption(res, e);
+         console.log(restmp);
+         this.setPieOption(piechart, restmp)
+       })
+     });
+
+     // barchart
+     data = this.collectData(this.data.isAbroadField, this.data.date_begin, this.data.date_last);
+     this.requestGetData(data, question_word).then(res => {
+       var restmp = this.checkEnoughOption(res, this.data.isAbroad);
+       console.log(restmp);
+       this.setBarOption(bar1chart, restmp)
+     });
+     data = this.collectData(this.data.vtField, this.data.date_begin, this.data.date_last);
+     this.requestGetData(data, question_word).then(res => {
+       var restmp = this.checkEnoughOption(res, this.data.vt);
+       console.log(restmp);
+       this.setBarOption(bar2chart, restmp)
+     });
+     data = this.collectData(this.data.isvField, this.data.date_begin, this.data.date_last);
+     this.requestGetData(data, question_word).then(res => {
+       var restmp = this.checkEnoughOption(res, this.data.isv);
+       console.log(restmp);
+       this.setBarOption(bar3chart, restmp)
+     });
+
+     //bar_queschart
+     data = this.collectData(this.data.qtField, this.data.date_begin, this.data.date_last);
+     this.requestGetData(data, question_word).then(res => {
+       this.getOption(this.data.qtType).then(e => {
+         var restmp = this.checkEnoughOption(res, e);
+         console.log(restmp);
+         this.setBar_QuesOption(bar_queschart, restmp)
+       })
+     });
+
+    //  piesolutionchart
+     data = this.collectData(this.data.solutionField, this.data.date_begin, this.data.date_last);
+     this.requestGetData(data, question_word).then(res => {
+       this.getOption(this.data.solutionType).then(e => {
+         var restmp = this.checkEnoughOption(res, e);
+         console.log(restmp);
+         this.setPieOption(piesolutionchart, restmp)
+       })
+     });
+   },
+
+  /** 验证得到的选项是否足够齐全 **/
+  checkEnoughOption: function (source, name) {
+    var forReturn = [];
+    // var i = name.length
+    if(source.status!='fail'){
+      for (var x in name) {
+        var y = 0;
+        for (y; y < source.data.length; y++) {
+          if (name[x].dictName == source.data[y].name) {
+            forReturn[x] = {
+              'name': name[x].dictName,
+              'value': source.data[y].value,
+            };
+            break;
+          }
+        }
+        if (y >= source.data.length) {
+          forReturn[x] = {
+            'name': name[x].dictName,
+            'value': 0,
+          };
+        }
+        console.log(name[x].dictName, forReturn);
+        console.log();
+      }
+    }
+    else{
+      for(var x in name){
+        forReturn[x] = {
+          'name': name[x].dictName,
+          'value': 0,
+        }
+      }
+    }
+    
+    console.log("");
+    return forReturn;
+  },
+
+  /**得到选项 */
+  getOption: function (type) {
+    return new Promise(function (resolve, reject) {
+      wx.request({
+        url: 'http://47.101.143.247:8080/visit-0.0.1-SNAPSHOT/dict/getDictList',
+        // url: '',
+        data: {
+          // dictType: JSON.stringify(type)
+          dictType: type ,
+        },
+        header: {
+          "Content-type": "application/x-www-form-urlencoded",
+          "Authorization": wx.getStorageSync('token'),
+        },
+        method: 'POST',
+
+        success: function (res) {
+          console.log(res)
           console.log("success")
           resolve(res.data.data)
         },
         fail: function (res) {
           console.log(res)
-          console.log(date_begin, date_last, request_chart)
           console.log('fail')
-          reject(source)
+          reject(res)
         },
         complete: function (res) {
           console.log("complete")
         },
       })
     })
-    // return source
   },
 })
