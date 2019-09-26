@@ -1,0 +1,25 @@
+<!--pages/bar/bar.wxml-->
+<view class="container-chart">
+  <view class="page">
+    <view class="page_hd">
+      <view>总人次：{{allAccompanyNumber}}</view>
+    </view>
+    <view class="page_bd">
+      <view class="date__Area">
+        <picker mode="date" value="{{date_begin}}" bindchange="bindDate_BeginChange">
+          <view class="date__cell">{{date_begin}}</view>
+        </picker>
+        <text space="emsp"> ~~ </text>
+        <picker mode="date" value="{{date_last}}" bindchange="bindDate_LastChange">
+          <view class="date__cell">{{date_last}}</view>
+        </picker>
+      </view>
+    </view>
+  </view>
+  <!-- 图表 -->
+  <ec-canvas class="pie-vertical" id="mychart-dom-multi-pie" canvas-id="mychart-multi-pie" ec="{{ ecpie }}" bind:init="pieOnInit" ></ec-canvas>
+  <ec-canvas class="bar-horizontal" id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar1 }}" bind:init="bar1OnInit"></ec-canvas>
+  <ec-canvas class="bar-horizontal" id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar2 }}" bind:init="bar2OnInit"></ec-canvas>
+  <ec-canvas class="bar-horizontal" id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar3 }}" bind:init="bar3OnInit"></ec-canvas>
+  <ec-canvas class="bar-vertical" id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar4 }}" bind:init="bar_quesOnInit"></ec-canvas>
+</view>

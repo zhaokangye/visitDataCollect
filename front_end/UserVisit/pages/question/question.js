@@ -7,20 +7,40 @@ Page({
    * 页面的初始数据
    */
   data: {
-    age: ["20以下", "21-30", "31-40","41-50","51-60","60以上"],
+    // age: ["20以下", "21-30", "31-40","41-50","51-60","60以上"],
+    age: '',
+    ageType: '年龄段', 
     ageIndex: 0,
 
-    qt: ["忘记密码", "账号被盗", "账号被封", "微信支付", "微信公众号", "小程序","QQ","游戏","权力机关调证","其他"],
+    // qt: ["忘记密码", "账号被盗", "账号被封", "微信支付", "微信公众号", "小程序","QQ","游戏","权力机关调证","其他"],
+    qt: '',
+    qtType: '问题类型',
     qtIndex: 0,
 
-    vl:["TIT","南通","媒体港"],
+    // vl:["TIT","南通","媒体港"],
+    vl: '',
+    vlType: '来访位置',
     vlIndex: 0,
 
     isv: ["是", "否"],
+    // isv: '',
+    isvType: '是否特殊上访',
     isvIndex: 0,
 
-    gender: ["男","女"],
+    // gender: ["男","女"],
+    gender: '',
+    genderType: '性别',
     genderIndex: 0,
+
+    vt: ["首次", "二次"],
+    // vt: '',
+    vtType: '来访类型',
+    vtIndex: 0,
+
+    // solution: ["指引登记", "指引深圳", "现场解决"],
+    solution: '',
+    solutionType: '解决方式',
+    solutionIndex: 0,
 
     accompany_number: 0,
     permanent_residence: "",
@@ -29,7 +49,7 @@ Page({
     isEmpty: false,
     isAbroad: 1,
 
-    date: "2016-09-01",
+    date: "",
 
     question:{}
   },
@@ -95,6 +115,18 @@ Page({
     })
   },
 
+  bindVtChange: function (e) {
+    this.setData({
+      vtIndex: e.detail.value
+    })
+  },
+
+  bindSolutionChange: function (e) {
+    this.setData({
+      solutionIndex: e.detail.value
+    })
+  },
+
   bindDateChange: function (e) {
     this.setData({
       date: e.detail.value
@@ -102,56 +134,51 @@ Page({
   },
 
   showTopTips: function () {
+    var dialogContent;
+    var that = this;
     this.collectData();
     // 判断空
     if(this.data.question.nationality == ""){
       console.log("nationality null");
-      var dialogContent = '国籍不能为空';
-      this.openConfirm(dialogContent);
+      dialogContent = "国籍不能为空";
     }
     else if(this.data.question.accompanyNumber == ""){
       console.log("accompanyNumber null");
-      var dialogContent = '同行人数不能为空';
-      this.openConfirm(dialogContent);
+      dialogContent = "同行人数不能为空";
     }
     else if(this.data.question.permanentResidence == ""){
       console.log("permanentResidence null");
-      var dialogContent = '常住地不能为空';
-      this.openConfirm(dialogContent);
+      dialogContent = "常住地不能为空";
     }
     else{
       wx.request({
-        url: 'http://localhost:8090/question/saveQuestion',
+        url: 'http://47.101.143.247:8080/visit-0.0.1-SNAPSHOT/question/saveQuestion',
         data: {
           question: JSON.stringify(this.data.question)
         },
         method: 'POST',
         header: {
-          "Content-type": "application/x-www-form-urlencoded"
+          "Content-type": "application/x-www-form-urlencoded",
+          "Authorization": wx.getStorageSync('token'),
         },
         success: function (res) {
           console.log('success')
           wx.navigateTo({
             url: '../finish/finish',
           })
+          
         },
         fail: function (res) {
-          console.log('connect fail')
-          var dialogContent = '已提交';
-          this.openConfirm(dialogContent);
+          console.log('connect fail');
+          console.log(res);
+          // dialogContent = "请勿重复提交";
+          
         },
       })
     }
-      // this.setData({
-      //   ageIndex: 0,
-      //   qtIndex: 0,
-      //   vlIndex: 0,
-      //   isvIndex: 0,
-      //   genderIndex: 0,
-      //   accompany_number: 0,
-      //   permanent_residence: "",
-      // }),
-      // url请求
+    // 弹出消息框
+    console.log(dialogContent);
+    that.openConfirm(dialogContent);
       
     // }else{
     //   this.setData({
@@ -163,6 +190,10 @@ Page({
     //     });
     //   }, 3000);
     // }
+  },
+
+  helloTest:function(){
+    console.log('hello world')
   },
   // 对话框
   openConfirm: function (dialogContent) {
@@ -189,6 +220,11 @@ Page({
     this.setData({
       date: DATE,
     });
+    this.ageGetNC();
+    this.genderGetNC();
+    this.qtGetNC();
+    this.vlGetNC();
+    this.solutionGetNC();
   },
 
   /**
@@ -201,6 +237,79 @@ Page({
     });
   },
 
+  /** getNameCode **/
+  ageGetNC: function() {
+    // var that = this
+    this.getOption(this.data.ageType).then(res => {
+      this.setData({
+        age: res,
+      })
+    })
+  },
+  genderGetNC: function () {
+    var that = this
+    that.getOption(that.data.genderType).then(res => {
+      that.setData({
+        gender: res,
+      })
+    })
+  },
+  qtGetNC: function () {
+    var that = this
+    that.getOption(that.data.qtType).then(res => {
+      that.setData({
+        qt: res,
+      })
+    })
+  },
+  vlGetNC: function () {
+    var that = this
+    that.getOption(that.data.vlType).then(res => {
+      that.setData({
+        vl: res,
+      })
+    })
+  },
+  solutionGetNC: function () {
+    var that = this
+    that.getOption(that.data.solutionType).then(res => {
+      that.setData({
+        solution: res,
+      })
+    })
+  },
+  getOption: function (type) {
+    return new Promise(function(resolve, reject) {
+      wx.request({
+        url: 'http://47.101.143.247:8080/visit-0.0.1-SNAPSHOT/dict/getDictList',
+          // url: '',
+          data: {
+            // dictType: JSON.stringify(type)
+            dictType: type
+          },
+          header: {
+            "Content-type": "application/x-www-form-urlencoded",
+            "Authorization": wx.getStorageSync('token'),
+          },
+          method: 'POST',
+
+          success: function (res) {
+            console.log(res)
+            console.log("success")
+            resolve(res.data.data)
+          },
+          fail: function (res) {
+            console.log(res)
+            console.log('fail')
+            reject(res)
+          },
+          complete: function (res) {
+            console.log("complete")
+          },
+      })
+    })
+  },
+
   collectData:function(){
     var an = this.data.accompany_number;
     var pr = this.data.permanent_residence;
@@ -209,7 +318,7 @@ Page({
     var agelast;
     var nationnalitylast;
     if (this.data.isAbroad == 0) {
-      agelast = this.data.age[this.data.ageIndex];
+      agelast = this.data.age[this.data.ageIndex].code;
       nationnalitylast = "null";
     }
     else if (this.data.isAbroad == 1) {
@@ -220,16 +329,18 @@ Page({
     var that=this
     that.setData({
       question:{
-        userId: wx.getStorageSync("userid"),
+        // userId: wx.getStorageSync("userid"),
         age: agelast,
-        gender: this.data.gender[this.data.genderIndex],
+        gender: this.data.gender[this.data.genderIndex].code,
         isAbroad:this.data.isAbroad,
         nationality: nationnalitylast,
         accompanyNumber: an,
         permanentResidence: pr,
-        questionType: this.data.qt[this.data.qtIndex],
-        visitLocation: this.data.vl[this.data.vlIndex],
+        questionType: this.data.qt[this.data.qtIndex].code,
+        visitLocation: this.data.vl[this.data.vlIndex].code,
         isSpecialVisit: this.data.isv[this.data.isvIndex],
+        visitType: this.data.vt[this.data.vtIndex],
+        solution: this.data.solution[this.data.solutionIndex].code,
         visitDate: this.data.date,
       }
     })

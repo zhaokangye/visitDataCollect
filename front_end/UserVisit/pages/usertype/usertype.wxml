@@ -6,4 +6,10 @@
   <view class="btn-flex">
     <button class="overseasbtn" bindtap="overseas_btn">外籍用户</button>
   </view>
+  <view class="btn-flex">
+    <button class="domesticbtn" bindtap="chart_btn">图表</button>
+  </view>
+  <view class="btn-flex">
+    <button class="overseasbtn" bindtap="aministrater_btn">管理员</button>
+  </view>
 </view>

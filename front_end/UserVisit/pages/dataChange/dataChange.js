@@ -1,45 +1,25 @@
-App = getApp();
+// pages/dataChange/dataChange.js
+var pages = getCurrentPages();
+var prePage = pages[pages.length - 2];
+// var info = prePage.data;
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    date_begin: "",
+    date_last: "",
   },
 
-  domestic_btn:function(e){
-    var app = getApp();
-    app.globalData.isAbroad = 0;
-    wx.navigateTo({
-      url: '../question/question',
-    })
-  },
-
-  overseas_btn:function(e){
-    var app = getApp();
-    app.globalData.isAbroad = 1;
-    wx.navigateTo({
-      url: '../question/question',
-    })
-  },
-
-  chart_btn: function (e) {
-    wx.navigateTo({
-      url: '../chart/chart',
-    })
-  },
-
-  aministrater_btn: function (e) {
-    wx.navigateTo({
-      url: '../aministrater/aministrater',
-    })
-  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
+    this.setData({
+      date_begin: options.date_begin,
+      date_last: options.date_last,
+    })
   },
 
   /**

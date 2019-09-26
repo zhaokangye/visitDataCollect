@@ -1,0 +1,3 @@
+<!--pages/dataChange/dataChange.wxml-->
+<view>{{date_begin}}</view>
+<view>{{date_last}}</view>

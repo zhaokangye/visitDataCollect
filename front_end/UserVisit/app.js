@@ -3,6 +3,7 @@ App({
   globalData: {
     systemInfo: {},
     isAbroad: 0,
+    date_index: 0
   },
 
   onLaunch: function () {
@@ -32,16 +33,15 @@ App({
           if (res.code) {
             // 发送 res.code 到后台换取 openId, sessionKey, unionId
             wx.request({
-              url: 'http://47.101.143.247:8080/visit-0.0.1-SNAPSHOT/login/wxlogin',
+              // url: 'http://localhost:8090/login/wxlogin',
+              url: 'http://47.101.143.247:8080/visit-0.0.1-SNAPSHOT/login',
               data: {
                 code: res.code
               },
               success: function (res) {
                 if (res.statusCode == 200) {
                   //存入本地缓存
-                  wx.setStorageSync('userid', res.data.data.id)
-                  wx.setStorageSync('openid', res.data.data.open_id)
-                  wx.setStorageSync('session_key', res.data.data.session_key)
+                  wx.setStorageSync('token', res.data.token)
                 } else {
                   console.log(res.errMsg)
                 }
@@ -56,5 +56,6 @@ App({
       })
     })
   },
+
 
 })
