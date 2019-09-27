@@ -1,12 +1,14 @@
 package com.kang.visit.module.question.service;
 
+import com.kang.visit.core.error.BusinessException;
+import com.kang.visit.core.error.EmBusinessError;
+import com.kang.visit.core.util.constants.Constants;
 import com.kang.visit.module.question.dao.QuestionMapper;
+import com.kang.visit.module.question.entity.ChartsParams;
 import com.kang.visit.module.question.entity.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,43 +23,17 @@ public class QuestionService {
         return question;
     }
 
-    public List<Map<String,Object>> visitCount(){
-        return this.questionMapper.visitCount();
-    }
-
-    public List<Map<String,Object>> isMutilVist(){
-        Map<String,Object> info=this.questionMapper.isMutilVist();
-        Integer firstVisit=(Integer) info.get("firstVisit");
-        Integer mutilVisit=(Integer)info.get("mutilVisit");
-        Map<String,Object> firstVistMap=new HashMap<>(2);
-        Map<String,Object> mutilVistMap=new HashMap<>(2);
-        firstVistMap.put("name","首次");
-        firstVistMap.put("value",firstVisit);
-        mutilVistMap.put("name","二次");
-        mutilVistMap.put("value",mutilVisit);
-        List<Map<String,Object>> list=new ArrayList<>();
-        list.add(firstVistMap);
-        list.add(mutilVistMap);
-        return list;
-    }
-
-    public List<Map<String,Object>> isAbroadCount(){
-        return this.questionMapper.isAbroadCount();
-    }
-
-    public List<Map<String,Object>> visitLocationCount(){
-        return this.questionMapper.visitLocationCount();
-    }
-
-    public List<Map<String,Object>> questionTypeCount(){
-        return this.questionMapper.questionTypeCount();
-    }
-
-    public List<Map<String,Object>> isSpecialVisitCount(){
-        return this.questionMapper.isSpecialVisitCount();
-    }
-
-    public Map<String,Object> totalAccompanyNumber(){
-        return this.questionMapper.totalAccompanyNumber();
+    // ${}会带来sql注入的威胁，使用枚举检查参数
+    public List<Map<String,Object>> countGroupByField(ChartsParams params)  {
+        if(Constants.QUESTION_TABLE_FIELDS.containsKey(params.getField())){
+            String dictType=(String)Constants.QUESTION_TABLE_FIELDS.get(params.getField());
+            if(dictType==null){
+                return this.questionMapper.countGroupByField(params);
+            }else {
+                params.setDictType(dictType);
+                return this.questionMapper.countGroupByField(params);
+            }
+        }
+        throw new BusinessException(EmBusinessError.POSSIBLE_SQL_INJECT);
     }
 }

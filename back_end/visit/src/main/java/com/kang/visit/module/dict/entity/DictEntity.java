@@ -1,18 +1,26 @@
 package com.kang.visit.module.dict.entity;
 
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
+
+@TableName("dict")
 public class DictEntity {
 
+    @TableId(value = "id" , type = IdType.AUTO)
     private Integer id;
 
-    private Integer num;
+    private String dictType;
 
-    private Integer pid;
-
-    private String name;
+    private String dictName;
 
     private String tips;
 
     private String code;
+
+    private String createBy;
+
+    private String updateBy;
 
     public Integer getId() {
         return id;
@@ -22,28 +30,20 @@ public class DictEntity {
         this.id = id;
     }
 
-    public Integer getNum() {
-        return num;
+    public String getDictType() {
+        return dictType;
     }
 
-    public void setNum(Integer num) {
-        this.num = num;
+    public void setDictType(String dictType) {
+        this.dictType = dictType;
     }
 
-    public Integer getPid() {
-        return pid;
+    public String getDictName() {
+        return dictName;
     }
 
-    public void setPid(Integer pid) {
-        this.pid = pid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setDictName(String dictName) {
+        this.dictName = dictName;
     }
 
     public String getTips() {
@@ -60,5 +60,21 @@ public class DictEntity {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy;
     }
 }

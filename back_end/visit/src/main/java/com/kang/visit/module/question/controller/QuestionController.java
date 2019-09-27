@@ -2,6 +2,9 @@ package com.kang.visit.module.question.controller;
 
 import com.kang.visit.config.shiro.ShiroKit;
 import com.kang.visit.core.controller.BaseController;
+import com.kang.visit.core.error.BusinessException;
+import com.kang.visit.core.error.EmBusinessError;
+import com.kang.visit.module.question.entity.ChartsParams;
 import com.kang.visit.module.question.entity.Question;
 import com.kang.visit.core.response.CommonReturnType;
 import com.alibaba.fastjson.JSONObject;
@@ -33,58 +36,15 @@ public class QuestionController extends BaseController {
     }
 
     @RequiresRoles("admin")
-    @RequestMapping("/visitCount")
+    @RequestMapping("/countGroupByField")
     @ResponseBody
-    public CommonReturnType visitCount(){
-        List<Map<String,Object>> counts=questionService.visitCount();
-        return CommonReturnType.create(counts);
+    public CommonReturnType countGroupByField(@RequestParam String params){
+        ChartsParams chartsParams = JSONObject.parseObject(params, ChartsParams.class);
+        List<Map<String,Object>> list=questionService.countGroupByField(chartsParams);
+        if(list.size()==0){
+            throw new BusinessException(EmBusinessError.DATA_NOT_FOUND);
+        }
+        return CommonReturnType.create(list);
     }
 
-    @RequiresRoles("admin")
-    @RequestMapping("/isMutilVist")
-    @ResponseBody
-    public CommonReturnType isMutilVist(){
-        List<Map<String,Object>> counts=questionService.isMutilVist();
-        return CommonReturnType.create(counts);
-    }
-
-    @RequiresRoles("admin")
-    @RequestMapping("/isAbroadCount")
-    @ResponseBody
-    public CommonReturnType isAbroadCount(){
-        List<Map<String,Object>> counts=questionService.isAbroadCount();
-        return CommonReturnType.create(counts);
-    }
-
-    @RequiresRoles("admin")
-    @RequestMapping("/visitLocationCount")
-    @ResponseBody
-    public CommonReturnType visitLocationCount(){
-        List<Map<String,Object>> counts=questionService.visitLocationCount();
-        return CommonReturnType.create(counts);
-    }
-
-    @RequiresRoles("admin")
-    @RequestMapping("/questionTypeCount")
-    @ResponseBody
-    public CommonReturnType questionTypeCount(){
-        List<Map<String,Object>> counts=questionService.questionTypeCount();
-        return CommonReturnType.create(counts);
-    }
-
-    @RequiresRoles("admin")
-    @RequestMapping("/isSpecialVisitCount")
-    @ResponseBody
-    public CommonReturnType isSpecialVisitCount(){
-        List<Map<String,Object>> counts=questionService.isSpecialVisitCount();
-        return CommonReturnType.create(counts);
-    }
-
-    @RequiresRoles("admin")
-    @RequestMapping("/totalAccompanyNumber")
-    @ResponseBody
-    public CommonReturnType totalAccompanyNumber(){
-        Map<String,Object> counts=questionService.totalAccompanyNumber();
-        return CommonReturnType.create(counts);
-    }
 }

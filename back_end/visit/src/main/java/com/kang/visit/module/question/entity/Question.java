@@ -9,6 +9,7 @@ import java.util.Date;
 
 @TableName("question")
 public class Question {
+
     @TableId(value = "id" , type = IdType.AUTO)
     private Integer id;
     private Integer userId;
@@ -22,6 +23,8 @@ public class Question {
     private String questionType;
     private String visitLocation;
     private String isSpecialVisit;
+    private String visitType;
+    private String solution;
     private Date visitDate;
     private String stsCd;
 
@@ -121,6 +124,22 @@ public class Question {
         this.isSpecialVisit = isSpecialVisit;
     }
 
+    public String getVisitType() {
+        return visitType;
+    }
+
+    public void setVisitType(String visitType) {
+        this.visitType = visitType;
+    }
+
+    public String getSolution() {
+        return solution;
+    }
+
+    public void setSolution(String solution) {
+        this.solution = solution;
+    }
+
     public Date getVisitDate() {
         return visitDate;
     }
@@ -139,7 +158,7 @@ public class Question {
 
     @Override
     public String toString() {
-        return "question{" +
+        return "Question{" +
                 "id=" + id +
                 ", userId=" + userId +
                 ", age='" + age + '\'' +
@@ -147,11 +166,13 @@ public class Question {
                 ", name='" + name + '\'' +
                 ", isAbroad='" + isAbroad + '\'' +
                 ", nationality='" + nationality + '\'' +
-                ", accompanyNumber='" + accompanyNumber + '\'' +
+                ", accompanyNumber=" + accompanyNumber +
                 ", permanentResidence='" + permanentResidence + '\'' +
                 ", questionType='" + questionType + '\'' +
                 ", visitLocation='" + visitLocation + '\'' +
                 ", isSpecialVisit='" + isSpecialVisit + '\'' +
+                ", visitType='" + visitType + '\'' +
+                ", solution='" + solution + '\'' +
                 ", visitDate=" + visitDate +
                 ", stsCd='" + stsCd + '\'' +
                 '}';

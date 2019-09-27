@@ -10,6 +10,8 @@ public enum EmBusinessError implements CommonError {
     WROING_PASSWORD(20003,"密码不正确"),
     NOT_LOGIN(20004,"未登录"),
 
+    POSSIBLE_SQL_INJECT(400,"参数不合法，可能出现sql注入"),
+    DATA_NOT_FOUND(400,"找不到数据")
     ;
 
     private int errCode;
