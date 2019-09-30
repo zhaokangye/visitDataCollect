@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/index/index",
     "pages/usertype/usertype",
     "pages/question/question",
     "pages/chart/chart",
