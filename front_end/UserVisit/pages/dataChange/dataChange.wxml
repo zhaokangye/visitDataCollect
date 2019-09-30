@@ -1,3 +1,140 @@
 <!--pages/dataChange/dataChange.wxml-->
-<view>{{date_begin}}</view>
-<view>{{date_last}}</view>
+<!--pages/domestic/domestic.wxml-->
+<view class="page">
+  <view class="page__hd">
+    <block wx:if="{{isAbroad==0}}">
+      <view class="page__title">国内用户</view>
+    </block>
+    <block wx:elif="{{isAbroad==1}}">
+      <view class="page__title">外籍用户</view>
+    </block>
+  </view>
+  <view class="page__bd">
+    <view class="weui-toptips weui-toptips_warn" wx:if="{{isEmpty}}">错误提示</view>
+    <view class="weui-cells__title">请填写或选择以下内容</view>
+    <view class="weui-cells weui-cells_after-title">
+      <!-- 年龄段/age -->
+      <view class="weui-cell weui-cell_select" wx:if="{{isAbroad==0||isAbroad==2}}">
+          <view class="weui-cell__hd weui-cell__hd_in-select-after">
+              <view class="weui-label">年龄段</view>
+          </view>
+          <view class="weui-cell__bd">
+              <picker bindchange="bindAgeChange" value="{{ageIndex}}" range="{{age}}" range-key="dictName">
+                  <view class="weui-select weui-select_in-select-after">{{age[ageIndex].dictName}}</view>
+              </picker>
+          </view>
+      </view>
+      <!-- 性别/gender -->
+      <view class="weui-cell weui-cell_select">
+          <view class="weui-cell__hd weui-cell__hd_in-select-after">
+              <view class="weui-label">性别</view>
+          </view>
+          <view class="weui-cell__bd">
+            <picker bindchange="bindGenderChange" value="{{genderIndex}}" range="{{gender}}" range-key="dictName">
+              <view class="weui-select weui-select_in-select-after">{{gender[genderIndex].dictName}}</view>
+            </picker>
+          </view>
+      </view>
+      <!-- 国籍/nationality -->
+      <view class="weui-cell" wx:if="{{isAbroad==1||isAbroad==2}}">
+        <view class="weui-cell__hd">
+          <view class="weui-label">国籍</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" bindinput="bindNaChange" placeholder="请输入国籍" value="{{nationality}}"></input>
+        </view>
+      </view>
+      <!-- 同行人数/accompany_number -->
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">来访人数</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" bindinput="bindAnChange" placeholder="请输入来访人数" type="number" value="{{accompany_number}}"></input>
+        </view>
+      </view>
+      <!-- 常住地/permanent_residence -->
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">常住地</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" bindinput="bindPrChange" placeholder="请输入常住地" type="text" value="{{permanent_residence}}"></input>
+        </view>
+      </view>
+      <!-- 问题类别/question_type -->
+      <view class="weui-cell weui-cell_select">
+          <view class="weui-cell__hd weui-cell__hd_in-select-after">
+              <view class="weui-label">问题类别</view>
+          </view>
+          <view class="weui-cell__bd">
+              <picker bindchange="bindQtChange" value="{{qtIndex}}" range="{{qt}}" range-key="dictName">
+                  <view class="weui-select weui-select_in-select-after">{{qt[qtIndex].dictName}}</view>
+              </picker>
+          </view>
+      </view>
+      <!-- 来访位置/visit_location -->
+      <view class="weui-cell weui-cell_select">
+          <view class="weui-cell__hd weui-cell__hd_in-select-after">
+              <view class="weui-label">来访位置</view>
+          </view>
+          <view class="weui-cell__bd">
+              <picker bindchange="bindVlChange" value="{{vlIndex}}" range="{{vl}}" range-key="dictName">
+                  <view class="weui-select weui-select_in-select-after">{{vl[vlIndex].dictName}}</view>
+              </picker>
+          </view>
+      </view>
+      <!-- 是否为特殊上访/is_special_visit -->
+      <view class="weui-cell weui-cell_select">
+          <view class="weui-cell__hd weui-cell__hd_in-select-after">
+              <view class="weui-label">是否为特殊申诉</view>
+          </view>
+          <view class="weui-cell__bd">
+              <picker bindchange="bindIsvChange" value="{{isvIndex}}" range="{{isv}}" range-key="dictName">
+                  <view class="weui-select weui-select_in-select-after">{{isv[isvIndex].dictName}}</view>
+              </picker>
+          </view>
+      </view>
+      <!-- 来访类型/visitType -->
+      <view class="weui-cell weui-cell_select">
+          <view class="weui-cell__hd weui-cell__hd_in-select-after">
+              <view class="weui-label">来访类型</view>
+          </view>
+          <view class="weui-cell__bd">
+              <picker bindchange="bindVtChange" value="{{vtIndex}}" range="{{vt}}" range-key="dictName">
+                  <view class="weui-select weui-select_in-select-after">{{vt[vtIndex].dictName}}</view>
+              </picker>
+          </view>
+      </view>
+      <!-- 解决方式/solution -->
+      <view class="weui-cell weui-cell_select">
+          <view class="weui-cell__hd weui-cell__hd_in-select-after">
+              <view class="weui-label">解决方式</view>
+          </view>
+          <view class="weui-cell__bd">
+              <picker bindchange="bindSolutionChange" value="{{solutionIndex}}" range="{{solution}}" range-key="dictName">
+                  <view class="weui-select weui-select_in-select-after">{{solution[solutionIndex].dictName}}</view>
+              </picker>
+          </view>
+      </view>
+      <!-- 日期读取/date -->
+      <view class="weui-cell ">
+        <view class="weui-cell__hd">
+            <view class="weui-label">日期</view>
+        </view>
+        <view class="weui-cell__bd">
+            <picker mode="date" value="{{date}}" bindchange="bindDateChange">
+                <view class="weui-input">{{date}}</view>
+            </picker>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 按钮 -->
+    <view class="weui-btn-area">
+      <button class="weui-btn" type="primary" bindtap="showTopTips">确定</button>
+    </view>
+  </view>
+</view>
+
+

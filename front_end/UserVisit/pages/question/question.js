@@ -1,6 +1,5 @@
 // pages/domestic/domestic.js
 var util = require("../../utils/util.js");
-
 Page({
 
   /**
@@ -25,7 +24,7 @@ Page({
     vlField: 'visitLocation',
     vlIndex: 0,
 
-    isv: ["是", "否"],
+    isv: ["正常", "异常"],
     // isv: '',
     isvIndex: 0,
 
@@ -120,6 +119,7 @@ Page({
   },
 
   bindVtChange: function (e) {
+    console.log('picker vt 发生选择改变，携带值为', e.detail.value);
     this.setData({
       vtIndex: e.detail.value
     })
@@ -148,7 +148,7 @@ Page({
     }
     else if(this.data.question.accompanyNumber == ""){
       console.log("accompanyNumber null");
-      dialogContent = "同行人数不能为空";
+      dialogContent = "来访人数不能为空";
     }
     else if(this.data.question.permanentResidence == ""){
       console.log("permanentResidence null");
@@ -323,6 +323,9 @@ Page({
     var visitDate;
     if(this.data.date==this.data.localdate){
       visitDate = this.data.date + ' ' + util.formatTime(new Date());
+      // var hour = visitDate.substring(11,13);
+      // hour = parseInt(hour) + 8;
+
     }
     else{
       visitDate = this.data.date + ' ' + '00:00:00';

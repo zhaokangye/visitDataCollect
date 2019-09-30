@@ -11,6 +11,12 @@
   width: 100%;
   height: 50%
 }
+.notChart__Area{
+  /* background-color: #5095f3; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .accompanyNumber__Area{
   font-weight: 400; 
   font-size: 16;
@@ -21,8 +27,8 @@
   display: flex;
   flex-direction: row;
 }
-.date__cell{
-  background-color: #ffffff; 
+.text__cell{
+  /* background-color: #ffffff;  */
   /* font-size: 18; */
-  color: #000f84;
+  color: #666666;
 }

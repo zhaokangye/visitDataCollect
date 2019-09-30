@@ -1,6 +1,21 @@
 // pages/dataChange/dataChange.js
 var pages = getCurrentPages();
 var prePage = pages[pages.length - 2];
+var question = {
+  id: 1,
+  age: 3,
+  gender: 1,
+  isAbroad: 0,
+  nationality: "",
+  accompanyNumber: 6,
+  permanentResidence: 'aalena',
+  questionType: 2,
+  visitLocation: 1,
+  isSpecialVisit: '异常',
+  visitType: '首次',
+  solution: 2,
+  visitDate: '2019-10-12 17:12:39',
+};
 // var info = prePage.data;
 Page({
 
@@ -8,8 +23,210 @@ Page({
    * 页面的初始数据
    */
   data: {
-    date_begin: "",
-    date_last: "",
+
+    // age: ["20以下", "21-30", "31-40","41-50","51-60","60以上"],
+    age: '',
+    ageType: '年龄段',
+    ageField: 'age',
+    ageIndex: 0,
+
+    // qt: ["忘记密码", "账号被盗", "账号被封", "微信支付", "微信公众号", "小程序","QQ","游戏","权力机关调证","其他"],
+    qt: '',
+    qtType: '问题类型',
+    qtField: 'questionType',
+    qtIndex: 0,
+
+    // vl:["TIT","南通","媒体港"],
+    vl: '',
+    vlType: '来访位置',
+    vlField: 'visitLocation',
+    vlIndex: 0,
+
+    isv: [{ 'dictName': "正常" }, { 'dictName': "异常"} ],
+    // isv: '',
+    isvIndex: 0,
+
+    // gender: ["男","女"],
+    gender: '',
+    genderType: '性别',
+    genderField: 'gender',
+    genderIndex: 0,
+
+    vt: [{'dictName': "首次"}, {'dictName': "二次"}],
+    // vt: '',
+    vtIndex: 0,
+
+    // solution: ["指引登记", "指引深圳", "现场解决"],
+    solution: '',
+    solutionType: '解决方式',
+    solutionField: 'soulution',
+    solutionIndex: 0,
+
+    accompany_number: 0,
+    permanent_residence: "",
+    nationality: "",
+
+    isEmpty: false,
+    isAbroad: 2,
+
+    date: "",
+    localdate: "",
+    curtime: "",
+
+    question: '',
+  },
+
+  bindAgeChange: function (e) {
+    console.log('picker age 发生选择改变，携带值为', e.detail.value);
+
+    this.setData({
+      ageIndex: e.detail.value
+    })
+  },
+
+  bindGenderChange: function (e) {
+    console.log('picker gender 发生选择改变，携带值为', e.detail.value);
+
+    this.setData({
+      genderIndex: e.detail.value
+    })
+  },
+
+  bindNaChange: function (e) {
+    console.log('输入内容', e.detail.value);
+    this.setData({
+      nationality: e.detail.value
+    })
+  },
+
+  bindAnChange: function (e) {
+    console.log('输入内容', e.detail.value);
+    this.setData({
+      accompany_number: e.detail.value
+    })
+  },
+
+  bindPrChange: function (e) {
+    console.log('输入内容', e.detail.value);
+    this.setData({
+      permanent_residence: e.detail.value
+    })
+  },
+
+  bindQtChange: function (e) {
+    console.log('picker qt 发生选择改变，携带值为', e.detail.value);
+
+    this.setData({
+      qtIndex: e.detail.value
+    })
+  },
+
+  bindVlChange: function (e) {
+    console.log('picker vl 发生选择改变，携带值为', e.detail.value);
+
+    this.setData({
+      vlIndex: e.detail.value
+    })
+  },
+
+  bindIsvChange: function (e) {
+    console.log('picker isv 发生选择改变，携带值为', e.detail.value);
+
+    this.setData({
+      isvIndex: e.detail.value
+    })
+  },
+
+  bindVtChange: function (e) {
+    this.setData({
+      vtIndex: e.detail.value
+    })
+  },
+
+  bindSolutionChange: function (e) {
+    this.setData({
+      solutionIndex: e.detail.value
+    })
+  },
+
+  bindDateChange: function (e) {
+    this.setData({
+      date: e.detail.value
+    })
+  },
+
+  /**
+   * 提交按钮
+   */
+  showTopTips: function () {
+    var dialogContent;
+    var that = this;
+    this.collectData();
+    // 判断空
+    if (this.data.question.nationality == "") {
+      console.log("nationality null");
+      dialogContent = "国籍不能为空";
+    }
+    else if (this.data.question.accompanyNumber == "") {
+      console.log("accompanyNumber null");
+      dialogContent = "来访人数不能为空";
+    }
+    else if (this.data.question.permanentResidence == "") {
+      console.log("permanentResidence null");
+      dialogContent = "常住地不能为空";
+    }
+    else {
+      wx.request({
+        url: 'http://47.101.143.247:8080/visit-0.0.1-SNAPSHOT/question/saveQuestion',
+        data: {
+          question: JSON.stringify(this.data.question)
+        },
+        method: 'POST',
+        header: {
+          "Content-type": "application/x-www-form-urlencoded",
+          "Authorization": wx.getStorageSync('token'),
+        },
+        success: function (res) {
+          console.log('success')
+
+        },
+        fail: function (res) {
+          console.log('connect fail');
+          console.log(res);
+          // dialogContent = "请勿重复提交";
+
+        },
+      })
+      dialogContent = '提交成功';
+    }
+    // 弹出消息框
+    console.log(dialogContent);
+    that.openConfirm(dialogContent, '../usertype/usertype');
+  },
+
+  helloTest: function () {
+    console.log('hello world')
+  },
+
+  /**
+   * 对话框
+   */
+  openConfirm: function (dialogContent, url) {
+    wx.showModal({
+      title: '提示',
+      content: dialogContent,
+      confirmText: "确定",
+      showCancel: false,
+      success: function (res) {
+        console.log(res);
+        if (res.confirm) {
+          console.log('用户点击确定')
+          wx.navigateTo({
+            url: url,
+          })
+        }
+      }
+    });
   },
 
   /**
@@ -17,57 +234,238 @@ Page({
    */
   onLoad: function (options) {
     this.setData({
-      date_begin: options.date_begin,
-      date_last: options.date_last,
-    })
+      question: JSON.parse(options.data),
+    });
+    console.log('question', this.data.question);
+    // 设置问题中的数据
+    this.ageGetNC();
+    this.genderGetNC();
+    this.qtGetNC();
+    this.vlGetNC();
+    this.solutionGetNC();
+    this.setData({
+      isAbroad: this.data.question.isAbroad,
+      nationality: this.data.question.nationality,
+      accompany_number: this.data.question.accompanyNumber,
+      permanent_residence: this.data.question.permanentResidence,
+    });
+    this.isvGetNC();
+    this.vtGetNC();
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
+    var item = this.data.question.visitDate;
+    console.log('item', typeof item);
+    // var item = '2018-12-12 19:28:10';
+    // 设置日期
+    this.setData({
+      date: item.substring(0, 10),
+      curtime: item.substring(11, 19),
+      localdate: item.substring(0, 10),
+    }) 
+    console.log('curdate', this.data.date, this.data.curtime);
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * get Name Code/根据字典得到dictName和code
    */
-  onShow: function () {
-
+  ageGetNC: function () {
+    var that = this;
+    that.getOption(that.data.ageType).then(res => {
+      that.setData({
+        age: res,
+      })
+      console.log('age', res);
+      // 设置初始index
+      that.setData({
+        ageIndex: that.setIndexForPicker(that.data.age, that.data.question.age),
+      })
+    })
+    
+  },
+  genderGetNC: function () {
+    var that = this
+    that.getOption(that.data.genderType).then(res => {
+      that.setData({
+        gender: res,
+      })
+      // 设置初始index
+      that.setData({
+        genderIndex: that.setIndexForPicker(that.data.gender, that.data.question.gender),
+      })
+    })
+    
+  },
+  qtGetNC: function () {
+    var that = this
+    that.getOption(that.data.qtType).then(res => {
+      that.setData({
+        qt: res,
+      })
+      // 设置初始index
+      that.setData({
+        qtIndex: that.setIndexForPicker(that.data.qt, that.data.question.questionType),
+      })
+    })
+  },
+  vlGetNC: function () {
+    var that = this
+    that.getOption(that.data.vlType).then(res => {
+      that.setData({
+        vl: res,
+      })
+      // 设置初始index
+      that.setData({
+        vlIndex: that.setIndexForPicker(that.data.vl, that.data.question.visitLocation),
+      })
+    })
+  },
+  solutionGetNC: function () {
+    var that = this
+    that.getOption(that.data.solutionType).then(res => {
+      that.setData({
+        solution: res,
+      })
+      // 设置初始index
+      that.setData({
+        solutionIndex: that.setIndexForPicker(that.data.solution, that.data.question.solution),
+      })
+    })
+  },
+  isvGetNC: function () {
+    var that = this;
+    console.log('isv', that.data.vt, that.data.question.visitType)
+    // 设置初始index
+    that.setData({
+      isvIndex: that.setIndexForPicker(that.data.isv, that.data.question.isSpecialVisit),
+    })
+  },
+  vtGetNC: function () {
+    var that = this;
+    // 设置初始index
+    console.log('vt', that.data.vt, that.data.question.visitType)
+    that.setData({
+      vtIndex: that.setIndexForPicker(that.data.vt, that.data.question.visitType),
+    })
   },
 
   /**
-   * 生命周期函数--监听页面隐藏
+   * 得到问题的选项
    */
-  onHide: function () {
+  getOption: function (type) {
+    return new Promise(function (resolve, reject) {
+      wx.request({
+        url: 'http://47.101.143.247:8080/visit-0.0.1-SNAPSHOT/dict/getDictList',
+        // url: '',
+        data: {
+          // dictType: JSON.stringify(type)
+          dictType: type,
+        },
+        header: {
+          "Content-type": "application/x-www-form-urlencoded",
+          "Authorization": wx.getStorageSync('token'),
+        },
+        method: 'POST',
 
+        success: function (res) {
+          console.log(res)
+          console.log("success")
+          resolve(res.data.data)
+        },
+        fail: function (res) {
+          console.log(res)
+          console.log('fail')
+          reject(res)
+        },
+        complete: function (res) {
+          console.log("complete")
+        },
+      })
+    })
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 根据id找到数据库中该记录的数据 
    */
-  onUnload: function () {
-
+  getData: function (id) {
+    var data;
+    this.getQuestionData(id).then(res => {
+      if(res.status!='success'){
+        var dialog = '网络请求失败';
+        var url = '../dataChoose/dataChoose';
+        openConfirm(dialog, url);
+      }
+      else{
+        data = res.data;
+      }
+    });
+    return data;
   },
 
   /**
-   * 页面相关事件处理函数--监听用户下拉动作
+   * 收集页面中的数据，以待提交
    */
-  onPullDownRefresh: function () {
+  collectData: function () {
+    var an = this.data.accompany_number;
+    var pr = this.data.permanent_residence;
 
+    // 判断国内用户或外籍用户
+    var agelast;
+    var nationnalitylast;
+    if (this.data.isAbroad == 0) {
+      agelast = this.data.age[this.data.ageIndex].code;
+      nationnalitylast = "null";
+    }
+    else if (this.data.isAbroad == 1) {
+      agelast = "null";
+      nationnalitylast = this.data.nationality;
+    }
+
+    // 获取日期与具体时间
+    var visitDate;
+    if (this.data.date == this.data.localdate) {
+      visitDate = this.data.date + ' ' + this.data.curtime;
+    }
+    else {
+      visitDate = this.data.date + ' ' + '00:00:00';
+    }
+    console.log(visitDate);
+
+    var that = this
+    that.setData({
+      question: {
+        // userId: wx.getStorageSync("userid"),
+        id: this.data.getid,
+        age: agelast,
+        gender: this.data.gender[this.data.genderIndex].code,
+        isAbroad: this.data.isAbroad,
+        nationality: nationnalitylast,
+        accompanyNumber: an,
+        permanentResidence: pr,
+        questionType: this.data.qt[this.data.qtIndex].code,
+        visitLocation: this.data.vl[this.data.vlIndex].code,
+        isSpecialVisit: this.data.isv[this.data.isvIndex].dictName,
+        visitType: this.data.vt[this.data.vtIndex].dictName,
+        solution: this.data.solution[this.data.solutionIndex].code,
+        visitDate: visitDate,
+      }
+    })
+    console.log(that.data.question)
   },
 
   /**
-   * 页面上拉触底事件的处理函数
+   * 设置picker中起始index
    */
-  onReachBottom: function () {
-
+  setIndexForPicker: function (resoption, questiondata) {
+    for(var x in resoption){
+      if(resoption[x].dictName==questiondata||resoption[x].code==questiondata){
+        console.log(resoption[x].dictName, resoption[x].code, questiondata);
+        return x;
+      }
+    }
+    return -1;
   },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
 })

@@ -1,20 +1,18 @@
 <!--pages/bar/bar.wxml-->
 <view class="container-chart">
-  <view class="page">
-    <view class="page_hd">
+  <view class="notChart__Area">
+    <view class="text__cell">
       <view>总人次：{{allAccompanyNumber}}</view>
     </view>
-    <view class="page_bd">
-      <view class="date__Area">
+    <view class="date__Area">
         <picker mode="date" value="{{date_begin}}" bindchange="bindDate_BeginChange">
-          <view class="date__cell">{{date_begin}}</view>
+          <text class="text__cell" space="emsp">{{date_begin?date_begin:"请选择日期上"}}</text>
         </picker>
         <text space="emsp"> ~~ </text>
         <picker mode="date" value="{{date_last}}" bindchange="bindDate_LastChange">
-          <view class="date__cell">{{date_last}}</view>
+          <text class="text__cell" space="emsp">{{date_last?date_last:"请选择日期下"}}</text>
         </picker>
       </view>
-    </view>
   </view>
   <!-- 图表 -->
   <ec-canvas class="pie-vertical" id="mychart-dom-multi-pie" canvas-id="mychart-multi-pie" ec="{{ ecpie }}" bind:init="pieOnInit" ></ec-canvas>

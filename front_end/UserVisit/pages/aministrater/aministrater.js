@@ -9,28 +9,18 @@ Page({
     date_begin: "",
     date_last: "",
 
-    illegaldateDialog: '日期段不正确',
+    illegaldateDialog: '日期段不正确，请修改',
   },
 
   bindDate_BeginChange: function (e) {
-    if(this.legalDate(e.detail.value, this.data.date_last)){
-      this.setData({
-        date_begin: e.detail.value
-      })
-    }
-    else{
-      this.openConfirm(this.data.illegaldateDialog)
-    }
+    this.setData({
+      date_begin: e.detail.value
+    })
   },
   bindDate_LastChange: function (e) {
-    if (this.legalDate(this.data.date_begin, e.detail.value)) {
-      this.setData({
-        date_last: e.detail.value
-      })
-    }
-    else {
-      this.openConfirm(this.data.illegaldateDialog)
-    }
+    this.setData({
+      date_last: e.detail.value
+    })
   },
   /* 判断日期段是否合法 */
   legalDate: function (date_begin, date_last) {
@@ -46,27 +36,32 @@ Page({
       return false;
     }
   },
+  
+  showTopTips: function () {
+    if (this.legalDate(this.data.date_begin, this.data.date_last)) {
+      wx.navigateTo({
+        url: '../dataChoose/dataChoose?date_begin=' + this.data.date_begin + '&date_last=' + this.data.date_last,
+      })
+    }
+    else{
+      this.openConfirm(this.data.illegaldateDialog);
+    }
+    
+  },
   // 对话框
   openConfirm: function (dialogContent) {
     wx.showModal({
-      title: '错误提示',
+      title: '提示',
       content: dialogContent,
       confirmText: "确定",
-      cancelText: "取消",
+      showCancel: false,
       success: function (res) {
         console.log(res);
         if (res.confirm) {
           console.log('用户点击确定')
-        } else {
-          console.log('用户点击取消')
         }
       }
     });
-  },
-  showTopTips: function () {
-    wx.navigateTo({
-      url: '../dataChoose/dataChoose?' + this.data.date_begin + '&date_last=' + this.data.date_last,
-    })
   },
   /**
    * 生命周期函数--监听页面加载

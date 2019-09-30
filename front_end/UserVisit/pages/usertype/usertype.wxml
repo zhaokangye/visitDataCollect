@@ -1,15 +1,46 @@
 <!--pages/usertype/usertype.wxml-->
-<view class="page-flex">
-  <view class="btn-flex">
-    <button class="domesticbtn" bindtap="domestic_btn">国内用户</button>
+<view class="page">
+  <view class="page__hd page-user">
+    <block wx:if="{{!hasUserInfo && canIUse}}">
+      <image src="{{user_image==''?user_image:'../../images/login.jpg'}}" mode="aspectFit" class="page-user_image"></image>
+      <button open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+    </block>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
   </view>
-  <view class="btn-flex">
-    <button class="overseasbtn" bindtap="overseas_btn">外籍用户</button>
-  </view>
-  <view class="btn-flex">
-    <button class="domesticbtn" bindtap="chart_btn">图表</button>
-  </view>
-  <view class="btn-flex">
-    <button class="overseasbtn" bindtap="aministrater_btn">管理员</button>
+  <view class="page__bd page__bd_spacing">
+    <view class="kind-list" wx:for='{{roles}}' wx:key="item">
+      <block wx:if="{{item =='reception'}}">
+        <!-- 国内用户 -->
+        <view class="kind-list__item">
+          <view class="kind-list__item-hd">
+            <view class="weui-flex__item" bindtap="domestic_btn">国内用户</view>
+          </view>
+        </view>
+        <!-- 外籍用户 -->
+        <view class="kind-list__item" >
+          <view class="kind-list__item-hd">
+            <view class="weui-flex__item" bindtap="overseas_btn">外籍用户</view>
+          </view>
+        </view>
+      </block>
+      <block wx:if="{{item=='admin'}}">
+        <!-- 图表 -->
+        <view class="kind-list__item" >
+          <view class="kind-list__item-hd">
+            <view class="weui-flex__item" bindtap="chart_btn">图表</view>
+          </view>
+        </view>
+        <!-- 数据修改 -->
+        <view class="kind-list__item">
+          <view class="kind-list__item-hd">
+            <view class="weui-flex__item" bindtap="aministrater_btn">数据修改</view>
+          </view>
+        </view>
+      </block>
+      
+    </view>
   </view>
 </view>

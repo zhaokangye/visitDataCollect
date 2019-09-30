@@ -5,7 +5,7 @@
     <view class="page__title">修改</view>
   </view>
   <view class="page__bd">
-    <view class="weui-cells__title">请选择日期和需要更改的问题</view>
+    <view class="weui-cells__title">请选择日期</view>
     <view class="weui-cells weui-cells_after-title">
       <!-- 日期/date -->
       <view class="weui-cell ">

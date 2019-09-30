@@ -32,8 +32,8 @@ Page({
   onLoad: function (options) {
     var DATE = util.formatDate(new Date());
     this.setData({
-      date_begin: DATE,
-      date_last: DATE,
+      date_begin: "",
+      date_last: "",
       // allAccompanyNumber: requestGetData(date_begin, date_last, question_word+aan_word)[0].value,
     });
     var data = this.collectData(this.data.accompanyNumberField, this.data.date_begin, this.data.date_last);
@@ -56,26 +56,51 @@ Page({
   /* 前半段 */
   bindDate_BeginChange: function (e) {
     console.log('begin', this.legalDate(e.detail.value, this.data.date_last))
+
     if(this.legalDate(e.detail.value, this.data.date_last)==true){
-      this.setData({
-        date_begin: e.detail.value
-      })
       this.refleshChart();
     }
+    else{
+      this.openConfirm(this.data.illegalDateDialog);
+    }
+    this.setData({
+      date_begin: e.detail.value
+    })
   },
   /* 后半段 */
   bindDate_LastChange: function (e) {
     console.log('last', this.legalDate(this.data.date_begin, e.detail.value))
     if (this.legalDate(this.data.date_begin, e.detail.value)==true) {
-      this.setData({
-        date_last: e.detail.value
-      })
       this.refleshChart();
     }
+    else{
+      this.openConfirm(this.data.illegalDateDialog);
+    }
+    this.setData({
+      date_last: e.detail.value
+    })
+  },
+
+  // 对话框
+  openConfirm: function (dialogContent) {
+    wx.showModal({
+      title: '错误提示',
+      content: dialogContent,
+      confirmText: "确定",
+      showCancel: false,
+      success: function (res) {
+        console.log(res);
+        if (res.confirm) {
+          console.log('用户点击确定')
+        }
+      }
+    });
   },
 
   /** data段 **/
   data: {
+    illegalDateDialog: '日期段不正确，则图表不更新，请修改',
+
     allAccompanyNumber: "",
     accompanyNumberType: '来访人数',
     accompanyNumberField: 'accompanyNumber',
@@ -93,8 +118,8 @@ Page({
     vtType: '来访类型',
     vtField: 'visitType',
 
-    isv: [{dictName: "是"}, {dictName: "否"}],
-    isvType: '是否特殊上访',
+    isv: [{dictName: "正常"}, {dictName: "异常"}],
+    isvType: '是否特殊申诉',
     isvField: 'isSpecialVisit',
 
     // qt: ["忘记密码", "账号被盗", "账号被封", "微信支付", "微信公众号", "小程序","QQ","游戏","权力机关调证","其他"],
@@ -303,7 +328,7 @@ Page({
     var sum = [source[0].value + source[1].value]
     return {
       backgroundColor: "#EDEDED",
-      color: ['#5095f3', '#000f84'],
+      color: ["#66CD00", "#666666"],
       grid: {
         top: 60,
         left: 70,
@@ -409,14 +434,8 @@ Page({
     // name data
     var name = []
     var data = []
-    // var index = 0
-    // name[index] = 'name'
-    // data[index] = 'data'
 
     for (var x in source) {
-      // index += 1
-      // name[index] = source[x].name
-      // data[index] = source[x].value
       name[x] = source[x].name
       data[x] = source[x].value
     }
@@ -427,6 +446,7 @@ Page({
         button: 20,
         // containLabel: true
       },
+      color: ["#666666"],
       tooltip: {},
       xAxis: {
         type: 'category',
@@ -546,11 +566,11 @@ Page({
     var diff = end_date.getTime() - start_date.getTime();
 
     console.log('diff',diff);
-    if(diff>=0){
-      return true;
+    if(diff<0){
+      return false;
     }
     else{
-      return false;
+      return true;
     }
   },
 
