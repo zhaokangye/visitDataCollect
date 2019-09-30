@@ -43,7 +43,7 @@
           <input class="weui-input" bindinput="bindNaChange" placeholder="请输入国籍"></input>
         </view>
       </view>
-      <!-- 同行人数/accompany_number -->
+      <!-- 来访人数/accompany_number -->
       <view class="weui-cell">
         <view class="weui-cell__hd">
           <view class="weui-label">来访人数</view>
@@ -83,15 +83,18 @@
               </picker>
           </view>
       </view>
-      <!-- 是否为特殊上访/is_special_visit -->
+      <!-- 是否为特殊申诉/is_special_visit -->
       <view class="weui-cell weui-cell_select">
           <view class="weui-cell__hd weui-cell__hd_in-select-after">
               <view class="weui-label">是否为特殊申诉</view>
           </view>
           <view class="weui-cell__bd">
-              <picker bindchange="bindIsvChange" value="{{isvIndex}}" range="{{isv}}">
-                  <view class="weui-select weui-select_in-select-after">{{isv[isvIndex]}}</view>
+              <picker bindchange="bindIsvChange" value="{{isvIndex}}" range="{{isv}}" range-key="dictName">
+                  <view class="weui-select weui-select_in-select-after">{{isv[isvIndex].dictName}}</view>
               </picker>
+              <!-- <picker bindchange="bindIsvChange" value="{{isvIndex}}" range="{{isv}}">
+                  <view class="weui-select weui-select_in-select-after">{{isv[isvIndex]}}</view>
+              </picker> -->
           </view>
       </view>
       <!-- 来访类型/visitType -->
@@ -100,9 +103,12 @@
               <view class="weui-label">来访类型</view>
           </view>
           <view class="weui-cell__bd">
-              <picker bindchange="bindVtChange" value="{{vtIndex}}" range="{{vt}}">
-                  <view class="weui-select weui-select_in-select-after">{{vt[vtIndex]}}</view>
+              <picker bindchange="bindVtChange" value="{{vtIndex}}" range="{{vt}}" range-key="dictName">
+                  <view class="weui-select weui-select_in-select-after">{{vt[vtIndex].dictName}}</view>
               </picker>
+              <!-- <picker bindchange="bindVtChange" value="{{vtIndex}}" range="{{vt}}">
+                  <view class="weui-select weui-select_in-select-after">{{vt[vtIndex]}}</view>
+              </picker> -->
           </view>
       </view>
       <!-- 解决方式/solution -->

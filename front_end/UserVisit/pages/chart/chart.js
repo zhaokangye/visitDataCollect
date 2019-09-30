@@ -290,12 +290,20 @@ Page({
     // var pages = getCurrentPages()
     var data = this.collectData(this.data.vtField, this.data.date_begin, this.data.date_last);
     this.requestGetData(data, question_word).then(res => {
-      console.log('bar2chart data', res, this.data.vt);
-      var restmp = this.checkEnoughOption(res, this.data.vt);
-      canvas.setChart(bar2chart);
-      bar2chart.setOption(this.getBarOption(restmp));
-      console.log('bar2chart already', restmp)
-      return bar2chart;
+      this.getOption(this.data.vtType).then(e => {
+        console.log('bar2chart data', res, e);
+        var restmp = this.checkEnoughOption(res, e);
+        canvas.setChart(bar2chart);
+        bar2chart.setOption(this.getBarOption(restmp));
+        console.log('bar2chart already', restmp)
+        return bar2chart;
+      });
+      // console.log('bar2chart data', res, this.data.vt);
+      // var restmp = this.checkEnoughOption(res, this.data.vt);
+      // canvas.setChart(bar2chart);
+      // bar2chart.setOption(this.getBarOption(restmp));
+      // console.log('bar2chart already', restmp)
+      // return bar2chart;
     });
     // setTimeout(function(){}, 2000);
   },
@@ -307,12 +315,20 @@ Page({
     // var pages = getCurrentPages()
     var data = this.collectData(this.data.isvField, this.data.date_begin, this.data.date_last);
     this.requestGetData(data, question_word).then(res => {
-      console.log('bar3chart data', res, this.data.isv);
-      var restmp = this.checkEnoughOption(res, this.data.isv);
-      canvas.setChart(bar3chart);
-      bar3chart.setOption(this.getBarOption(restmp));
-      console.log('bar3chart already', restmp)
-      return bar3chart;
+      this.getOption(this.data.isvType).then(e => {
+        console.log('bar3chart data', res, e);
+        var restmp = this.checkEnoughOption(res, e);
+        canvas.setChart(bar3chart);
+        bar3chart.setOption(this.getBarOption(restmp));
+        console.log('bar3chart already', restmp)
+        return bar3chart;
+      });
+      // console.log('bar3chart data', res, this.data.isv);
+      // var restmp = this.checkEnoughOption(res, this.data.isv);
+      // canvas.setChart(bar3chart);
+      // bar3chart.setOption(this.getBarOption(restmp));
+      // console.log('bar3chart already', restmp)
+      // return bar3chart;
     });
     // setTimeout(function(){}, 2000);
   },

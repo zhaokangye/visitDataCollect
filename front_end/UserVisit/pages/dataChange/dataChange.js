@@ -42,8 +42,10 @@ Page({
     vlField: 'visitLocation',
     vlIndex: 0,
 
-    isv: [{ 'dictName': "正常" }, { 'dictName': "异常"} ],
-    // isv: '',
+    // isv: [{ 'dictName': "正常" }, { 'dictName': "异常"} ],
+    isv: '',
+    isvType: '是否特殊申诉',
+    isvField: 'isSpecialVisit',
     isvIndex: 0,
 
     // gender: ["男","女"],
@@ -52,8 +54,10 @@ Page({
     genderField: 'gender',
     genderIndex: 0,
 
-    vt: [{'dictName': "首次"}, {'dictName': "二次"}],
-    // vt: '',
+    // vt: [{'dictName': "首次"}, {'dictName': "二次"}],
+    vt: '',
+    vtType: '来访类型',
+    vtField: 'visitType',
     vtIndex: 0,
 
     // solution: ["指引登记", "指引深圳", "现场解决"],
@@ -177,7 +181,7 @@ Page({
     }
     else {
       wx.request({
-        url: 'http://47.101.143.247:8080/visit-0.0.1-SNAPSHOT/question/saveQuestion',
+        url: 'http://47.101.143.247:8080/visit-0.0.1-SNAPSHOT/question/updateQuestion',
         data: {
           question: JSON.stringify(this.data.question)
         },
@@ -337,19 +341,37 @@ Page({
   },
   isvGetNC: function () {
     var that = this;
-    console.log('isv', that.data.vt, that.data.question.visitType)
-    // 设置初始index
-    that.setData({
-      isvIndex: that.setIndexForPicker(that.data.isv, that.data.question.isSpecialVisit),
+    that.getOption(that.data.isvType).then(res => {
+      that.setData({
+        isv: res,
+      })
+      // 设置初始index
+      that.setData({
+        isvIndex: that.setIndexForPicker(that.data.isv, that.data.question.isSpecialVisit),
+      })
     })
+    // console.log('isv', that.data.isv, that.data.question.isSpecialVisit)
+    // // 设置初始index
+    // that.setData({
+    //   isvIndex: that.setIndexForPicker(that.data.isv, that.data.question.isSpecialVisit),
+    // })
   },
   vtGetNC: function () {
     var that = this;
-    // 设置初始index
-    console.log('vt', that.data.vt, that.data.question.visitType)
-    that.setData({
-      vtIndex: that.setIndexForPicker(that.data.vt, that.data.question.visitType),
+    that.getOption(that.data.vtType).then(res => {
+      that.setData({
+        vt: res,
+      })
+      // 设置初始index
+      that.setData({
+        vtIndex: that.setIndexForPicker(that.data.vt, that.data.question.visitType),
+      })
     })
+    // // 设置初始index
+    // console.log('vt', that.data.vt, that.data.question.visitType)
+    // that.setData({
+    //   vtIndex: that.setIndexForPicker(that.data.vt, that.data.question.visitType),
+    // })
   },
 
   /**
@@ -447,8 +469,10 @@ Page({
         permanentResidence: pr,
         questionType: this.data.qt[this.data.qtIndex].code,
         visitLocation: this.data.vl[this.data.vlIndex].code,
-        isSpecialVisit: this.data.isv[this.data.isvIndex].dictName,
-        visitType: this.data.vt[this.data.vtIndex].dictName,
+        // isSpecialVisit: this.data.isv[this.data.isvIndex].dictName,
+        // visitType: this.data.vt[this.data.vtIndex].dictName,
+        isSpecialVisit: this.data.isv[this.data.isvIndex].code,
+        visitType: this.data.vt[this.data.vtIndex].code,
         solution: this.data.solution[this.data.solutionIndex].code,
         visitDate: visitDate,
       }

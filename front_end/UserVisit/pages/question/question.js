@@ -24,8 +24,10 @@ Page({
     vlField: 'visitLocation',
     vlIndex: 0,
 
-    isv: ["正常", "异常"],
-    // isv: '',
+    // isv: ["正常", "异常"],
+    isv: '',
+    isvType: '是否特殊申诉',
+    isvField: 'isSpecialVisit',
     isvIndex: 0,
 
     // gender: ["男","女"],
@@ -34,8 +36,10 @@ Page({
     genderField: 'gender',
     genderIndex: 0,
 
-    vt: ["首次", "二次"],
-    // vt: '',
+    // vt: ["首次", "二次"],
+    vt: '',
+    vtType: '来访类型',
+    vtField: 'visitType',
     vtIndex: 0,
 
     // solution: ["指引登记", "指引深圳", "现场解决"],
@@ -138,21 +142,24 @@ Page({
   },
 
   showTopTips: function () {
-    var dialogContent;
+    var dialogContent, url;
     var that = this;
     this.collectData();
     // 判断空
     if(this.data.question.nationality == ""){
       console.log("nationality null");
       dialogContent = "国籍不能为空";
+      url = "";
     }
     else if(this.data.question.accompanyNumber == ""){
       console.log("accompanyNumber null");
       dialogContent = "来访人数不能为空";
+      url = "";
     }
     else if(this.data.question.permanentResidence == ""){
       console.log("permanentResidence null");
       dialogContent = "常住地不能为空";
+      url = "";
     }
     else{
       wx.request({
@@ -177,17 +184,18 @@ Page({
         },
       })
       dialogContent = '提交成功';
+      url = "../usertype/usertype";
     }
     // 弹出消息框
     console.log(dialogContent);
-    that.openConfirm(dialogContent);
+    that.openConfirm(dialogContent, url);
   },
 
   helloTest:function(){
     console.log('hello world')
   },
   // 对话框
-  openConfirm: function (dialogContent) {
+  openConfirm: function (dialogContent, url) {
     wx.showModal({
       title: '提示',
       content: dialogContent,
@@ -198,7 +206,7 @@ Page({
         if (res.confirm) {
           console.log('用户点击确定')
           wx.navigateTo({
-            url: '../usertype/usertype',
+            url: url,
           })
         }
       }
@@ -215,6 +223,8 @@ Page({
     });
     this.ageGetNC();
     this.genderGetNC();
+    this.isvGetNC();
+    this.vtGetNC();
     this.qtGetNC();
     this.vlGetNC();
     this.solutionGetNC();
@@ -230,7 +240,9 @@ Page({
     });
   },
 
-  /** getNameCode **/
+  /**
+   * getNameCode/得到字典中的dictName和code 
+   */
   ageGetNC: function() {
     var that = this
     that.getOption(that.data.ageType).then(res => {
@@ -244,6 +256,22 @@ Page({
     that.getOption(that.data.genderType).then(res => {
       that.setData({
         gender: res,
+      })
+    })
+  },
+  isvGetNC: function () {
+    var that = this
+    that.getOption(that.data.isvType).then(res => {
+      that.setData({
+        isv: res,
+      })
+    })
+  },
+  vtGetNC: function () {
+    var that = this
+    that.getOption(that.data.vtType).then(res => {
+      that.setData({
+        vt: res,
       })
     })
   },
@@ -344,8 +372,10 @@ Page({
         permanentResidence: pr,
         questionType: this.data.qt[this.data.qtIndex].code,
         visitLocation: this.data.vl[this.data.vlIndex].code,
-        isSpecialVisit: this.data.isv[this.data.isvIndex],
-        visitType: this.data.vt[this.data.vtIndex],
+        // isSpecialVisit: this.data.isv[this.data.isvIndex],
+        // visitType: this.data.vt[this.data.vtIndex],
+        isSpecialVisit: this.data.isv[this.data.isvIndex].code,
+        visitType: this.data.vt[this.data.vtIndex].code,
         solution: this.data.solution[this.data.solutionIndex].code,
         visitDate: visitDate,
       }
