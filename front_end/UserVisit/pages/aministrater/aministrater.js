@@ -40,7 +40,7 @@ Page({
   showTopTips: function () {
     if (this.legalDate(this.data.date_begin, this.data.date_last)) {
       wx.navigateTo({
-        url: '../dataChoose/dataChoose?date_begin=' + this.data.date_begin + '&date_last=' + this.data.date_last,
+        url: '../dataChoose/dataChoose?date_begin=' + util.formatRealTime(new Date(this.data.date_begin + ' 00:00:00')) + '&date_last=' + util.formatRealTime(new Date(this.data.date_last + ' 23:59:59')),
       })
     }
     else{

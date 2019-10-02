@@ -56,29 +56,31 @@ Page({
   /* 前半段 */
   bindDate_BeginChange: function (e) {
     console.log('begin', this.legalDate(e.detail.value, this.data.date_last))
-
-    if(this.legalDate(e.detail.value, this.data.date_last)==true){
+    console.log('begin', e.detail.value, this.data.date_last)
+    this.setData({
+      date_begin: e.detail.value
+    })
+    if (this.legalDate(this.data.date_begin, this.data.date_last)==true){
       this.refleshChart();
     }
     else{
       this.openConfirm(this.data.illegalDateDialog);
     }
-    this.setData({
-      date_begin: e.detail.value
-    })
   },
   /* 后半段 */
   bindDate_LastChange: function (e) {
     console.log('last', this.legalDate(this.data.date_begin, e.detail.value))
-    if (this.legalDate(this.data.date_begin, e.detail.value)==true) {
+    console.log('last', this.data.date_begin, e.detail.value)
+    this.setData({
+      date_last: e.detail.value
+    })
+    if (this.legalDate(this.data.date_begin, this.data.date_last)==true) {
       this.refleshChart();
     }
     else{
       this.openConfirm(this.data.illegalDateDialog);
     }
-    this.setData({
-      date_last: e.detail.value
-    })
+    
   },
 
   // 对话框
@@ -546,8 +548,8 @@ Page({
         method: 'POST',
 
         success: function (res) {
-          console.log("success")
-          
+          // console.log("success")
+          console.log('得到图的数据', res.data)
           resolve(res.data)
         },
         fail: function (res) {
@@ -568,10 +570,23 @@ Page({
 
    /* 日期与请求数据封装 */
   collectData: function (fieldGet, date_begin, date_last) {
+      // console.log('collectData', fieldGet, date_begin, date_last);
+      var util = require("../../utils/util.js");
+      var startDate, endDate;
+      if(date_begin==""||date_last==""){
+        startDate = date_begin
+        endDate = date_last
+      }
+      else {
+        startDate = util.formatRealTime(new Date(date_begin + ' 00:00:00'))
+        endDate = util.formatRealTime(new Date(date_last + ' 23:59:59'))
+      }
+      console.log('collectData', fieldGet, startDate, endDate);
+      console.log('date', date_begin, date_last)
       return {
         field: fieldGet,
-        startDate: date_begin, 
-        endDate: date_last,
+        startDate: startDate, 
+        endDate: endDate,
       }
    },
 
@@ -582,11 +597,11 @@ Page({
     var diff = end_date.getTime() - start_date.getTime();
 
     console.log('diff',diff);
-    if(diff<0){
-      return false;
+    if(diff>=0){
+      return true;
     }
     else{
-      return true;
+      return false;
     }
   },
 
@@ -597,9 +612,18 @@ Page({
      data = this.collectData(this.data.accompanyNumberField, this.data.date_begin, this.data.date_last);
      this.requestGetData(data, question_word).then(res => {
        console.log(res);
-       this.setData({
-         allAccompanyNumber: res.data[0].value
-       })
+       if(res.status!='success'){
+         var dialog = res.data.errMsg;
+         this.openConfirm(dialog);
+         this.setData({
+           allAccompanyNumber: 0,
+         })
+       }
+       else{
+         this.setData({
+           allAccompanyNumber: res.data[0].value
+         })
+       }
      });
 
     //  piechart
@@ -710,8 +734,7 @@ Page({
         method: 'POST',
 
         success: function (res) {
-          console.log(res)
-          console.log("success")
+          console.log('得到' + type + '字典', res)
           resolve(res.data.data)
         },
         fail: function (res) {

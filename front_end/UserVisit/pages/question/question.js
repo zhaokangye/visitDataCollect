@@ -149,17 +149,17 @@ Page({
     if(this.data.question.nationality == ""){
       console.log("nationality null");
       dialogContent = "国籍不能为空";
-      url = "";
+      url = 0;
     }
     else if(this.data.question.accompanyNumber == ""){
       console.log("accompanyNumber null");
       dialogContent = "来访人数不能为空";
-      url = "";
+      url = 0;
     }
     else if(this.data.question.permanentResidence == ""){
       console.log("permanentResidence null");
       dialogContent = "常住地不能为空";
-      url = "";
+      url = 0;
     }
     else{
       wx.request({
@@ -184,7 +184,7 @@ Page({
         },
       })
       dialogContent = '提交成功';
-      url = "../usertype/usertype";
+      url = 1;
     }
     // 弹出消息框
     console.log(dialogContent);
@@ -203,11 +203,14 @@ Page({
       showCancel: false,
       success: function (res) {
         console.log(res);
-        if (res.confirm) {
+        if (res.confirm&&url==1) {
           console.log('用户点击确定')
-          wx.navigateTo({
-            url: url,
+          wx.navigateBack({
+            delta: url,
           })
+        }
+        else {
+          console.log('用户点击确定，但不跳转')
         }
       }
     });
@@ -350,13 +353,15 @@ Page({
     // 获取日期与具体时间
     var visitDate;
     if(this.data.date==this.data.localdate){
-      visitDate = this.data.date + ' ' + util.formatTime(new Date());
+      // visitDate = this.data.date + ' ' + util.formatTime(new Date());
+      visitDate = util.formatRealTime(new Date(this.data.date + ' ' + util.formatTime(new Date())))
       // var hour = visitDate.substring(11,13);
       // hour = parseInt(hour) + 8;
 
     }
     else{
-      visitDate = this.data.date + ' ' + '00:00:00';
+      // visitDate = this.data.date + ' ' + '00:00:00';
+      visitDate = util.formatRealTime(new Date(this.data.date + ' ' + '00:00:00'))
     }
     console.log(visitDate);
 
