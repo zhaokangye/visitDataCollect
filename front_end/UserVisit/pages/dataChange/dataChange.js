@@ -455,6 +455,7 @@ Page({
 
     // 获取日期与具体时间
     var visitDate;
+    var util = require('../../utils/util.js')
     if (this.data.date == this.data.localdate) {
       // visitDate = this.data.date + ' ' + this.data.curtime;
       visitDate = util.formatRealTime(new Date(this.data.date + ' ' + this.data.curtime))

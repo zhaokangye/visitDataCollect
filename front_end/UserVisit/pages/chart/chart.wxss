@@ -13,10 +13,26 @@
 }
 .notChart__Area{
   /* background-color: #5095f3; */
+  height: 10%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  margin: 10px;
 }
+.chart__Area {
+  position: absolute;
+  top: 10%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+} 
 .accompanyNumber__Area{
   font-weight: 400; 
   font-size: 16;

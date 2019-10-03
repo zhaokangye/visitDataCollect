@@ -1,20 +1,20 @@
 // pages/dataChoose/dataChoose.js
 var pages = getCurrentPages();
 var prepages = pages[pages.length - 2];
-var time = [
-  { 'id': 0, 'question': "忘记密码", 'time': '2019-09-26 12:36:14'},
-  { 'id': 2, 'question': "忘记密码", 'time': '2019-09-26 12:36:20' },
-  { 'id': 1, 'question': "忘记密码", 'time': '2019-09-26 12:36:15'},
-  { 'id': 3, 'question': "忘记密码", 'time': '2019-09-26 12:36:30' },
-  { 'id': 4, 'question': "忘记密码", 'time': '2019-09-26 12:36:31' },
-];
-var extra = [
-  { 'id': 5, 'question': "忘记密码", 'time': '2019-09-26 12:36:40' },
-  { 'id': 6, 'question': "忘记密码", 'time': '2019-09-26 12:36:50' },
-  { 'id': 7, 'question': "忘记密码", 'time': '2019-09-26 12:37:30' },
-  { 'id': 8, 'question': "忘记密码", 'time': '2019-09-26 12:37:50' },
-  { 'id': 9, 'question': "忘记密码", 'time': '2019-09-26 12:38:30' },
-];
+// var time = [
+//   { 'id': 0, 'question': "忘记密码", 'time': '2019-09-26 12:36:14'},
+//   { 'id': 2, 'question': "忘记密码", 'time': '2019-09-26 12:36:20' },
+//   { 'id': 1, 'question': "忘记密码", 'time': '2019-09-26 12:36:15'},
+//   { 'id': 3, 'question': "忘记密码", 'time': '2019-09-26 12:36:30' },
+//   { 'id': 4, 'question': "忘记密码", 'time': '2019-09-26 12:36:31' },
+// ];
+// var extra = [
+//   { 'id': 5, 'question': "忘记密码", 'time': '2019-09-26 12:36:40' },
+//   { 'id': 6, 'question': "忘记密码", 'time': '2019-09-26 12:36:50' },
+//   { 'id': 7, 'question': "忘记密码", 'time': '2019-09-26 12:37:30' },
+//   { 'id': 8, 'question': "忘记密码", 'time': '2019-09-26 12:37:50' },
+//   { 'id': 9, 'question': "忘记密码", 'time': '2019-09-26 12:38:30' },
+// ];
 Page({
 
   /**
@@ -59,11 +59,25 @@ Page({
       date_begin: options.date_begin,
       date_last: options.date_last,
     })
+    
+    // this.setData({
+    //   list: this.bubbleSort(this.data.list),
+    //   // page: this.data.page + 1,
+    // });
+  },
+
+  /**
+   * 生命周期函数-监听页面显示
+   */
+  onShow: function (options) {
+    this.setData({
+      page: 1,
+    })
     this.requestGetData(this.collectData(this.data.date_begin, this.data.date_last, this.data.page, this.data.size)).then(res => {
-      if(res.status=='fail'||res.status==404){
+      if (res.status == 'fail' || res.status == 404) {
         this.openConfirm(this.data.requestErrorDialog);
       }
-      else{
+      else {
         this.setData({
           list: res.data.records,
         });
@@ -74,10 +88,6 @@ Page({
       console.log('curpage', this.data.page)
     });
     this.qtGetNC();
-    // this.setData({
-    //   list: this.bubbleSort(this.data.list),
-    //   // page: this.data.page + 1,
-    // });
   },
 
   /**

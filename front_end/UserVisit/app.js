@@ -98,7 +98,6 @@ App({
                 console.log("用户id为" + wx.getStorageSync('userid'))
                 console.log("session_key为" + wx.getStorageSync('session_key'))
                 console.log('roles:' + wx.getStorageSync('roles'))
-                that.globalData.roles = wx.getStorageSync('roles')
               });
             }
           })

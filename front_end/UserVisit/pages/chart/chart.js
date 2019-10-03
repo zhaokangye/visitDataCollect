@@ -37,19 +37,27 @@ Page({
       // allAccompanyNumber: requestGetData(date_begin, date_last, question_word+aan_word)[0].value,
     });
     var data = this.collectData(this.data.accompanyNumberField, this.data.date_begin, this.data.date_last);
-    this.requestGetData(data, question_word).then(res => {
-      console.log(res);
-      if(res.status!="fail"){
-        this.setData({
-          allAccompanyNumber: res.data[0].value
-        })
-      }
-      else{
-        this.setData({
-          allAccompanyNumber: 0
-        })
-      }
-    });
+    // this.requestGetData(data, question_word).then(res => {
+    //   console.log(res);
+    //   if(res.status!="fail"){
+    //     this.setData({
+    //       allAccompanyNumber: res.data[0].value
+    //     })
+    //   }
+    //   else{
+    //     this.setData({
+    //       allAccompanyNumber: 0
+    //     })
+    //   }
+    // });
+    
+  },
+
+  /**
+   * 生命周期函数-数据准备完成
+   */
+  onReady: function (options) {
+    this.refleshChart();
   },
 
   /** 更新日期后立刻更新数据 **/
@@ -176,17 +184,22 @@ Page({
       height: height
     });
     var data = this.collectData(this.data.vlField, this.data.date_begin, this.data.date_last);
-    this.requestGetData(data, question_word).then(res => {
-      this.getOption(this.data.vlType).then(e => {
-        console.log('piechart data', res, e)
-        var restmp = this.checkEnoughOption(res, e);
-        canvas.setChart(piechart);
-        piechart.setOption(this.getPieOption(restmp));
-        console.log('piechart already', restmp)
-        return piechart;
-      })
-      
-    });
+    // var data = [{ "name": "TIT", "value": 6 }, { "name": "南通", "value": 0 }, { "name": "媒体港", "value": 4 }]
+    // this.requestGetData(data, question_word).then(res => {
+    //   // this.getOption(this.data.vlType).then(e => {
+    //   //   console.log('piechart data', res, e)
+    //   //   var restmp = this.checkEnoughOption(res, e);
+    //   //   canvas.setChart(piechart);
+    //   //   piechart.setOption(this.getPieOption(restmp));
+    //   //   console.log('piechart already', restmp)
+    //   //   return piechart;
+    //   // })
+    //   piechart.setOption(this.getPieOption(res.data));
+    //   console.log('piechart already', res)
+    // });
+    canvas.setChart(piechart);
+    console.log('piechart init');
+    return piechart;
   },
 
   /* 动态更改参数 */
@@ -243,7 +256,7 @@ Page({
         },
         type: 'pie',
         center: ['65%', '45%'],
-        radius: [0, '80%'],
+        radius: [0, '70%'],
         data: source,
         itemStyle: {
           emphasis: {
@@ -274,14 +287,15 @@ Page({
     });
     // var pages = getCurrentPages()
     var data = this.collectData(this.data.isAbroadField, this.data.date_begin, this.data.date_last);
-    this.requestGetData(data, question_word).then(res => {
-      console.log('bar1chart data',res, this.data.isAbroad);
-      var restmp = this.checkEnoughOption(res, this.data.isAbroad);
-      canvas.setChart(bar1chart);
-      bar1chart.setOption(this.getBarOption(restmp));
-      console.log('bar1chart already', restmp)
-      return bar1chart;
-    });
+    // this.requestGetData(data, question_word).then(res => {
+    //   console.log('bar1chart data',res, this.data.isAbroad);
+    //   // var restmp = res
+    //   bar1chart.setOption(this.getBarOption(res.data));
+    //   console.log('bar1chart already', res)
+    // });
+    canvas.setChart(bar1chart);
+    console.log('bar1chart init');
+    return bar1chart;
     // setTimeout(function(){}, 2000);
   },
   initBar2Chart: function (canvas, width, height) {
@@ -291,22 +305,23 @@ Page({
     });
     // var pages = getCurrentPages()
     var data = this.collectData(this.data.vtField, this.data.date_begin, this.data.date_last);
-    this.requestGetData(data, question_word).then(res => {
-      this.getOption(this.data.vtType).then(e => {
-        console.log('bar2chart data', res, e);
-        var restmp = this.checkEnoughOption(res, e);
-        canvas.setChart(bar2chart);
-        bar2chart.setOption(this.getBarOption(restmp));
-        console.log('bar2chart already', restmp)
-        return bar2chart;
-      });
-      // console.log('bar2chart data', res, this.data.vt);
-      // var restmp = this.checkEnoughOption(res, this.data.vt);
-      // canvas.setChart(bar2chart);
-      // bar2chart.setOption(this.getBarOption(restmp));
-      // console.log('bar2chart already', restmp)
-      // return bar2chart;
-    });
+    // this.requestGetData(data, question_word).then(res => {
+    //   // this.getOption(this.data.vtType).then(e => {
+    //   //   console.log('bar2chart data', res, e);
+    //   //   var restmp = this.checkEnoughOption(res, e);
+    //   //   canvas.setChart(bar2chart);
+    //   //   bar2chart.setOption(this.getBarOption(restmp));
+    //   //   console.log('bar2chart already', restmp)
+    //   //   return bar2chart;
+    //   // });
+    //   console.log('bar2chart data', res, this.data.vt);
+    //   bar2chart.setOption(this.getBarOption(res.data));
+    //   console.log('bar2chart already', res)
+    // });
+    
+    canvas.setChart(bar2chart);
+    console.log('bar2chart init');
+    return bar2chart;
     // setTimeout(function(){}, 2000);
   },
   initBar3Chart: function (canvas, width, height) {
@@ -316,22 +331,23 @@ Page({
     });
     // var pages = getCurrentPages()
     var data = this.collectData(this.data.isvField, this.data.date_begin, this.data.date_last);
-    this.requestGetData(data, question_word).then(res => {
-      this.getOption(this.data.isvType).then(e => {
-        console.log('bar3chart data', res, e);
-        var restmp = this.checkEnoughOption(res, e);
-        canvas.setChart(bar3chart);
-        bar3chart.setOption(this.getBarOption(restmp));
-        console.log('bar3chart already', restmp)
-        return bar3chart;
-      });
-      // console.log('bar3chart data', res, this.data.isv);
-      // var restmp = this.checkEnoughOption(res, this.data.isv);
-      // canvas.setChart(bar3chart);
-      // bar3chart.setOption(this.getBarOption(restmp));
-      // console.log('bar3chart already', restmp)
-      // return bar3chart;
-    });
+    // this.requestGetData(data, question_word).then(res => {
+    //   // this.getOption(this.data.isvType).then(e => {
+    //   //   console.log('bar3chart data', res, e);
+    //   //   var restmp = this.checkEnoughOption(res, e);
+    //   //   canvas.setChart(bar3chart);
+    //   //   bar3chart.setOption(this.getBarOption(restmp));
+    //   //   console.log('bar3chart already', restmp)
+    //   //   return bar3chart;
+    //   // });
+    //   console.log('bar3chart data', res, this.data.isv);
+      
+    //   bar3chart.setOption(this.getBarOption(res.data));
+    //   console.log('bar3chart already', res)
+    // });
+    canvas.setChart(bar3chart);
+    
+    return bar3chart;
     // setTimeout(function(){}, 2000);
   },
 
@@ -430,15 +446,20 @@ Page({
     // source
     // var pages = getCurrentPages()
     var data = this.collectData(this.data.qtField, this.data.date_begin, this.data.date_last);
-    this.requestGetData(data, question_word).then(res => {
-      this.getOption(this.data.qtType).then(e => {
-        var restmp = this.checkEnoughOption(res, e);
-        canvas.setChart(bar_queschart);
-        bar_queschart.setOption(this.getBar_QuesOption(restmp));
-        console.log('bar_queschart already', restmp)
-        return bar_queschart;
-      });
-    });
+    // this.requestGetData(data, question_word).then(res => {
+    //   // this.getOption(this.data.qtType).then(e => {
+    //   //   var restmp = this.checkEnoughOption(res, e);
+    //   //   canvas.setChart(bar_queschart);
+    //   //   bar_queschart.setOption(this.getBar_QuesOption(restmp));
+    //   //   console.log('bar_queschart already', restmp)
+    //   //   return bar_queschart;
+    //   // });
+    //   bar_queschart.setOption(this.getBar_QuesOption(res.data));
+    //   console.log('bar_queschart already', res)
+    // });
+    canvas.setChart(bar_queschart);
+    console.log('bar_queschart init');
+    return bar_queschart;
   },
 
   /* 动态更改参数 */
@@ -510,17 +531,21 @@ Page({
       height: height
     });
     var data = this.collectData(this.data.solutionField, this.data.date_begin, this.data.date_last);
-    this.requestGetData(data, question_word).then(res => {
-      this.getOption(this.data.solutionType).then(e => {
-        console.log('piesolutionchart data', res, e)
-        var restmp = this.checkEnoughOption(res, e);
-        canvas.setChart(piesolutionchart);
-        piesolutionchart.setOption(this.getPieOption(restmp));
-        console.log('piechart already', restmp)
-        return piesolutionchart;
-      })
-
-    });
+    // this.requestGetData(data, question_word).then(res => {
+    //   // this.getOption(this.data.solutionType).then(e => {
+    //   //   console.log('piesolutionchart data', res, e)
+    //   //   var restmp = this.checkEnoughOption(res, e);
+    //   //   canvas.setChart(piesolutionchart);
+    //   //   piesolutionchart.setOption(this.getPieOption(restmp));
+    //   //   console.log('piechart already', restmp)
+    //   //   return piesolutionchart;
+    //   // })
+    //   piesolutionchart.setOption(this.getPieOption(res.data));
+    //   console.log('piechart already', res)
+    // });
+    canvas.setChart(piesolutionchart);
+    console.log('piesolutionchart init');
+    return piesolutionchart;
   },
 
   /* 动态更改参数 */
@@ -611,7 +636,6 @@ Page({
      //accompanyNumber
      data = this.collectData(this.data.accompanyNumberField, this.data.date_begin, this.data.date_last);
      this.requestGetData(data, question_word).then(res => {
-       console.log(res);
        if(res.status!='success'){
          var dialog = res.data.errMsg;
          this.openConfirm(dialog);
@@ -630,51 +654,57 @@ Page({
     // visitLocation
      data = this.collectData(this.data.vlField, this.data.date_begin, this.data.date_last);
      this.requestGetData(data, question_word).then(res => {
-       this.getOption(this.data.vlType).then(e => {
-         var restmp = this.checkEnoughOption(res, e);
-         console.log(restmp);
-         this.setPieOption(piechart, restmp)
-       })
+      //  this.getOption(this.data.vlType).then(e => {
+        //  var restmp = this.checkEnoughOption(res, e);
+        //  console.log(restmp);
+        //  this.setPieOption(piechart, restmp)
+      //  })
+       this.setPieOption(piechart, res.data)
      });
 
      // barchart
      data = this.collectData(this.data.isAbroadField, this.data.date_begin, this.data.date_last);
      this.requestGetData(data, question_word).then(res => {
-       var restmp = this.checkEnoughOption(res, this.data.isAbroad);
-       console.log(restmp);
-       this.setBarOption(bar1chart, restmp)
+      //  var restmp = this.checkEnoughOption(res, this.data.isAbroad);
+      //  console.log(restmp);
+      //  this.setBarOption(bar1chart, restmp)
+       this.setBarOption(bar1chart, res.data)
      });
      data = this.collectData(this.data.vtField, this.data.date_begin, this.data.date_last);
      this.requestGetData(data, question_word).then(res => {
-       var restmp = this.checkEnoughOption(res, this.data.vt);
-       console.log(restmp);
-       this.setBarOption(bar2chart, restmp)
+      //  var restmp = this.checkEnoughOption(res, this.data.vt);
+      //  console.log(restmp);
+      //  this.setBarOption(bar2chart, restmp)
+       this.setBarOption(bar2chart, res.data)
      });
      data = this.collectData(this.data.isvField, this.data.date_begin, this.data.date_last);
      this.requestGetData(data, question_word).then(res => {
-       var restmp = this.checkEnoughOption(res, this.data.isv);
-       console.log(restmp);
-       this.setBarOption(bar3chart, restmp)
+      //  var restmp = this.checkEnoughOption(res, this.data.isv);
+      //  console.log(restmp);
+      //  this.setBarOption(bar3chart, restmp)
+       this.setBarOption(bar3chart, res.data)
      });
 
      //bar_queschart
      data = this.collectData(this.data.qtField, this.data.date_begin, this.data.date_last);
      this.requestGetData(data, question_word).then(res => {
-       this.getOption(this.data.qtType).then(e => {
-         var restmp = this.checkEnoughOption(res, e);
-         console.log(restmp);
-         this.setBar_QuesOption(bar_queschart, restmp)
-       })
+      //  this.getOption(this.data.qtType).then(e => {
+      //    var restmp = this.checkEnoughOption(res, e);
+      //    console.log(restmp);
+      //    this.setBar_QuesOption(bar_queschart, restmp)
+      //  })
+       this.setBar_QuesOption(bar_queschart, res.data)
      });
 
     //  piesolutionchart
      data = this.collectData(this.data.solutionField, this.data.date_begin, this.data.date_last);
      this.requestGetData(data, question_word).then(res => {
-       this.getOption(this.data.solutionType).then(e => {
-         var restmp = this.checkEnoughOption(res, e);
-         console.log(restmp);
-         this.setPieOption(piesolutionchart, restmp)
-       })
+      //  this.getOption(this.data.solutionType).then(e => {
+      //    var restmp = this.checkEnoughOption(res, e);
+      //    console.log(restmp);
+      //    this.setPieOption(piesolutionchart, restmp)
+      //  })
+       this.setPieOption(piesolutionchart, res.data)
      });
    },
 
