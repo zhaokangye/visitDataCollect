@@ -1,21 +1,6 @@
 // pages/dataChange/dataChange.js
 var pages = getCurrentPages();
 var prePage = pages[pages.length - 2];
-var question = {
-  id: 1,
-  age: 3,
-  gender: 1,
-  isAbroad: 0,
-  nationality: "",
-  accompanyNumber: 6,
-  permanentResidence: 'aalena',
-  questionType: 2,
-  visitLocation: 1,
-  isSpecialVisit: '异常',
-  visitType: '首次',
-  solution: 2,
-  visitDate: '2019-10-12 17:12:39',
-};
 // var info = prePage.data;
 Page({
 
@@ -24,6 +9,7 @@ Page({
    */
   data: {
     getid: "",
+    
     // age: ["20以下", "21-30", "31-40","41-50","51-60","60以上"],
     age: '',
     ageType: '年龄段',
@@ -220,6 +206,7 @@ Page({
    * 对话框
    */
   openConfirm: function (dialogContent, url) {
+    var that = this;
     wx.showModal({
       title: '提示',
       content: dialogContent,
@@ -414,24 +401,6 @@ Page({
         },
       })
     })
-  },
-
-  /**
-   * 根据id找到数据库中该记录的数据 
-   */
-  getData: function (id) {
-    var data;
-    this.getQuestionData(id).then(res => {
-      if(res.status!='success'){
-        var dialog = '网络请求失败';
-        var url = '../dataChoose/dataChoose';
-        openConfirm(dialog, url);
-      }
-      else{
-        data = res.data;
-      }
-    });
-    return data;
   },
 
   /**

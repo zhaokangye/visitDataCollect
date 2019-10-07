@@ -5,7 +5,9 @@
     "pages/chart/chart",
     "pages/aministrater/aministrater",
     "pages/dataChange/dataChange",
-    "pages/dataChoose/dataChoose"
+    "pages/dataChoose/dataChoose",
+    "pages/authorityList/authorityList",
+    "pages/authorityChange/authorityChange"
   ],
   "window": {
     "backgroundTextStyle": "light",

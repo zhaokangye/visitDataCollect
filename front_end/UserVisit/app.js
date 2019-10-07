@@ -54,6 +54,8 @@ App({
                     that.rolesReadyCallback(res)
                   }
                 } else {
+                  wx.setStorageSync('token', '')
+                  wx.setStorageSync('roles', '')
                   console.log(res.errMsg)
                 }
                 console.log('wx.login.request', res)
@@ -62,6 +64,8 @@ App({
             })
           } else {
             console.log('登录失败！' + res.errMsg)
+            wx.setStorageSync('token', '')
+            wx.setStorageSync('roles', '')
             reject('error');
           }
         }

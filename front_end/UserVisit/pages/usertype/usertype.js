@@ -40,6 +40,13 @@ Page({
       url: '../aministrater/aministrater',
     })
   },
+
+  authorityControl_btn: function (e) {
+    wx.navigateTo({
+      // url: '../authorityList/authorityList',
+      url: '../authorityList/authorityList',
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */

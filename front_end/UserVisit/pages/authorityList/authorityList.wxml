@@ -1,20 +1,22 @@
+<!--pages/authorityControl/authorityControl.wxml-->
 <!--pages/dataChoose/dataChoose.wxml-->
 <view class="page">
   <view class="page__hd">
-    <text class="page__title" space="emsp">{{date_begin}} ~~ {{date_last}}</text>
+    <text class="page__title" space="emsp">用户列表</text>
   </view>
   <view class="page__bd page__bd_spacing">
     <view class="kind-list">
-      <block wx:for-items="{{list}}" wx:key="id" wx:for-item="item">
+      <block wx:for-items="{{list}}" wx:key="nickname" wx:for-item="item">
         <view class="kind-list__item">
           <view class="kind-list__item-hd kind-list__item-abstract" bindtap="modification" id="{{index}}">
             <view class="kind-list__item-abstract_number">{{index+1}}</view>
             <view class="kind-list__item-abstract_content">
-              <block wx:for="{{qt}}" wx:key="dictName" wx:for-item="question">
-                <view class="kind-list__item-abstract_question" wx:if="{{item.questionType==question.code}}">{{showedType}}：{{question.dictName}}</view>
-              </block>
-              <view class="kind-list__item-abstract_time">{{item.visitDate}}</view>
+              <!-- 元件显示：昵称，权限 -->
+              <view class="kind-list__item-abstract_question">{{item.nickName}}</view>
+              <view class="kind-list__item-abstract_time">权限：{{item.roles}}</view>
+              
             </view>
+
           </view>
         </view>
       </block>
