@@ -136,9 +136,6 @@ Page({
         console.log(res);
         if (res.confirm && url == 1) {
           console.log('用户点击确定')
-          prepage.setData({
-            page: that.data.page
-          })
           wx.navigateBack({
             delta: url,
           })
@@ -185,7 +182,6 @@ Page({
   onLoad: function (options) {
     this.setData({
       record: JSON.parse(options.data),
-      page: options.curpage
     })
     console.log('record', typeof this.data.record, this.data.record);
     this.setData({

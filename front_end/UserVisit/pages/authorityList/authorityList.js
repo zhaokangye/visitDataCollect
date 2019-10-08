@@ -101,7 +101,7 @@ Page({
     console.log(e);
     var that = this;
     wx.navigateTo({
-      url: '../authorityChange/authorityChange?data=' + JSON.stringify(that.data.list[e.currentTarget.id]) + '&curpage=' + that.data.curpage,
+      url: '../authorityChange/authorityChange?data=' + JSON.stringify(that.data.list[e.currentTarget.id]),
       success: function (res) {
         console.log(typeof that.data.list[e.currentTarget.id], that.data.list[e.currentTarget.id]);
         that.setData({
