@@ -1,19 +1,22 @@
 
 .bar-horizontal{
   width: 100%;
-  height: 7.31%
+  height: 7.31%;
+  /* height: 15%; */
 }
 .bar-vertical{
   width: 100%;
-  height: 29.26%
+  height: 29.26%;
+  /* height: 60%; */
 }
 .pie-vertical{
   width: 100%;
-  height: 24.39%
+  height: 24.39%;
+  /* height: 50%; */
 }
 .notChart__Area{
   /* background-color: #5095f3; */
-  height: 10%;
+  height: 5%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,9 +29,9 @@
   bottom: 0;
   left: 0;
   right: 0; */
-  position: absolute;
-  top: 10%;
-  height: 205%;
+  /* position: absolute; */
+  /* top: 10%; */
+  height: 95%;
   width: 100%;
   display: flex;
   flex-direction: column;

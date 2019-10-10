@@ -1,5 +1,6 @@
 <!--pages/bar/bar.wxml-->
 <view class="container-chart">
+
   <view class="notChart__Area">
     <view class="text__cell">
       <view>总人次：{{allAccompanyNumber}}</view>
@@ -14,15 +15,28 @@
         </picker>
       </view>
   </view>
+
   <view class="chart__Area">
     <!-- 图表 -->
-    <ec-canvas class="pie-vertical" id="mychart-multi-pie" canvas-id="mychart-multi-pie" ec="{{ ecpie }}" bind:init="pieOnInit" ></ec-canvas>
+    <view class="pie-vertical">
+      <ec-canvas id="mychart-dom-multi-pie" canvas-id="mychart-multi-pie" ec="{{ ecpie }}" bind:init="pieOnInit" ></ec-canvas>
+    </view>
+    <view class="bar-horizontal">
+      <ec-canvas id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar1 }}" bind:init="bar1OnInit"></ec-canvas>
+    </view>
+    <view class="bar-horizontal">
+      <ec-canvas id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar2 }}" bind:init="bar2OnInit"></ec-canvas>
+    </view>
+    <view class="bar-horizontal">
+      <ec-canvas id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar3 }}" bind:init="bar3OnInit"></ec-canvas>
+    </view>
+    <view class="bar-vertical">
+      <ec-canvas id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar4 }}" bind:init="bar_quesOnInit"></ec-canvas>
+    </view>
+    <view class="pie-vertical">
+      <ec-canvas id="mychart-dom-multi-pie" canvas-id="mychart-multi-pie" ec="{{ ecpie_solution }}" bind:init="pieSolutionOnInit" ></ec-canvas>
+    </view>
     
-    <ec-canvas class="bar-horizontal" id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar1 }}" bind:init="bar1OnInit"></ec-canvas>
-    <ec-canvas class="bar-horizontal" id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar2 }}" bind:init="bar2OnInit"></ec-canvas>
-    <ec-canvas class="bar-horizontal" id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar3 }}" bind:init="bar3OnInit"></ec-canvas>
-    <ec-canvas class="bar-vertical" id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar4 }}" bind:init="bar_quesOnInit"></ec-canvas>
-    <ec-canvas class="pie-vertical" id="mychart-multi-pie" canvas-id="mychart-multi-pie" ec="{{ ecpie_solution }}" bind:init="pieSolutionOnInit" ></ec-canvas>
   </view>
   
 </view>

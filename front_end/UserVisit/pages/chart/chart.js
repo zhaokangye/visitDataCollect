@@ -168,7 +168,7 @@ Page({
   /* 初始化 */
   pieOnInit (e) {
     console.log(e)
-    return this.initPieChart(e.detail.canvas, e.detail.width, e.detail.height)
+    this.initPieChart(e.detail.canvas, e.detail.width, e.detail.height)
   },
   initPieChart: function (canvas, width, height) {
     piechart = echarts.init(canvas, null, {
@@ -200,19 +200,23 @@ Page({
     var value = []
     // 赋值进name
     for (var x in source) {
-      name[x] = source[x].name
+      name[x] = {name: source[x].name}
       value[x] = source[x].value
     }
+    console.log('getPieOption', name, value, source)
     return {
       backgroundColor: "#EDEDED",
       color: ["#66CD00", "#4169E1", "#666666", "#91F2DE"],
+      tooltip: {
+        position: ['50%', '40%']
+      },
       legend: {
         itemWidth: 20,
         itemHeigth: 40,
         itemGap: 10,
         formatter: (params) => {
           for (var x in name) {
-            if (params == name[x]) {
+            if (params == name[x].name) {
               return params + ' ' + value[x]
             }
           }
@@ -222,26 +226,17 @@ Page({
         left: 10,
         data: name,
       },
-      tooltip: {
-        position: ['50%', '40%']
-      },
       series: [{
         label: {
           normal: {
             position: 'inside',
             formatter: '{d}%',
-            align: 'center',
+            fontSize: 14,
+            // align: 'center',
             textStyle: {
               color: '#000000'
             },
           }
-        },
-        labelLine: {
-          normal: {
-            smooth: 0.2,
-            length: 10,
-            length2: 20
-          },
         },
         type: 'pie',
         center: ['65%', '45%'],
@@ -261,13 +256,13 @@ Page({
   /** 柱状图 **/
   /* 初始化 */
   bar1OnInit (e) {
-    return this.initBar1Chart(e.detail.canvas, e.detail.width, e.detail.height)
+    this.initBar1Chart(e.detail.canvas, e.detail.width, e.detail.height)
   },
   bar2OnInit (e) {
-    return this.initBar2Chart(e.detail.canvas, e.detail.width, e.detail.height)
+    this.initBar2Chart(e.detail.canvas, e.detail.width, e.detail.height)
   },
   bar3OnInit (e) {
-    return this.initBar3Chart(e.detail.canvas, e.detail.width, e.detail.height)
+    this.initBar3Chart(e.detail.canvas, e.detail.width, e.detail.height)
   },
   initBar1Chart: function (canvas, width, height) {
     bar1chart = echarts.init(canvas, null, {
@@ -371,7 +366,8 @@ Page({
             normal: {
               show: true,
               position: 'insideLeft',
-              fontSize: 14,
+              // fontSize: 14,
+              // fontFamily: 'serif',
               offset: [-70, 0],
               color: '#333',
               formatter: '{a}\n({c})',
@@ -388,7 +384,7 @@ Page({
             normal: {
               show: true,
               position: 'insideRight',
-              fontSize: 14,
+              // fontSize: 14,
               offset: [70, 0],
               color: '#333',
               formatter: '{a}\n({c})',
@@ -403,7 +399,7 @@ Page({
   /** 柱状图2 **/
   /* 初始化 */
   bar_quesOnInit (e) {
-    return this.initBar_QuesChart(e.detail.canvas, e.detail.width, e.detail.height)
+    this.initBar_QuesChart(e.detail.canvas, e.detail.width, e.detail.height)
   },
   initBar_QuesChart: function (canvas, width, height) {
     bar_queschart = echarts.init(canvas, null, {
@@ -438,6 +434,7 @@ Page({
       name[x] = source[x].name
       data[x] = source[x].value
     }
+    console.log('getBar_QuesOption', name, data, source)
     return {
       backgroundColor: "#EDEDED",
       grid: {
@@ -454,24 +451,30 @@ Page({
         },
         confine: true
       },
-      xAxis: {
-        type: 'category',
-        data: name,
-        axisTick:{
-          alignWithLabel:true
-        },
-        axisLabel:{
-          interval:0,
-          rotate: -45,
-          fontSize:12.5,
-        },
-      },
-      yAxis: {
-        type: 'value',
+      xAxis: [
+        {
+          type: 'category',
+          data: name,
+          axisTick: {
+            show: false,
+            // alignWithLabel:true
+          },
+          axisLabel: {
+            interval: 0,
+            rotate: -45,
+            fontSize: 12,
+          },
 
-      },
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value',
+        }
+      ],
       series: [
         {
+          name: this.data.qtType,
           type: 'bar',
           data: data,
           label: {
@@ -490,7 +493,7 @@ Page({
   /*** 解决方式饼图 */
   /* 初始化 */
   pieSolutionOnInit(e) {
-    return this.initPieSolutionChart(e.detail.canvas, e.detail.width, e.detail.height)
+    this.initPieSolutionChart(e.detail.canvas, e.detail.width, e.detail.height)
   },
   initPieSolutionChart: function (canvas, width, height) {
     piesolutionchart = echarts.init(canvas, null, {
@@ -514,7 +517,6 @@ Page({
   requestGetData: function (data, request_chart) {
     // console.log(typeof date_begin, typeof date_last);
     return new Promise(function (resolve, reject) {
-      var source
       wx.request({
         url: 'http://47.101.143.247:8080/visit-0.0.1-SNAPSHOT' + request_chart,
         // url: '',
@@ -535,7 +537,7 @@ Page({
         fail: function (res) {
           console.log(res)
           console.log('fail')
-          reject(source)
+          reject(res)
         },
         complete: function (res) {
           if (res.data.status == 'fail') {
@@ -545,7 +547,6 @@ Page({
         },
       })
     })
-    // return source
   },
 
   /* 日期与请求数据封装 */

@@ -79,6 +79,7 @@ Page({
       app.rolesReadyCallback = res => {
         this.setData({
           roles: res.data.roles,
+          hasUserInfo: true,
         })
         console.log('rolecallback', res.data.roles)
       }
@@ -96,7 +97,8 @@ Page({
       })
       console.log('canIUse', this.data.canIUse)
     }
-    
+    console.log('canIUse', this.data.canIUse)
+    console.log('hasUserInfo', this.data.hasUserInfo)
   },
 
   getUserInfo: function (e) {
