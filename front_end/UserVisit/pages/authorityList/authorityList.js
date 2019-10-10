@@ -45,24 +45,6 @@ Page({
       page: 1,
       curpage: this.data.curTargetId/this.data.size + 1
     })
-    // console.log('curpage  ',this.data.curpage)
-    // this.requestGetData(this.collectData(this.data.page, this.data.size)).then(res => {
-    //   if (res.status == 'fail' || res.status == 404) {
-    //     this.openConfirm(this.data.requestErrorDialog);
-    //   }
-    //   else {
-    //     var data = res.data
-    //     that.setData({
-    //       // 用户列表
-    //       list: data,
-    //     });
-    //     that.setData({
-    //       page: that.data.page + 1,
-    //     })
-    //   }
-      
-    //   console.log('curpage', that.data.page)
-    // });
     this.showRecords(this.data.curpage).then(res => {
       var list = res;
       that.setData({
@@ -166,14 +148,20 @@ Page({
         method: 'POST',
 
         success: function (res) {
-          console.log("success")
-          console.log(res.data)
-          resolve(res.data)
+          if(res.statusCode == 200){
+            console.log('requestGetData', res)
+            resolve(res.data)
+          }
+          else {
+            var dialog = res.data.data.errMsg
+            that.openConfirm(dialog)
+          }
         },
         fail: function (res) {
-          console.log(res)
-          console.log('fail')
-          reject(source)
+          var dialog = res.data.data.errMsg
+          console.log('requestGetData', res)
+          that.openConfirm(dialog)
+          reject(res)
         },
         complete: function (res) {
           if (res.data.status == 'fail') {
@@ -246,7 +234,7 @@ Page({
 
         mergedAjax = mergedAjax.then(() => {
 
-          return that.requestGetData(that.collectData(that.data.date_begin, that.data.date_last, that.data.page, that.data.size)).then(res => {
+          return that.requestGetData(that.collectData(that.data.page, that.data.size)).then(res => {
             if (res.status == 'fail' || res.status == 404) {
               this.openConfirm(that.data.requestErrorDialog);
             }

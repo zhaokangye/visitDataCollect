@@ -7,7 +7,9 @@
     "pages/dataChange/dataChange",
     "pages/dataChoose/dataChoose",
     "pages/authorityList/authorityList",
-    "pages/authorityChange/authorityChange"
+    "pages/authorityChange/authorityChange",
+    "pages/optionChange/optionChange",
+    "pages/optionList/optionList"
   ],
   "window": {
     "backgroundTextStyle": "light",

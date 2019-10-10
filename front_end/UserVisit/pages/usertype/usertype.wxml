@@ -45,6 +45,12 @@
             <view class="weui-flex__item" bindtap="authorityControl_btn">权限控制</view>
           </view>
         </view>
+        <!-- 选项修改 -->
+        <view class="kind-list__item">
+          <view class="kind-list__item-hd">
+            <view class="weui-flex__item" bindtap="optionControl_btn">选项修改</view>
+          </view>
+        </view>
       </block>
       
     </view>

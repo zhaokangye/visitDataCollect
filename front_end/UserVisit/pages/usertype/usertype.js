@@ -47,6 +47,12 @@ Page({
       url: '../authorityList/authorityList',
     })
   },
+
+  optionControl_btn: function (e) {
+    wx.navigateTo({
+      url: '../optionList/optionList',
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */

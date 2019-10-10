@@ -3,6 +3,7 @@ import * as echarts from '../../ec-canvas/echarts';
 var util = require("../../utils/util.js");
 const app = getApp();
 var pages = getCurrentPages();
+var currPage = pages[pages.length - 1];
 
 var question_word = '/question/countGroupByField';
 
@@ -34,30 +35,32 @@ Page({
     this.setData({
       date_begin: "",
       date_last: "",
-      // allAccompanyNumber: requestGetData(date_begin, date_last, question_word+aan_word)[0].value,
     });
     var data = this.collectData(this.data.accompanyNumberField, this.data.date_begin, this.data.date_last);
-    // this.requestGetData(data, question_word).then(res => {
-    //   console.log(res);
-    //   if(res.status!="fail"){
-    //     this.setData({
-    //       allAccompanyNumber: res.data[0].value
-    //     })
-    //   }
-    //   else{
-    //     this.setData({
-    //       allAccompanyNumber: 0
-    //     })
-    //   }
-    // });
-    
   },
 
   /**
    * 生命周期函数-数据准备完成
    */
   onReady: function (options) {
-    this.refleshChart();
+    // this.refleshChart();
+    var data
+    //accompanyNumber
+    data = this.collectData(this.data.accompanyNumberField, this.data.date_begin, this.data.date_last);
+    this.requestGetData(data, question_word).then(res => {
+      if (res.status != 'success') {
+        var dialog = res.data.errMsg;
+        this.openConfirm(dialog);
+        this.setData({
+          allAccompanyNumber: 0,
+        })
+      }
+      else {
+        this.setData({
+          allAccompanyNumber: res.data[0].value
+        })
+      }
+    });
   },
 
   /** 更新日期后立刻更新数据 **/
@@ -145,29 +148,17 @@ Page({
     date_index: 0,
     collectdate: "",
     // 来访位置
-    ecpie: {
-
-    },
+    ecpie: { },
     // 国内外
-    ecbar1: {
-      
-    },
+    ecbar1: { },
     // 首次二次来访
-    ecbar2: {
-      
-    },
+    ecbar2: { },
     // 是否特殊上访
-    ecbar3: {
-      
-    },
+    ecbar3: { },
     // 问题分类
-    ecbar4: {
-      
-    },
+    ecbar4: { },
     // 解决方式
-    ecpie_solution: {
-
-    },
+    ecpie_solution: { },
   },
 
  
@@ -176,6 +167,7 @@ Page({
   /** 饼图 **/
   /* 初始化 */
   pieOnInit (e) {
+    console.log(e)
     return this.initPieChart(e.detail.canvas, e.detail.width, e.detail.height)
   },
   initPieChart: function (canvas, width, height) {
@@ -184,28 +176,22 @@ Page({
       height: height
     });
     var data = this.collectData(this.data.vlField, this.data.date_begin, this.data.date_last);
-    // var data = [{ "name": "TIT", "value": 6 }, { "name": "南通", "value": 0 }, { "name": "媒体港", "value": 4 }]
-    // this.requestGetData(data, question_word).then(res => {
-    //   // this.getOption(this.data.vlType).then(e => {
-    //   //   console.log('piechart data', res, e)
-    //   //   var restmp = this.checkEnoughOption(res, e);
-    //   //   canvas.setChart(piechart);
-    //   //   piechart.setOption(this.getPieOption(restmp));
-    //   //   console.log('piechart already', restmp)
-    //   //   return piechart;
-    //   // })
-    //   piechart.setOption(this.getPieOption(res.data));
-    //   console.log('piechart already', res)
-    // });
-    canvas.setChart(piechart);
-    console.log('piechart init');
-    return piechart;
+    this.requestGetData(data, question_word).then(res => {
+      canvas.setChart(piechart);
+      
+      this.setPieOption(piechart, res.data)
+      console.log('piechart init', piechart);
+      return piechart;
+    });
+    // canvas.setChart(piechart);
+    // console.log('piechart init');
+    // return piechart;
   },
 
   /* 动态更改参数 */
   setPieOption: function (chart, source) {
     // chart.clear();
-    chart.setOption(this.getPieOption(source));
+    chart.setOption(this.getPieOption(source), true);
   },
 
   /* 设置样式 */
@@ -221,6 +207,9 @@ Page({
       backgroundColor: "#EDEDED",
       color: ["#66CD00", "#4169E1", "#666666", "#91F2DE"],
       legend: {
+        itemWidth: 20,
+        itemHeigth: 40,
+        itemGap: 10,
         formatter: (params) => {
           for (var x in name) {
             if (params == name[x]) {
@@ -285,76 +274,54 @@ Page({
       width: width,
       height: height
     });
-    // var pages = getCurrentPages()
     var data = this.collectData(this.data.isAbroadField, this.data.date_begin, this.data.date_last);
-    // this.requestGetData(data, question_word).then(res => {
-    //   console.log('bar1chart data',res, this.data.isAbroad);
-    //   // var restmp = res
-    //   bar1chart.setOption(this.getBarOption(res.data));
-    //   console.log('bar1chart already', res)
-    // });
-    canvas.setChart(bar1chart);
-    console.log('bar1chart init');
-    return bar1chart;
-    // setTimeout(function(){}, 2000);
+    this.requestGetData(data, question_word).then(res => {
+      canvas.setChart(bar1chart);
+      console.log('bar1chart init');
+      this.setBarOption(bar1chart, res.data)
+      return bar1chart;
+    });
+    // canvas.setChart(bar1chart);
+    // console.log('bar1chart init');
+    // return bar1chart;
   },
   initBar2Chart: function (canvas, width, height) {
     bar2chart = echarts.init(canvas, null, {
       width: width,
       height: height
     });
-    // var pages = getCurrentPages()
     var data = this.collectData(this.data.vtField, this.data.date_begin, this.data.date_last);
-    // this.requestGetData(data, question_word).then(res => {
-    //   // this.getOption(this.data.vtType).then(e => {
-    //   //   console.log('bar2chart data', res, e);
-    //   //   var restmp = this.checkEnoughOption(res, e);
-    //   //   canvas.setChart(bar2chart);
-    //   //   bar2chart.setOption(this.getBarOption(restmp));
-    //   //   console.log('bar2chart already', restmp)
-    //   //   return bar2chart;
-    //   // });
-    //   console.log('bar2chart data', res, this.data.vt);
-    //   bar2chart.setOption(this.getBarOption(res.data));
-    //   console.log('bar2chart already', res)
-    // });
-    
-    canvas.setChart(bar2chart);
-    console.log('bar2chart init');
-    return bar2chart;
-    // setTimeout(function(){}, 2000);
+    this.requestGetData(data, question_word).then(res => {
+      canvas.setChart(bar2chart);
+      console.log('bar2chart init');
+      this.setBarOption(bar2chart, res.data)
+      return bar2chart;
+    });
+    // canvas.setChart(bar2chart);
+    // console.log('bar2chart init');
+    // return bar2chart;
   },
   initBar3Chart: function (canvas, width, height) {
     bar3chart = echarts.init(canvas, null, {
       width: width,
       height: height
     });
-    // var pages = getCurrentPages()
     var data = this.collectData(this.data.isvField, this.data.date_begin, this.data.date_last);
-    // this.requestGetData(data, question_word).then(res => {
-    //   // this.getOption(this.data.isvType).then(e => {
-    //   //   console.log('bar3chart data', res, e);
-    //   //   var restmp = this.checkEnoughOption(res, e);
-    //   //   canvas.setChart(bar3chart);
-    //   //   bar3chart.setOption(this.getBarOption(restmp));
-    //   //   console.log('bar3chart already', restmp)
-    //   //   return bar3chart;
-    //   // });
-    //   console.log('bar3chart data', res, this.data.isv);
-      
-    //   bar3chart.setOption(this.getBarOption(res.data));
-    //   console.log('bar3chart already', res)
-    // });
-    canvas.setChart(bar3chart);
-    
-    return bar3chart;
-    // setTimeout(function(){}, 2000);
+    this.requestGetData(data, question_word).then(res => {
+      canvas.setChart(bar3chart);
+      console.log('bar3chart init');
+      this.setBarOption(bar3chart, res.data)
+      return bar3chart;
+    });
+    // canvas.setChart(bar3chart);
+    // console.log('bar3chart init');
+    // return bar3chart;
   },
 
   /* 动态更改参数 */
   setBarOption: function (chart, source) {
     // chart.clear();
-    chart.setOption(this.getBarOption(source))
+    chart.setOption(this.getBarOption(source), true)
   },
 
   /* 设置样式 */
@@ -443,29 +410,22 @@ Page({
       width: width,
       height: height
     });
-    // source
-    // var pages = getCurrentPages()
     var data = this.collectData(this.data.qtField, this.data.date_begin, this.data.date_last);
-    // this.requestGetData(data, question_word).then(res => {
-    //   // this.getOption(this.data.qtType).then(e => {
-    //   //   var restmp = this.checkEnoughOption(res, e);
-    //   //   canvas.setChart(bar_queschart);
-    //   //   bar_queschart.setOption(this.getBar_QuesOption(restmp));
-    //   //   console.log('bar_queschart already', restmp)
-    //   //   return bar_queschart;
-    //   // });
-    //   bar_queschart.setOption(this.getBar_QuesOption(res.data));
-    //   console.log('bar_queschart already', res)
-    // });
-    canvas.setChart(bar_queschart);
-    console.log('bar_queschart init');
-    return bar_queschart;
+    this.requestGetData(data, question_word).then(res => {
+      canvas.setChart(bar_queschart);
+      console.log('bar_queschart init');
+      this.setBar_QuesOption(bar_queschart, res.data)
+      return bar_queschart;
+    });
+    // canvas.setChart(bar_queschart);
+    // console.log('bar_queschart init');
+    // return bar_queschart;
   },
 
   /* 动态更改参数 */
   setBar_QuesOption: function (chart, source) {
     // chart.clear();
-    chart.setOption(this.getBar_QuesOption(source));
+    chart.setOption(this.getBar_QuesOption(source), true);
   },
 
   /* 设置样式 */
@@ -482,11 +442,18 @@ Page({
       backgroundColor: "#EDEDED",
       grid: {
         top: 20,
+        left: '15%',
         button: 20,
         // containLabel: true
       },
       color: ["#666666"],
-      tooltip: {},
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+          type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+        },
+        confine: true
+      },
       xAxis: {
         type: 'category',
         data: name,
@@ -531,27 +498,15 @@ Page({
       height: height
     });
     var data = this.collectData(this.data.solutionField, this.data.date_begin, this.data.date_last);
-    // this.requestGetData(data, question_word).then(res => {
-    //   // this.getOption(this.data.solutionType).then(e => {
-    //   //   console.log('piesolutionchart data', res, e)
-    //   //   var restmp = this.checkEnoughOption(res, e);
-    //   //   canvas.setChart(piesolutionchart);
-    //   //   piesolutionchart.setOption(this.getPieOption(restmp));
-    //   //   console.log('piechart already', restmp)
-    //   //   return piesolutionchart;
-    //   // })
-    //   piesolutionchart.setOption(this.getPieOption(res.data));
-    //   console.log('piechart already', res)
-    // });
-    canvas.setChart(piesolutionchart);
-    console.log('piesolutionchart init');
-    return piesolutionchart;
-  },
-
-  /* 动态更改参数 */
-  setPieOption: function (chart, source) {
-    // chart.clear();
-    chart.setOption(this.getPieOption(source));
+    this.requestGetData(data, question_word).then(res => {
+      canvas.setChart(piesolutionchart);
+      console.log('piesolutionchart init');
+      this.setPieOption(piesolutionchart, res.data)
+      return piesolutionchart;
+    });
+    // canvas.setChart(piesolutionchart);
+    // console.log('piesolutionchart init');
+    // return piesolutionchart;
   },
 
   /** 请求图的数据  **/
@@ -593,27 +548,27 @@ Page({
     // return source
   },
 
-   /* 日期与请求数据封装 */
+  /* 日期与请求数据封装 */
   collectData: function (fieldGet, date_begin, date_last) {
-      // console.log('collectData', fieldGet, date_begin, date_last);
-      var util = require("../../utils/util.js");
-      var startDate, endDate;
-      if(date_begin==""||date_last==""){
-        startDate = date_begin
-        endDate = date_last
-      }
-      else {
-        startDate = util.formatRealTime(new Date(date_begin + ' 00:00:00'))
-        endDate = util.formatRealTime(new Date(date_last + ' 23:59:59'))
-      }
-      console.log('collectData', fieldGet, startDate, endDate);
-      console.log('date', date_begin, date_last)
-      return {
-        field: fieldGet,
-        startDate: startDate, 
-        endDate: endDate,
-      }
-   },
+    // console.log('collectData', fieldGet, date_begin, date_last);
+    var util = require("../../utils/util.js");
+    var startDate, endDate;
+    if (date_begin == "" || date_last == "") {
+      startDate = date_begin
+      endDate = date_last
+    }
+    else {
+      startDate = util.formatRealTime(new Date(date_begin + ' 00:00:00'))
+      endDate = util.formatRealTime(new Date(date_last + ' 23:59:59'))
+    }
+    console.log('collectData', fieldGet, startDate, endDate);
+    console.log('date', date_begin, date_last)
+    return {
+      field: fieldGet,
+      startDate: startDate,
+      endDate: endDate,
+    }
+  },
 
   /* 判断日期段是否合法 */
   legalDate: function (date_begin, date_last) {
@@ -630,83 +585,59 @@ Page({
     }
   },
 
-   /** 日期变更，刷新图表 **/
-   refleshChart: function () {
-     var data
-     //accompanyNumber
-     data = this.collectData(this.data.accompanyNumberField, this.data.date_begin, this.data.date_last);
-     this.requestGetData(data, question_word).then(res => {
-       if(res.status!='success'){
-         var dialog = res.data.errMsg;
-         this.openConfirm(dialog);
-         this.setData({
-           allAccompanyNumber: 0,
-         })
-       }
-       else{
-         this.setData({
-           allAccompanyNumber: res.data[0].value
-         })
-       }
-     });
+  /** 日期变更，刷新图表 **/
+  refleshChart: function () {
+    var data
+    //accompanyNumber
+    data = this.collectData(this.data.accompanyNumberField, this.data.date_begin, this.data.date_last);
+    this.requestGetData(data, question_word).then(res => {
+      if (res.status != 'success') {
+        var dialog = res.data.errMsg;
+        this.openConfirm(dialog);
+        this.setData({
+          allAccompanyNumber: 0,
+        })
+      }
+      else {
+        this.setData({
+          allAccompanyNumber: res.data[0].value
+        })
+      }
+    });
 
     //  piechart
     // visitLocation
-     data = this.collectData(this.data.vlField, this.data.date_begin, this.data.date_last);
-     this.requestGetData(data, question_word).then(res => {
-      //  this.getOption(this.data.vlType).then(e => {
-        //  var restmp = this.checkEnoughOption(res, e);
-        //  console.log(restmp);
-        //  this.setPieOption(piechart, restmp)
-      //  })
-       this.setPieOption(piechart, res.data)
-     });
+    data = this.collectData(this.data.vlField, this.data.date_begin, this.data.date_last);
+    this.requestGetData(data, question_word).then(res => {
+      this.setPieOption(piechart, res.data)
+    });
 
-     // barchart
-     data = this.collectData(this.data.isAbroadField, this.data.date_begin, this.data.date_last);
-     this.requestGetData(data, question_word).then(res => {
-      //  var restmp = this.checkEnoughOption(res, this.data.isAbroad);
-      //  console.log(restmp);
-      //  this.setBarOption(bar1chart, restmp)
-       this.setBarOption(bar1chart, res.data)
-     });
-     data = this.collectData(this.data.vtField, this.data.date_begin, this.data.date_last);
-     this.requestGetData(data, question_word).then(res => {
-      //  var restmp = this.checkEnoughOption(res, this.data.vt);
-      //  console.log(restmp);
-      //  this.setBarOption(bar2chart, restmp)
-       this.setBarOption(bar2chart, res.data)
-     });
-     data = this.collectData(this.data.isvField, this.data.date_begin, this.data.date_last);
-     this.requestGetData(data, question_word).then(res => {
-      //  var restmp = this.checkEnoughOption(res, this.data.isv);
-      //  console.log(restmp);
-      //  this.setBarOption(bar3chart, restmp)
-       this.setBarOption(bar3chart, res.data)
-     });
+    // barchart
+    data = this.collectData(this.data.isAbroadField, this.data.date_begin, this.data.date_last);
+    this.requestGetData(data, question_word).then(res => {
+      this.setBarOption(bar1chart, res.data)
+    });
+    data = this.collectData(this.data.vtField, this.data.date_begin, this.data.date_last);
+    this.requestGetData(data, question_word).then(res => {
+      this.setBarOption(bar2chart, res.data)
+    });
+    data = this.collectData(this.data.isvField, this.data.date_begin, this.data.date_last);
+    this.requestGetData(data, question_word).then(res => {
+      this.setBarOption(bar3chart, res.data)
+    });
 
-     //bar_queschart
-     data = this.collectData(this.data.qtField, this.data.date_begin, this.data.date_last);
-     this.requestGetData(data, question_word).then(res => {
-      //  this.getOption(this.data.qtType).then(e => {
-      //    var restmp = this.checkEnoughOption(res, e);
-      //    console.log(restmp);
-      //    this.setBar_QuesOption(bar_queschart, restmp)
-      //  })
-       this.setBar_QuesOption(bar_queschart, res.data)
-     });
+    //bar_queschart
+    data = this.collectData(this.data.qtField, this.data.date_begin, this.data.date_last);
+    this.requestGetData(data, question_word).then(res => {
+      this.setBar_QuesOption(bar_queschart, res.data)
+    });
 
     //  piesolutionchart
-     data = this.collectData(this.data.solutionField, this.data.date_begin, this.data.date_last);
-     this.requestGetData(data, question_word).then(res => {
-      //  this.getOption(this.data.solutionType).then(e => {
-      //    var restmp = this.checkEnoughOption(res, e);
-      //    console.log(restmp);
-      //    this.setPieOption(piesolutionchart, restmp)
-      //  })
-       this.setPieOption(piesolutionchart, res.data)
-     });
-   },
+    data = this.collectData(this.data.solutionField, this.data.date_begin, this.data.date_last);
+    this.requestGetData(data, question_word).then(res => {
+      this.setPieOption(piesolutionchart, res.data)
+    });
+  },
 
   /** 验证得到的选项是否足够齐全 **/
   checkEnoughOption: function (source, name) {

@@ -7,16 +7,6 @@ Page({
    */
   data: {
     record: "",
-    // record:{
-    //   id: 0,
-    //   nickname: 'MANA',
-    //   authrity1: 'admin',
-    //   authrity2: 'reception',
-    // },
-    // checkboxItems: [
-    //   { authority: 'admin', value: '0', checked: true },
-    //   { authority: 'reception', value: '1', checked: true }
-    // ],
     checkboxItems: "",
 
     saveRecord: {},
@@ -99,10 +89,18 @@ Page({
           "Authorization": wx.getStorageSync('token'),
         },
         success: function (res) {
-          console.log('success')
-          dialogContent = '提交成功';
-          url = 1;
-          resolve(res)
+          if(res.statusCode == 200){
+            dialogContent = '提交成功';
+            url = 1;
+            resolve(res)
+          }
+          else{
+            console.log('connect fail');
+            console.log(res);
+            // dialogContent = "请勿重复提交";
+            dialogContent = '网络波动，请重试'
+            url = 0;
+          }
         },
         fail: function (res) {
           console.log('connect fail');

@@ -1,15 +1,15 @@
 
 .bar-horizontal{
   width: 100%;
-  height: 15%
+  height: 7.31%
 }
 .bar-vertical{
   width: 100%;
-  height: 60%
+  height: 29.26%
 }
 .pie-vertical{
   width: 100%;
-  height: 50%
+  height: 24.39%
 }
 .notChart__Area{
   /* background-color: #5095f3; */
@@ -21,16 +21,19 @@
   margin: 10px;
 }
 .chart__Area {
-  position: absolute;
+  /* position: absolute;
   top: 10%;
   bottom: 0;
   left: 0;
-  right: 0;
-
+  right: 0; */
+  position: absolute;
+  top: 10%;
+  height: 205%;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
+  /* align-items: center; */
+  /* justify-content: space-between; */
   box-sizing: border-box;
 } 
 .accompanyNumber__Area{

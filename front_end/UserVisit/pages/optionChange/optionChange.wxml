@@ -1,0 +1,46 @@
+<!--pages/optionList/optionChange.wxml-->
+<view class="page">
+  <view class="page__hd">
+    <view class="page__title">问题选项修改</view>
+  </view>
+  <view class="page__bd">
+    <view class="weui-cells__title">下面输入框可输入选项名称</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">字典名</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" placeholder="请输入字典名" value="{{currentDictType}}" bindinput="dictTypeChange"/>
+        </view>
+      </view>
+
+      <block wx:for="{{dictListforshow}}" wx:key="dictName" wx:for-index="listIndex">
+        <view class="weui-cell" id="{{listIndex}}" bindtap="getCurTargetId">
+          <view class="weui-cell__hd">
+            <view class="weui-label">{{item.code}}</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" placeholder="请输入选项名" bindinput="textChange" value="{{item.dictName}}" disabled="{{!item.isExist}}" />
+          </view>
+          <view class="weui-cell__ft">
+            <button class="weui-btn mini-btn" type="warn" size="mini" bindtap="deleteDict" wx:if="{{item.isExist}}">删除</button>
+            <button class="weui-btn mini-btn" type="primary" size="mini" bindtap="restoreDict" wx:elif="{{!item.isExist}}">恢复</button>
+          </view>
+        </view>
+      </block>
+
+      <view class="weui-cell weui-cell_link" bindtap="addMore">
+        <view class="weui-cell__bd">添加更多</view>
+      </view>
+    </view>
+    <!-- 按钮 -->
+    <view class="weui-btn-area">
+      <button class="weui-btn" type="primary" bindtap="showTopTips">确定</button>
+    </view>
+  </view>
+</view>
+
+
+
+
