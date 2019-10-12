@@ -19,6 +19,7 @@ public class Constants {
         QUESTION_TABLE_FIELDS.put("isAbroad","国内外");
         QUESTION_TABLE_FIELDS.put("accompanyNumber", null);
         QUESTION_TABLE_FIELDS.put("solution", "解决方式");
+        QUESTION_TABLE_FIELDS.put("questionnairesNumber",null);
     }
 
     //表字段

@@ -21,6 +21,13 @@
             </if>
             group by NULL
         </if>
+        <if test="field =='questionnairesNumber'">
+            select count(1) as value
+            from question
+            <if test="startDate != null and startDate!='' and endDate!= null and endDate!=''">
+                where visitDate between #{startDate} and #{endDate}
+            </if>
+        </if>
         <if test="dictType != null and dictType !=''">
             select dictName as name,IFNULL(table1.value,0) as value
             from dict
