@@ -3,6 +3,7 @@ package com.kang.visit.config.shiro;
 
 import com.kang.visit.config.jwt.JwtConfig;
 import com.kang.visit.core.entity.JwtToken;
+import com.kang.visit.core.util.CommonTools;
 import com.kang.visit.module.login.dao.WxAccountRepository;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -19,9 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by EalenXie on 2018/11/26 12:12.
@@ -65,7 +64,7 @@ public class ShiroRealmConfig {
                 JwtToken token=(JwtToken)SecurityUtils.getSubject().getPrincipal();
                 String wxOpenId=jwtConfig.getWxOpenIdByToken(token.getToken());
                 SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-                authorizationInfo.setRoles(wxAccountRepository.getRoleByOpenId(wxOpenId));
+                authorizationInfo.setRoles(CommonTools.parseFromRoles(wxAccountRepository.getRoleByOpenId(wxOpenId)));
                 return authorizationInfo;
             }
 

@@ -10,6 +10,8 @@ public class JwtToken implements AuthenticationToken {
 
     private String token;
 
+    private String loginType;
+
     public JwtToken(String token) {
         this.token = token;
     }
@@ -30,5 +32,13 @@ public class JwtToken implements AuthenticationToken {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getLoginType() {
+        return loginType;
+    }
+
+    public void setLoginType(String loginType) {
+        this.loginType = loginType;
     }
 }

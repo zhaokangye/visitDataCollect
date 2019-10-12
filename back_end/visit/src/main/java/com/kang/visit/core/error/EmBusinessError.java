@@ -11,7 +11,9 @@ public enum EmBusinessError implements CommonError {
     NOT_LOGIN(20004,"未登录"),
 
     POSSIBLE_SQL_INJECT(400,"参数不合法，可能出现sql注入"),
-    DATA_NOT_FOUND(400,"找不到数据")
+    DATA_NOT_FOUND(400,"找不到数据"),
+    ROLES_ERROR(400,"角色表中数据出现异常"),
+    DICT_REPEAT(400,"字典出现重复")
     ;
 
     private int errCode;

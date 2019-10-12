@@ -1,8 +1,6 @@
 package com.kang.visit.core.util.constants;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Constants {
@@ -17,9 +15,16 @@ public class Constants {
         QUESTION_TABLE_FIELDS.put("visitLocation", "来访位置");
         QUESTION_TABLE_FIELDS.put("questionType", "问题类型");
         QUESTION_TABLE_FIELDS.put("isSpecialVisit", "是否特殊申诉");
-        QUESTION_TABLE_FIELDS.put("visitType", null);
-        QUESTION_TABLE_FIELDS.put("isAbroad", null);
+        QUESTION_TABLE_FIELDS.put("visitType", "来访类型");
+        QUESTION_TABLE_FIELDS.put("isAbroad","国内外");
         QUESTION_TABLE_FIELDS.put("accompanyNumber", null);
         QUESTION_TABLE_FIELDS.put("solution", "解决方式");
     }
+
+    //表字段
+    public static final String WXACCOUNT_TABLE_ID="userId";
+
+    //角色名
+    public static final String ADMIN="admin";
+    public static final String RECEPTION="reception";
 }

@@ -38,7 +38,7 @@ public class ShiroConfig {
     @Bean
     public DefaultWebSecurityManager securityManager(ShiroRealmConfig shiroRealmConfig) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealms(shiroRealmConfig.allRealm());     //设置realm
+        securityManager.setRealms(shiroRealmConfig.allRealm());     //设置realms
         DefaultSubjectDAO subjectDAO = (DefaultSubjectDAO) securityManager.getSubjectDAO();
         // 关闭自带session
         DefaultSessionStorageEvaluator evaluator = (DefaultSessionStorageEvaluator) subjectDAO.getSessionStorageEvaluator();

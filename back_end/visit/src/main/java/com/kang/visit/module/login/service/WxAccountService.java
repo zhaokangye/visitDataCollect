@@ -3,6 +3,7 @@ package com.kang.visit.module.login.service;
 import com.alibaba.fastjson.JSONObject;
 import com.kang.visit.config.jwt.JwtConfig;
 import com.kang.visit.core.entity.Token;
+import com.kang.visit.core.util.CommonTools;
 import com.kang.visit.module.login.dao.WxAccountRepository;
 import com.kang.visit.module.login.entity.Code2SessionResponse;
 import com.kang.visit.module.login.entity.WxAccount;
@@ -56,7 +57,7 @@ public class WxAccountService {
      * @param code 小程序端 调用 wx.login 获取到的code,用于调用 微信code2session接口
      * @return 返回后端 自定义登陆态 token  基于JWT实现
      */
-    public Token wxUserLogin(String code) {
+    public Token wxUserLogin(String code,String nickName) {
         //1 . code2session返回JSON数据
         String resultJson = code2Session(code);
         //2 . 解析数据
@@ -71,15 +72,18 @@ public class WxAccountService {
                 wxAccount.setWxOpenid(response.getOpenid());    //不存在就新建用户
                 wxAccount.setSessionKey(response.getSession_key());
                 wxAccount.setLastTime(new Date());
+                wxAccount.setNickName(nickName);
                 wxAccountRepository.insert(wxAccount);
+            }else {
+                //4 . 更新sessionKey和 登陆时间
+                wxAccount.setSessionKey(response.getSession_key());
+                wxAccount.setLastTime(new Date());
+                wxAccount.setNickName(nickName);
+                wxAccountRepository.updateById(wxAccount);
             }
-            //4 . 更新sessionKey和 登陆时间
-            wxAccount.setSessionKey(response.getSession_key());
-            wxAccount.setLastTime(new Date());
-            wxAccountRepository.updateById(wxAccount);
             //5 . JWT 返回自定义登陆态 Token
             String token = jwtConfig.createTokenByWxAccount(wxAccount);
-            return new Token(token,wxAccount.getId());
+            return new Token(token, CommonTools.parseFromRoles(wxAccountRepository.getRoleByOpenId(wxAccount.getWxOpenid())));
         }
     }
 }

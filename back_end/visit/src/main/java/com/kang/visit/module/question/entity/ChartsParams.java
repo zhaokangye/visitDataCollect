@@ -1,16 +1,14 @@
 package com.kang.visit.module.question.entity;
 
-import java.sql.Date;
-
 public class ChartsParams {
 
     private String field;
 
     private String dictType;
 
-    private Date startDate;
+    private String startDate;
 
-    private Date endDate;
+    private String endDate;
 
     public String getField() {
         return field;
@@ -28,19 +26,19 @@ public class ChartsParams {
         this.dictType = dictType;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 }

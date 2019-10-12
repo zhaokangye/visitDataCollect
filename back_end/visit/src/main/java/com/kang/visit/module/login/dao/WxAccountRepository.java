@@ -13,5 +13,5 @@ public interface WxAccountRepository extends BaseMapper<WxAccount> {
      */
     WxAccount findByWxOpenid(String wxOpenId);
 
-    Set<String> getRoleByOpenId(String wxOpenid);
+    String getRoleByOpenId(String wxOpenid);
 }

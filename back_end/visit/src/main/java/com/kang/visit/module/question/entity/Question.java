@@ -1,8 +1,11 @@
 package com.kang.visit.module.question.entity;
 
+
 import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableLogic;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
@@ -15,7 +18,6 @@ public class Question {
     private Integer userId;
     private String age;
     private String gender;
-    private String name;
     private String isAbroad;
     private String nationality;
     private Integer accompanyNumber;
@@ -25,8 +27,14 @@ public class Question {
     private String isSpecialVisit;
     private String visitType;
     private String solution;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date visitDate;
+    @TableLogic
     private String stsCd;
+    private String createBy;
+    private Date createTime;
+    private Integer updateBy;
+    private Date updateTime;
 
     public Integer getId() {
         return id;
@@ -58,14 +66,6 @@ public class Question {
 
     public void setGender(String gender) {
         this.gender = gender;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getIsAbroad() {
@@ -156,25 +156,36 @@ public class Question {
         this.stsCd = stsCd;
     }
 
-    @Override
-    public String toString() {
-        return "Question{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", age='" + age + '\'' +
-                ", gender='" + gender + '\'' +
-                ", name='" + name + '\'' +
-                ", isAbroad='" + isAbroad + '\'' +
-                ", nationality='" + nationality + '\'' +
-                ", accompanyNumber=" + accompanyNumber +
-                ", permanentResidence='" + permanentResidence + '\'' +
-                ", questionType='" + questionType + '\'' +
-                ", visitLocation='" + visitLocation + '\'' +
-                ", isSpecialVisit='" + isSpecialVisit + '\'' +
-                ", visitType='" + visitType + '\'' +
-                ", solution='" + solution + '\'' +
-                ", visitDate=" + visitDate +
-                ", stsCd='" + stsCd + '\'' +
-                '}';
+    public String getCreateBy() {
+        return createBy;
     }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Integer getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(Integer updateBy) {
+        this.updateBy = updateBy;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
 }

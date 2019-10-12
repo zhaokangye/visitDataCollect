@@ -18,9 +18,9 @@ public class DictEntity {
 
     private String code;
 
-    private String createBy;
+    private Integer createBy;
 
-    private String updateBy;
+    private Integer updateBy;
 
     public Integer getId() {
         return id;
@@ -62,19 +62,19 @@ public class DictEntity {
         this.code = code;
     }
 
-    public String getCreateBy() {
+    public Integer getCreateBy() {
         return createBy;
     }
 
-    public void setCreateBy(String createBy) {
+    public void setCreateBy(Integer createBy) {
         this.createBy = createBy;
     }
 
-    public String getUpdateBy() {
+    public Integer getUpdateBy() {
         return updateBy;
     }
 
-    public void setUpdateBy(String updateBy) {
+    public void setUpdateBy(Integer updateBy) {
         this.updateBy = updateBy;
     }
 }

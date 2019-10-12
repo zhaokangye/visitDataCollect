@@ -9,8 +9,9 @@
     </select>
 
     <select id="getRoleByOpenId" resultType="String">
-        select roleName
+        select roles
         from role
         where userId=(select id from wxAccount where wxOpenid=#{wxOpenid})
+        and stsCd='A'
     </select>
 </mapper>

@@ -19,6 +19,7 @@ public class WxAccount {
     private Integer id;
     private String wxOpenid;
     private String sessionKey;
+    private String nickName;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastTime;
 
@@ -44,6 +45,14 @@ public class WxAccount {
 
     public void setSessionKey(String sessionKey) {
         this.sessionKey = sessionKey;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public Date getLastTime() {

@@ -1,11 +1,14 @@
 package com.kang.visit.module.question.service;
 
+import com.baomidou.mybatisplus.plugins.Page;
+import com.kang.visit.config.shiro.ShiroKit;
 import com.kang.visit.core.error.BusinessException;
 import com.kang.visit.core.error.EmBusinessError;
 import com.kang.visit.core.util.constants.Constants;
 import com.kang.visit.module.question.dao.QuestionMapper;
 import com.kang.visit.module.question.entity.ChartsParams;
 import com.kang.visit.module.question.entity.Question;
+import com.kang.visit.module.question.entity.QuestionParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,15 @@ public class QuestionService {
     public Question createVisit(Question question){
         this.questionMapper.insert(question);
         return question;
+    }
+
+    public Page<Question> selectQuestionList(Page<Question> page, QuestionParams params){
+        return page.setRecords(questionMapper.selectQuestionList(page,params));
+    }
+
+    public Boolean updateQuestion(Question question){
+        this.questionMapper.updateById(question);
+        return true;
     }
 
     // ${}会带来sql注入的威胁，使用枚举检查参数

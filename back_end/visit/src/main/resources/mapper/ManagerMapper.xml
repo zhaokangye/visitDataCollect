@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kang.visit.module.manager.dao.ManagerMapper">
+
+    <select id="userRolesList" resultType="com.kang.visit.module.manager.entity.UserRoles">
+        select wx.id as userId,nickName,roles
+        from wxAccount wx
+        left join role role
+        on wx.id=role.userId
+        and role.stsCd='A'
+    </select>
+
+</mapper>
+
+

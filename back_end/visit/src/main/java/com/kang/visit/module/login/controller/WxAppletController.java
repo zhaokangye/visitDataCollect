@@ -27,24 +27,14 @@ public class WxAppletController {
      * 返回给小程序端 自定义登陆态 token
      */
     @RequestMapping("/login")
-    public ResponseEntity wxAppletLoginApi(@RequestParam String code) {
+    public ResponseEntity wxAppletLoginApi(@RequestParam String code,@RequestParam(required = false) String nickName) {
         if (code.isEmpty()) {
             Map<String, String> result = new HashMap<>();
-            result.put("msg", "缺少参数code或code不合法");
+            result.put("msg", "缺少参数或参数不合法");
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<>(wxAccountService.wxUserLogin(code), HttpStatus.OK);
+            return new ResponseEntity<>(wxAccountService.wxUserLogin(code,nickName), HttpStatus.OK);
         }
     }
 
-    /**
-     * 需要认证的测试接口  需要 @RequiresAuthentication 注解，则调用此接口需要 header 中携带自定义登陆态 authorization
-     */
-    @RequiresAuthentication
-    @PostMapping("/sayHello")
-    public ResponseEntity sayHello() {
-        Map<String, String> result = new HashMap<>();
-        result.put("words", "hello World");
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
 }

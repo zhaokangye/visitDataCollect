@@ -105,6 +105,14 @@
             <version>3.4.1</version>
         </dependency>
 
+        <!--单元测试相关-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
     </dependencies>
 
     <build>

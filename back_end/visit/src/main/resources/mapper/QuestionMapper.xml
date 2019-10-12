@@ -2,28 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kang.visit.module.question.dao.QuestionMapper">
 
+    <select id="selectQuestionList" resultType="com.kang.visit.module.question.entity.Question">
+      select *
+      from question
+      where stsCd='A'
+      <if test="startDate != null and endDate!= null">
+        and visitDate between #{startDate} and #{endDate}
+      </if>
+      order by visitDate
+    </select>
+
     <select id="countGroupByField" resultType="java.util.Map">
-        <if test="field =='visitType'">
-            select visitType as name,count(1) as value
-            from question
-            <if test="startDate != null and endDate!= null">
-                where visitDate between #{startDate} and #{endDate}
-            </if>
-            group by visitType
-            order by visitType DESC
-        </if>
-        <if test="field =='isAbroad'">
-            select case when isAbroad=0 then '国内' else '国外' end as name,count(1) as value
-            from question
-            <if test="startDate != null and endDate!= null">
-                where visitDate between #{startDate} and #{endDate}
-            </if>
-            group by isAbroad
-        </if>
         <if test="field =='accompanyNumber'">
             select sum(accompanyNumber) as value
             from question
-            <if test="startDate != null and endDate!= null">
+            <if test="startDate != null and startDate!='' and endDate!= null and endDate!=''">
                 where visitDate between #{startDate} and #{endDate}
             </if>
             group by NULL
@@ -34,7 +27,7 @@
             left join(select ${field} as name
             ,count(1) as value
             from question
-            <if test="startDate != null and endDate!= null">
+            <if test="startDate != null and startDate!='' and endDate!= null and endDate!=''">
                 where visitDate between #{startDate} and #{endDate}
             </if>
             group by ${field}) as table1
