@@ -1,26 +1,59 @@
 
 .bar-horizontal{
   width: 100%;
-  height: 7.31%;
+  height: 5.21%;
+  display: flex;
+  flex-direction: row;
+  /* align-items: center; */
+  /* justify-content: space-between; */
   /* height: 15%; */
+}
+.title-chart{
+  width: 100%;
+  height: 7.61%;
+  padding-top: 10px;
+  padding-left: 10px;
+  
+}
+.title-chart__text{
+  font-size: 22px;
+  color: #333;
+  font-style: normal;
+  font-weight: normal;
+  font-family: 'sans-serif'
+}
+.bar-horizontal__label{
+  width: 10%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.bar-horizontal__label-text{
+  font-size: 18px;
+}
+.bar-horizontal__chart{
+  width: 80%;
+  height: 100%;
 }
 .bar-vertical{
   width: 100%;
-  height: 29.26%;
+  height: 30.25%;
   /* height: 60%; */
 }
 .pie-vertical{
   width: 100%;
-  height: 24.39%;
+  height: 25.04%;
   /* height: 50%; */
 }
 .notChart__Area{
   /* background-color: #5095f3; */
-  height: 5%;
+  height: 10%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  /* align-items: center; */
+  justify-content: space-between;
   margin: 10px;
 }
 .chart__Area {
@@ -31,7 +64,7 @@
   right: 0; */
   /* position: absolute; */
   /* top: 10%; */
-  height: 95%;
+  height: 90%;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -51,6 +84,15 @@
 }
 .text__cell{
   /* background-color: #ffffff;  */
-  /* font-size: 18; */
-  color: #666666;
+  font-size: 18px;
+  /* color: #666666; */
+}
+.text__date{
+  border: 1px solid black;
+  padding: 2px;
+}
+.chart__gap{
+  height: 0.26%;
+  width: 100%;
+  background-color: #FFFFFF;
 }

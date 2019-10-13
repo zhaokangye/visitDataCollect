@@ -2,40 +2,90 @@
 <view class="container-chart">
 
   <view class="notChart__Area">
-    <view class="text__cell">
-      <view>总人次：{{allAccompanyNumber}}</view>
-    </view>
     <view class="date__Area">
-        <picker mode="date" value="{{date_begin}}" bindchange="bindDate_BeginChange">
-          <text class="text__cell" space="emsp">{{date_begin?date_begin:"请选择日期上"}}</text>
-        </picker>
-        <text space="emsp"> ~~ </text>
-        <picker mode="date" value="{{date_last}}" bindchange="bindDate_LastChange">
-          <text class="text__cell" space="emsp">{{date_last?date_last:"请选择日期下"}}</text>
-        </picker>
-      </view>
+      <text class="text__cell">日期：</text>
+
+      <picker mode="date" value="{{date_begin}}" bindchange="bindDate_BeginChange">
+        <text class="text__date" space="emsp">{{date_begin?date_begin:"请选择日期上"}}</text>
+      </picker>
+      <text space="emsp">——</text>
+      <picker mode="date" value="{{date_last}}" bindchange="bindDate_LastChange">
+        <text class="text__date" space="emsp">{{date_last?date_last:"请选择日期下"}}</text>
+      </picker>
+    </view>
+
+    <view class="text__cell">
+      <text space="emsp">申诉处理：{{questionnairesNumber}} 起</text>
+    </view>
+
+    <view class="text__cell">
+      <text space="emsp">来访人次：{{allAccompanyNumber}} 人</text>
+    </view>
   </view>
 
   <view class="chart__Area">
+
+    <view class="chart__gap"></view>
+
     <!-- 图表 -->
     <view class="pie-vertical">
       <ec-canvas id="mychart-dom-multi-pie" canvas-id="mychart-multi-pie" ec="{{ ecpie }}" bind:init="pieOnInit" ></ec-canvas>
     </view>
-    <view class="bar-horizontal">
-      <ec-canvas id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar1 }}" bind:init="bar1OnInit"></ec-canvas>
-    </view>
-    <view class="bar-horizontal">
-      <ec-canvas id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar2 }}" bind:init="bar2OnInit"></ec-canvas>
-    </view>
-    <view class="bar-horizontal">
-      <ec-canvas id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar3 }}" bind:init="bar3OnInit"></ec-canvas>
-    </view>
+    <view class="chart__gap"></view>
+
     <view class="bar-vertical">
       <ec-canvas id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar4 }}" bind:init="bar_quesOnInit"></ec-canvas>
     </view>
+    <view class="chart__gap"></view>
+
     <view class="pie-vertical">
       <ec-canvas id="mychart-dom-multi-pie" canvas-id="mychart-multi-pie" ec="{{ ecpie_solution }}" bind:init="pieSolutionOnInit" ></ec-canvas>
     </view>
+    <view class="chart__gap"></view>
+
+    <view class="title-chart">
+      <text class="title-chart__text">{{horizontalBarTitle}}</text>
+    </view>
+
+    <view class="bar-horizontal">
+      <view class="bar-horizontal__label">
+        <text class="bar-horizontal__label-text">{{isAbroad[0].name}}</text>
+      </view>
+      <view class="bar-horizontal__chart">
+        <ec-canvas id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar1 }}" bind:init="bar1OnInit"></ec-canvas>
+      </view>
+      <view class="bar-horizontal__label">
+        <text class="bar-horizontal__label-text">{{isAbroad[1].name}}</text>
+      </view>
+    </view>
+
+    <view class="bar-horizontal">
+      <view class="bar-horizontal__label">
+        <text class="bar-horizontal__label-text">{{vt[0].name}}</text>
+      </view>
+      <view class="bar-horizontal__chart">
+        <ec-canvas id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar2 }}" bind:init="bar2OnInit"></ec-canvas>
+      </view>
+      <view class="bar-horizontal__label">
+        <text class="bar-horizontal__label-text">{{vt[1].name}}</text>
+      </view>
+    </view>
+
+    <view class="bar-horizontal">
+      <view class="bar-horizontal__label">
+        <text class="bar-horizontal__label-text">{{isv[0].name}}</text>
+      </view>
+      <view class="bar-horizontal__chart">
+        <ec-canvas id="mychart-dom-multi-bar" canvas-id="mychart-multi-bar" ec="{{ ecbar3 }}" bind:init="bar3OnInit"></ec-canvas>
+      </view>
+      <view class="bar-horizontal__label">
+        <text class="bar-horizontal__label-text">{{isv[1].name}}</text>
+      </view>
+    </view>
+
+    <!-- <view class="bar-horizontal">
+
+    </view> -->
     
   </view>
   

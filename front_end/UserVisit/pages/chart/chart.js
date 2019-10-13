@@ -33,8 +33,8 @@ Page({
   onLoad: function (options) {
     var DATE = util.formatDate(new Date());
     this.setData({
-      date_begin: "",
-      date_last: "",
+      date_begin: DATE,
+      date_last: DATE,
     });
     var data = this.collectData(this.data.accompanyNumberField, this.data.date_begin, this.data.date_last);
   },
@@ -49,8 +49,8 @@ Page({
     data = this.collectData(this.data.accompanyNumberField, this.data.date_begin, this.data.date_last);
     this.requestGetData(data, question_word).then(res => {
       if (res.status != 'success') {
-        var dialog = res.data.errMsg;
-        this.openConfirm(dialog);
+        // var dialog = res.data.errMsg;
+        // this.openConfirm(dialog);
         this.setData({
           allAccompanyNumber: 0,
         })
@@ -58,6 +58,23 @@ Page({
       else {
         this.setData({
           allAccompanyNumber: res.data[0].value
+        })
+      }
+    });
+
+    //questionnairesNumber
+    data = this.collectData(this.data.questionnairesNumberField, this.data.date_begin, this.data.date_last);
+    this.requestGetData(data, question_word).then(res => {
+      if (res.status != 'success') {
+        // var dialog = res.data.errMsg;
+        // this.openConfirm(dialog);
+        this.setData({
+          questionnairesNumber: 0,
+        })
+      }
+      else {
+        this.setData({
+          questionnairesNumber: res.data[0].value
         })
       }
     });
@@ -118,11 +135,17 @@ Page({
     accompanyNumberType: '来访人数',
     accompanyNumberField: 'accompanyNumber',
 
+    questionnairesNumber: "",
+    questionnairesNumberType: '申诉处理',
+    questionnairesNumberField: 'questionnairesNumber',
+
     // vl:["TIT","南通","媒体港"],
     vlType: '来访位置',
     vlField: 'visitLocation',
+    vlTitle: '三地申诉数据',
 
     // 国内外
+    horizontalBarTitle: '风控数据',
     isAbroad: [{dictName: '国内'}, {dictName: '外籍'}],
     isAbroadType: '国内外',
     isAbroadField: 'isAbroad',
@@ -175,11 +198,12 @@ Page({
       width: width,
       height: height
     });
+    var color = ["#66CD00", "#4169E1", "#666666"]
     var data = this.collectData(this.data.vlField, this.data.date_begin, this.data.date_last);
     this.requestGetData(data, question_word).then(res => {
       canvas.setChart(piechart);
       
-      this.setPieOption(piechart, res.data)
+      this.setPieOption(piechart, res.data, color, this.data.vlTitle)
       console.log('piechart init', piechart);
       return piechart;
     });
@@ -189,13 +213,13 @@ Page({
   },
 
   /* 动态更改参数 */
-  setPieOption: function (chart, source) {
+  setPieOption: function (chart, source, color, title) {
     // chart.clear();
-    chart.setOption(this.getPieOption(source), true);
+    chart.setOption(this.getPieOption(source, color, title), true);
   },
 
   /* 设置样式 */
-  getPieOption: function (source) {
+  getPieOption: function (source, color, title) {
     var name = []
     var value = []
     // 赋值进name
@@ -205,42 +229,45 @@ Page({
     }
     console.log('getPieOption', name, value, source)
     return {
+      title: {
+        show: true,
+        text: title,
+        textStyle: {
+          fontSize: 22,
+        },
+        left: 10,
+        top: 10,
+      },
       backgroundColor: "#EDEDED",
-      color: ["#66CD00", "#4169E1", "#666666", "#91F2DE"],
+      color: color,
       tooltip: {
         position: ['50%', '40%']
       },
       legend: {
-        itemWidth: 20,
-        itemHeigth: 40,
+        itemWidth: 10,
+        itemHeigth: 5,
         itemGap: 10,
         formatter: (params) => {
           for (var x in name) {
             if (params == name[x].name) {
-              return params + ' ' + value[x]
+              return params + '：' + value[x]
             }
           }
         },
         orient: 'vertical',
-        top: 10,
-        left: 10,
+        top: '35%',
+        left: '65%',
         data: name,
       },
       series: [{
         label: {
           normal: {
-            position: 'inside',
-            formatter: '{d}%',
-            fontSize: 14,
-            // align: 'center',
-            textStyle: {
-              color: '#000000'
-            },
+            show: false,
           }
         },
         type: 'pie',
-        center: ['65%', '45%'],
-        radius: [0, '70%'],
+        center: ['35%', '55%'],
+        radius: [0, '60%'],
         data: source,
         itemStyle: {
           emphasis: {
@@ -271,6 +298,10 @@ Page({
     });
     var data = this.collectData(this.data.isAbroadField, this.data.date_begin, this.data.date_last);
     this.requestGetData(data, question_word).then(res => {
+      var datatmp = res.data;
+      this.setData({
+        isAbroad: datatmp,
+      })
       canvas.setChart(bar1chart);
       console.log('bar1chart init');
       this.setBarOption(bar1chart, res.data)
@@ -287,6 +318,10 @@ Page({
     });
     var data = this.collectData(this.data.vtField, this.data.date_begin, this.data.date_last);
     this.requestGetData(data, question_word).then(res => {
+      var datatmp = res.data;
+      this.setData({
+        vt: datatmp,
+      })
       canvas.setChart(bar2chart);
       console.log('bar2chart init');
       this.setBarOption(bar2chart, res.data)
@@ -303,6 +338,10 @@ Page({
     });
     var data = this.collectData(this.data.isvField, this.data.date_begin, this.data.date_last);
     this.requestGetData(data, question_word).then(res => {
+      var datatmp = res.data;
+      this.setData({
+        isv: datatmp,
+      })
       canvas.setChart(bar3chart);
       console.log('bar3chart init');
       this.setBarOption(bar3chart, res.data)
@@ -324,11 +363,11 @@ Page({
     var sum = [source[0].value + source[1].value]
     return {
       backgroundColor: "#EDEDED",
-      color: ["#66CD00", "#666666"],
+      color: ["#63B8FF", "#EE9A00"],
       grid: {
         top: 60,
-        left: 70,
-        right: 70,
+        left: 10,
+        right: 10,
         containLabel: false
       },
       tooltip: {
@@ -365,12 +404,14 @@ Page({
           label: {
             normal: {
               show: true,
-              position: 'insideLeft',
+              position: 'inside',
               // fontSize: 14,
               // fontFamily: 'serif',
-              offset: [-70, 0],
-              color: '#333',
-              formatter: '{a}\n({c})',
+              // offset: [-70, 0],
+              color: '#000000',
+              // formatter: '{a}\n({c})',
+              formatter: '{c}',
+              fontSize: 14,
             }
           },
           data: [source[0].value]
@@ -383,11 +424,13 @@ Page({
           label: {
             normal: {
               show: true,
-              position: 'insideRight',
+              position: 'inside',
               // fontSize: 14,
-              offset: [70, 0],
-              color: '#333',
-              formatter: '{a}\n({c})',
+              // offset: [70, 0],
+              color: '#000000',
+              formatter: '{c}',
+              fontSize: 14,
+              // formatter: '{a}\n({c})',
             }
           },
           data: [source[1].value],
@@ -436,14 +479,23 @@ Page({
     }
     console.log('getBar_QuesOption', name, data, source)
     return {
+      title: {
+        show: true,
+        text: this.data.qtType,
+        textStyle: {
+          fontSize: 22,
+        },
+        left: 10,
+        top: 10,
+      },
       backgroundColor: "#EDEDED",
       grid: {
-        top: 20,
+        top: '20%',
         left: '15%',
         button: 20,
         // containLabel: true
       },
-      color: ["#666666"],
+      color: ["#6B8E23"],
       tooltip: {
         trigger: 'axis',
         axisPointer: {            // 坐标轴指示器，坐标轴触发有效
@@ -470,6 +522,14 @@ Page({
       yAxis: [
         {
           type: 'value',
+          axisTick: {
+            show: false,
+            // alignWithLabel:true
+          },
+          splitLine: {
+            show: false,
+            // alignWithLabel:true
+          },
         }
       ],
       series: [
@@ -477,14 +537,15 @@ Page({
           name: this.data.qtType,
           type: 'bar',
           data: data,
-          label: {
-            normal: {
-              show: true,
-              formatter: params => {
-                return params.data[params.dataIndex + 1]
-              },
-            }
-          }
+          barWidth: 10
+          // label: {
+          //   normal: {
+          //     show: true,
+          //     formatter: params => {
+          //       return params.data[params.dataIndex + 1]
+          //     },
+          //   }
+          // }
         },
       ]
     };
@@ -500,11 +561,12 @@ Page({
       width: width,
       height: height
     });
+    var color = ["#9999CC", "#666666", "#000093"]
     var data = this.collectData(this.data.solutionField, this.data.date_begin, this.data.date_last);
     this.requestGetData(data, question_word).then(res => {
       canvas.setChart(piesolutionchart);
       console.log('piesolutionchart init');
-      this.setPieOption(piesolutionchart, res.data)
+      this.setPieOption(piesolutionchart, res.data, color, this.data.solutionType)
       return piesolutionchart;
     });
     // canvas.setChart(piesolutionchart);
@@ -588,13 +650,13 @@ Page({
 
   /** 日期变更，刷新图表 **/
   refleshChart: function () {
-    var data
+    var data, color
     //accompanyNumber
     data = this.collectData(this.data.accompanyNumberField, this.data.date_begin, this.data.date_last);
     this.requestGetData(data, question_word).then(res => {
       if (res.status != 'success') {
-        var dialog = res.data.errMsg;
-        this.openConfirm(dialog);
+        // var dialog = res.data.errMsg;
+        // this.openConfirm(dialog);
         this.setData({
           allAccompanyNumber: 0,
         })
@@ -606,11 +668,29 @@ Page({
       }
     });
 
+    //questionnairesNumber
+    data = this.collectData(this.data.questionnairesNumberField, this.data.date_begin, this.data.date_last);
+    this.requestGetData(data, question_word).then(res => {
+      if (res.status != 'success') {
+        // var dialog = res.data.errMsg;
+        // this.openConfirm(dialog);
+        this.setData({
+          questionnairesNumber: 0,
+        })
+      }
+      else {
+        this.setData({
+          questionnairesNumber: res.data[0].value
+        })
+      }
+    });
+
     //  piechart
     // visitLocation
     data = this.collectData(this.data.vlField, this.data.date_begin, this.data.date_last);
     this.requestGetData(data, question_word).then(res => {
-      this.setPieOption(piechart, res.data)
+      color = ["#66CD00", "#4169E1", "#666666"]
+      this.setPieOption(piechart, res.data, color, this.data.vlTitle)
     });
 
     // barchart
@@ -636,47 +716,9 @@ Page({
     //  piesolutionchart
     data = this.collectData(this.data.solutionField, this.data.date_begin, this.data.date_last);
     this.requestGetData(data, question_word).then(res => {
-      this.setPieOption(piesolutionchart, res.data)
+      color = ["#9999CC", "#666666", "#000093"]
+      this.setPieOption(piesolutionchart, res.data, color, this.data.solutionType)
     });
-  },
-
-  /** 验证得到的选项是否足够齐全 **/
-  checkEnoughOption: function (source, name) {
-    var forReturn = [];
-    // var i = name.length
-    if(source.status!='fail'){
-      for (var x in name) {
-        var y = 0;
-        for (y; y < source.data.length; y++) {
-          if (name[x].dictName == source.data[y].name) {
-            forReturn[x] = {
-              'name': name[x].dictName,
-              'value': source.data[y].value,
-            };
-            break;
-          }
-        }
-        if (y >= source.data.length) {
-          forReturn[x] = {
-            'name': name[x].dictName,
-            'value': 0,
-          };
-        }
-        console.log(name[x].dictName, forReturn);
-        console.log();
-      }
-    }
-    else{
-      for(var x in name){
-        forReturn[x] = {
-          'name': name[x].dictName,
-          'value': 0,
-        }
-      }
-    }
-    
-    console.log("");
-    return forReturn;
   },
 
   /**得到选项 */
