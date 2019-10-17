@@ -2,7 +2,7 @@
 <view class="page">
     <view class="page__hd">
         <view class="page__title">选项（字典）修改使用说明</view>
-        <!-- <view class="page__desc"></view> -->
+        <view class="page__desc"></view>
     </view>
     <view class="page__bd">
       <view class="weui-article">
@@ -23,7 +23,8 @@
           <view class="weui-article__section">
             <view class="weui-article__h3">1.2.1 编号</view>
             <view class="weui-article__p">
-              规定为0或1。
+              规定为0或1。若非0和1，则其它地方会出现错误，可通过选项修改回来。
+              PS：规定国内是0，国外是1
             </view>
 
             <view class="weui-article__h3">1.2.2 内容</view>
@@ -64,7 +65,8 @@
           <view class="weui-article__section">
             <view class="weui-article__h3">2.2.1 编号</view>
             <view class="weui-article__p">
-              编号从0~99中随意选择，不可重复。届时提交之后会根据数字从小到大进行排列。
+              编号从0~99中随意选择，不可重复。届时提交之后会根据数字从小到大进行排列；编号能够唯一识别该选项，请不要随意修改。
+              PS：若已经修改，可参考3修改回来。
             </view>
 
             <view class="weui-article__h3">2.2.2 内容</view>
@@ -74,7 +76,7 @@
 
             <view class="weui-article__h3">2.2.3 删除与恢复</view>
             <view class="weui-article__p">
-              至少要保证有一项，否则整个字典会删除。
+              至少保持有一项
             </view>
 
             <view class="weui-article__h3">2.2.4 添加更多</view>
@@ -89,6 +91,82 @@
           </view>
         </view>
 
+        <view class="weui-article__h1">3. 初始编号</view>
+        <view class="weui-article__p">
+          选项的初始编号
+        </view>
+        <view class="weui-article__section">
+          <view class="weui-article__h2">3.1 来访位置</view>
+          <view class="weui-article__section">
+            <view class="weui-article__p">
+              0：TIT
+              1：南通
+              2：媒体港
+            </view>
+          </view>
+          <view class="weui-article__h2">3.2 年龄段</view>
+          <view class="weui-article__section">
+            <view class="weui-article__p">
+              0：20以下
+              1：21-30
+              2：31-40
+              3：41-50
+              4：51-60
+              5：60以上
+            </view>
+          </view>
+          <view class="weui-article__h2">3.3 问题类型</view>
+          <view class="weui-article__section">
+            <view class="weui-article__p">
+              0：忘记密码
+              1：账号被盗
+              2：账号被封
+              3：微信支付
+              4：微信公众号
+              5：小程序
+              6：QQ
+              7：游戏
+              8：权力机关调证
+              9：其他
+            </view>
+          </view>
+          <view class="weui-article__h2">3.4 性别</view>
+          <view class="weui-article__section">
+            <view class="weui-article__p">
+              0：男
+              1：女
+            </view>
+          </view>
+          <view class="weui-article__h2">3.5 解决方式</view>
+          <view class="weui-article__section">
+            <view class="weui-article__p">
+              0：指引登记
+              1：指引深圳
+              2：现场解决
+            </view>
+          </view>
+          <view class="weui-article__h2">3.6 是否特殊申诉</view>
+          <view class="weui-article__section">
+            <view class="weui-article__p">
+              0：正常
+              1：异常
+            </view>
+          </view>
+          <view class="weui-article__h2">3.7 国内外</view>
+          <view class="weui-article__section">
+            <view class="weui-article__p">
+              0：国内
+              1：国外
+            </view>
+          </view>
+          <view class="weui-article__h2">3.8 来访类型</view>
+          <view class="weui-article__section">
+            <view class="weui-article__p">
+              0：首次
+              1：多次
+            </view>
+          </view>
+        </view>
       </view>
     </view>
 </view>

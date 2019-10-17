@@ -9,6 +9,8 @@ Page({
   data: {
     date_begin: "",
     date_last: "",
+    date_beginForShow: "",
+    date_lastForShow: '',
 
     questionTime: "",
     showedType: "问题类型",
@@ -47,8 +49,17 @@ Page({
     this.setData({
       date_begin: options.date_begin,
       date_last: options.date_last,
+      
     })
-    
+    var begin = this.data.date_begin;
+    var last = this.data.date_last;
+    console.log('begin', typeof begin);
+    console.log('last', typeof last);
+    // 设置日期
+    this.setData({
+      date_beginForShow: begin.substring(0, 10),
+      date_lastForShow: last.substring(0, 10),
+    }) 
     // this.setData({
     //   list: this.bubbleSort(this.data.list),
     //   // page: this.data.page + 1,
@@ -80,7 +91,7 @@ Page({
   /**
    * 页面定位
    * 当前定位是静态定位，若排版需要变化，则这里也需要变化
-   * 日期的高度为144px，每一个记录的高度为94px
+   * 日期的高度为112px，每一个记录的高度为94px
    */
   pageLocation: function (curTargetId) {
     var location;
@@ -88,7 +99,7 @@ Page({
       location = 0;
     }
     else {
-      location = curTargetId * 104 + 144
+      location = curTargetId * 94 + 112
     }
     wx.pageScrollTo({
       // selector: '#' + curTargetId,

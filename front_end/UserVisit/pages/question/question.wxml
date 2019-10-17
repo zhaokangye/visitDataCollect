@@ -2,10 +2,10 @@
 <view class="page">
   <view class="page__hd">
     <block wx:if="{{isAbroad==0}}">
-      <view class="page__title">{{isAbroadContent[isAbroad].dictName}}用户</view>
+      <view class="page__title">国内用户</view>
     </block>
     <block wx:else>
-      <view class="page__title">{{isAbroadContent[isAbroad].dictName}}用户</view>
+      <view class="page__title">外籍用户</view>
     </block>
   </view>
   <view class="page__bd">

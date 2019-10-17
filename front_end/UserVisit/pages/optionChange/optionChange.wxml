@@ -1,7 +1,7 @@
 <!--pages/optionList/optionChange.wxml-->
 <view class="page">
   <view class="page__hd">
-    <view class="page__title">问题选项修改</view>
+    <view class="page__title">选项修改</view>
   </view>
   <view class="page__bd">
     <view class="weui-cells__title">下面输入框可输入选项名称</view>

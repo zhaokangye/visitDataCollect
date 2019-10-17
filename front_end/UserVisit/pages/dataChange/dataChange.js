@@ -549,10 +549,10 @@ Page({
     var nationnalitylast;
     if (this.data.isAbroad == 0) {
       agelast = this.data.age[this.data.ageIndex].code;
-      nationnalitylast = "null";
+      nationnalitylast = null;
     }
     else if (this.data.isAbroad == 1) {
-      agelast = "null";
+      agelast = null;
       nationnalitylast = this.data.nationality;
     }
 

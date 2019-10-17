@@ -239,8 +239,9 @@ Page({
       dictListforshow: this.data.dictListforshowTmp
     });
     var dictListforshow = this.data.dictListforshow;
+    
     for (var x in dictListforshow) {
-      if(x == dictListforshow.length - 1){
+      if (x == dictListforshow.length - 1) {
         if (dictListforshow[x].isExist && dictListforshow[x].dictName != '') {
           dictValues = dictValues + dictListforshow[x].code + ':' + dictListforshow[x].dictName;
         }
@@ -251,6 +252,7 @@ Page({
         }
       }
     }
+    
     console.log('collectDictValues', dictValues);
     return dictValues
   },
@@ -260,7 +262,7 @@ Page({
    */
   showTopTips: function (e) {
     var url, data, that = this;
-    if (this.codeRepetition() == true) {
+    if (this.codeRepetition() == true && this.optionCheck() == true) {
       if (that.data.isCreateDictType) {
         url = that.data.addDictUrl;
         data = that.addDictCollectData();
@@ -273,12 +275,16 @@ Page({
         console.log('提交成功，其内容为', res)
       })
     }
-    else {
+    else if (this.codeRepetition() == false) {
       var dialog = '编号重复，请重新输入'
       var dialogUrl = 0;
       that.openConfirm(dialog, dialogUrl);
     }
-    
+    else if (this.optionCheck() == false) {
+      var dialog = '至少保留一个选项'
+      var dialogUrl = 0;
+      that.openConfirm(dialog, dialogUrl);
+    }
   },
 
   /**
@@ -466,4 +472,18 @@ Page({
     }
     return true;
   },
+
+  /**
+   * 验证是否没有选项
+   */
+  optionCheck: function () {
+    var dictListforshow = this.data.dictListforshow;
+    var count = 0;
+    for (var x in dictListforshow) {
+      if (dictListforshow[x].isExist == true) {
+        return true;
+      }
+    }
+    return false;
+  }
 })

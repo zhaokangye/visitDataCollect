@@ -60,7 +60,7 @@ Page({
   /**
    * 页面定位
    * 当前定位是静态定位，若排版需要变化，则这里也需要变化
-   * 日期的高度为104px，每一个记录的高度为94px
+   * 日期的高度为112px，每一个记录的高度为94px
    */
   pageLocation: function (curTargetId) {
     var location;
@@ -68,7 +68,7 @@ Page({
       location = 0;
     }
     else {
-      location = curTargetId * 104 + 112
+      location = curTargetId * 94 + 112
     }
     wx.pageScrollTo({
       // selector: '#' + curTargetId,
