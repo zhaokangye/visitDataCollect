@@ -49,12 +49,14 @@ Page({
     // solution: ["指引登记", "指引深圳", "现场解决"],
     solution: '',
     solutionType: '解决方式',
-    solutionField: 'soulution',
+    solutionField: 'solution',
     solutionIndex: 0,
 
     accompany_number: 0,
     permanent_residence: "",
     nationality: "",
+
+    getDictListUrl: '/dict/getDictListForQuestion',
 
     isEmpty: false,
     isAbroad: 2,
@@ -128,18 +130,21 @@ Page({
   },
 
   bindVtChange: function (e) {
+    console.log('picker vt 发生选择改变，携带值为', e.detail.value);
     this.setData({
       vtIndex: e.detail.value
     })
   },
 
   bindSolutionChange: function (e) {
+    console.log('picker solution 发生选择改变，携带值为', e.detail.value);
     this.setData({
       solutionIndex: e.detail.value
     })
   },
 
   bindDateChange: function (e) {
+    console.log('picker date 发生选择改变，携带值为', e.detail.value);
     this.setData({
       date: e.detail.value
     })
@@ -272,7 +277,7 @@ Page({
    */
   ageGetNC: function () {
     var that = this;
-    that.getOption(that.data.ageType).then(res => {
+    that.getOption(that.data.ageField).then(res => {
       that.setData({
         age: res,
       })
@@ -286,7 +291,7 @@ Page({
   },
   genderGetNC: function () {
     var that = this
-    that.getOption(that.data.genderType).then(res => {
+    that.getOption(that.data.genderField).then(res => {
       that.setData({
         gender: res,
       })
@@ -299,7 +304,7 @@ Page({
   },
   qtGetNC: function () {
     var that = this
-    that.getOption(that.data.qtType).then(res => {
+    that.getOption(that.data.qtField).then(res => {
       that.setData({
         qt: res,
       })
@@ -311,7 +316,7 @@ Page({
   },
   vlGetNC: function () {
     var that = this
-    that.getOption(that.data.vlType).then(res => {
+    that.getOption(that.data.vlField).then(res => {
       that.setData({
         vl: res,
       })
@@ -323,7 +328,7 @@ Page({
   },
   solutionGetNC: function () {
     var that = this
-    that.getOption(that.data.solutionType).then(res => {
+    that.getOption(that.data.solutionField).then(res => {
       that.setData({
         solution: res,
       })
@@ -335,7 +340,7 @@ Page({
   },
   isvGetNC: function () {
     var that = this;
-    that.getOption(that.data.isvType).then(res => {
+    that.getOption(that.data.isvField).then(res => {
       that.setData({
         isv: res,
       })
@@ -344,15 +349,10 @@ Page({
         isvIndex: that.setIndexForPicker(that.data.isv, that.data.question.isSpecialVisit),
       })
     })
-    // console.log('isv', that.data.isv, that.data.question.isSpecialVisit)
-    // // 设置初始index
-    // that.setData({
-    //   isvIndex: that.setIndexForPicker(that.data.isv, that.data.question.isSpecialVisit),
-    // })
   },
   vtGetNC: function () {
     var that = this;
-    that.getOption(that.data.vtType).then(res => {
+    that.getOption(that.data.vtField).then(res => {
       that.setData({
         vt: res,
       })
@@ -361,24 +361,20 @@ Page({
         vtIndex: that.setIndexForPicker(that.data.vt, that.data.question.visitType),
       })
     })
-    // // 设置初始index
-    // console.log('vt', that.data.vt, that.data.question.visitType)
-    // that.setData({
-    //   vtIndex: that.setIndexForPicker(that.data.vt, that.data.question.visitType),
-    // })
   },
 
   /**
    * 得到问题的选项
    */
-  getOption: function (type) {
+  getOption: function (field) {
+    var that = this;
     return new Promise(function (resolve, reject) {
       wx.request({
-        url: 'http://47.101.143.247:8080/visit-0.0.1-SNAPSHOT/dict/getDictList',
+        url: 'http://47.101.143.247:8080/visit-0.0.1-SNAPSHOT' + that.data.getDictListUrl,
         // url: '',
         data: {
           // dictType: JSON.stringify(type)
-          dictType: type,
+          field: field,
         },
         header: {
           "Content-type": "application/x-www-form-urlencoded",

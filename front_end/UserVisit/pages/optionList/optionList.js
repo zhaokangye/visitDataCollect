@@ -21,7 +21,7 @@ Page({
 
     // 记录请求url
     // 父字典名字
-    dictTypeList: ['字典增加'],
+    dictTypeList: [],
     dictTypeUrl: '/dict/displayAllDict',
 
     
@@ -42,21 +42,12 @@ Page({
    */
   onShow: function (options) {
     var that = this;
-    // this.showRecords(this.data.curpage).then(res => {
-    //   var list = res;
-    //   that.setData({
-    //     list: list,
-    //   })
-    //   console.log(that.data.list);
-    //   this.pageLocation(this.data.curTargetId)
-    //   console.log('curTargetId', that.data.curTargetId)
-    // })
     this.requestGetDict().then(res => {
       var dictTypeList = res.data
       console.log('requestFinish', res)
 
       for (var x in dictTypeList) {
-        var list = 'dictTypeList[' + [parseInt(x) + 1] + ']';
+        var list = 'dictTypeList[' + [parseInt(x)] + ']';
         that.setData({
           [list]: dictTypeList[x],
         })
@@ -69,7 +60,7 @@ Page({
   /**
    * 页面定位
    * 当前定位是静态定位，若排版需要变化，则这里也需要变化
-   * 日期的高度为144px，每一个记录的高度为94px
+   * 日期的高度为104px，每一个记录的高度为94px
    */
   pageLocation: function (curTargetId) {
     var location;

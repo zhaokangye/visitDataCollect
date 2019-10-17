@@ -30,7 +30,7 @@
         <!-- 图表 -->
         <view class="kind-list__item" >
           <view class="kind-list__item-hd">
-            <view class="weui-flex__item" bindtap="chart_btn">图表</view>
+            <view class="weui-flex__item" bindtap="chart_btn">数据统计</view>
           </view>
         </view>
         <!-- 数据修改 -->
