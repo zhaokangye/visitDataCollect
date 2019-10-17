@@ -1,0 +1,95 @@
+<!--pages/optionChange/userManual.wxml-->
+<view class="page">
+    <view class="page__hd">
+        <view class="page__title">选项（字典）修改使用说明</view>
+        <!-- <view class="page__desc"></view> -->
+    </view>
+    <view class="page__bd">
+      <view class="weui-article">
+        
+        <view class="weui-article__h1">1. 只存在两种选择的字典</view>
+        <view class="weui-article__p">
+          如国内外，其中的选项只有国内或国外
+        </view>
+        <view class="weui-article__section">
+          <view class="weui-article__h2">1.1 字典名</view>
+          <view class="weui-article__section">
+            <!-- <view class="weui-article__h3">1. 修改方式</view> -->
+            <view class="weui-article__p">
+              可随意修改。
+            </view>
+          </view>
+          <view class="weui-article__h2">1.2 选项</view>
+          <view class="weui-article__section">
+            <view class="weui-article__h3">1.2.1 编号</view>
+            <view class="weui-article__p">
+              规定为0或1。
+            </view>
+
+            <view class="weui-article__h3">1.2.2 内容</view>
+            <view class="weui-article__p">
+              可随意修改。
+            </view>
+
+            <view class="weui-article__h3">1.2.3 删除与恢复</view>
+            <view class="weui-article__p">
+              无论是删除还是恢复，都要保持选项只有两个，否则会出现错误。
+            </view>
+
+            <view class="weui-article__h3">1.2.4 添加更多</view>
+            <view class="weui-article__p">
+              无论是删除还是恢复，都要保持选项只有两个，否则会出现错误。
+            </view>
+
+            <view class="weui-article__h3">1.2.5 提交</view>
+            <view class="weui-article__p">
+              确认修改的内容与1.2.1~1.2.4无冲突，则可以提交。
+            </view>
+          </view>
+        </view>
+
+        <view class="weui-article__h1">2. 可有多种选择的字典</view>
+        <view class="weui-article__p">
+          如来访位置，其中的选项有TIT、南通等
+        </view>
+        <view class="weui-article__section">
+          <view class="weui-article__h2">2.1 字典名</view>
+          <view class="weui-article__section">
+            <!-- <view class="weui-article__h3">1. 修改方式</view> -->
+            <view class="weui-article__p">
+              可随意修改
+            </view>
+          </view>
+          <view class="weui-article__h2">2.2 选项</view>
+          <view class="weui-article__section">
+            <view class="weui-article__h3">2.2.1 编号</view>
+            <view class="weui-article__p">
+              编号从0~99中随意选择，不可重复。届时提交之后会根据数字从小到大进行排列。
+            </view>
+
+            <view class="weui-article__h3">2.2.2 内容</view>
+            <view class="weui-article__p">
+              可随意修改
+            </view>
+
+            <view class="weui-article__h3">2.2.3 删除与恢复</view>
+            <view class="weui-article__p">
+              至少要保证有一项，否则整个字典会删除。
+            </view>
+
+            <view class="weui-article__h3">2.2.4 添加更多</view>
+            <view class="weui-article__p">
+              最多有100项，也就是编号为0~99。
+            </view>
+
+            <view class="weui-article__h3">2.2.5 提交</view>
+            <view class="weui-article__p">
+              确认修改的内容与2.2.1~2.2.4无冲突，则可以提交。
+            </view>
+          </view>
+        </view>
+
+      </view>
+    </view>
+</view>
+

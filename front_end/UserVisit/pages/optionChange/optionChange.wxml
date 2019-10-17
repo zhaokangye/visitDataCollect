@@ -18,7 +18,8 @@
       <block wx:for="{{dictListforshow}}" wx:key="dictName" wx:for-index="listIndex">
         <view class="weui-cell" id="{{listIndex}}" bindtap="getCurTargetId">
           <view class="weui-cell__hd">
-            <view class="weui-label">{{item.code}}</view>
+            <!-- <view class="weui-label">{{item.code}}</view> -->
+            <input class="weui-label" placeholder="请输入编号" bindinput="codeChange" value="{{item.code}}" disabled="{{!item.isExist}}" type="number"/>
           </view>
           <view class="weui-cell__bd">
             <input class="weui-input" placeholder="请输入选项名" bindinput="textChange" value="{{item.dictName}}" disabled="{{!item.isExist}}" />
@@ -32,6 +33,13 @@
 
       <view class="weui-cell weui-cell_link" bindtap="addMore">
         <view class="weui-cell__bd">添加更多</view>
+      </view>
+
+      
+    </view>
+    <view class="weui-agree" bindtap="userManual">
+      <view class="weui-agree__text">
+        <view class="weui-agree__link" >《使用说明》</view>
       </view>
     </view>
     <!-- 按钮 -->

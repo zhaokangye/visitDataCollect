@@ -198,7 +198,7 @@ Page({
       width: width,
       height: height
     });
-    var color = ["#66CD00", "#4169E1", "#666666"]
+    var color = ["#66CD00", "#4169E1", "#666666", "#AE0000", "#F00078", "#AE00AE", "#A23400", "#804040", "#808040", "#336666"]
     var data = this.collectData(this.data.vlField, this.data.date_begin, this.data.date_last);
     this.requestGetData(data, question_word).then(res => {
       canvas.setChart(piechart);
@@ -561,7 +561,7 @@ Page({
       width: width,
       height: height
     });
-    var color = ["#9999CC", "#666666", "#000093"]
+    var color = ["#9999CC", "#666666", "#000093", "#AE0000", "#F00078", "#AE00AE", "#A23400", "#804040", "#808040", "#336666"]
     var data = this.collectData(this.data.solutionField, this.data.date_begin, this.data.date_last);
     this.requestGetData(data, question_word).then(res => {
       canvas.setChart(piesolutionchart);
@@ -689,7 +689,7 @@ Page({
     // visitLocation
     data = this.collectData(this.data.vlField, this.data.date_begin, this.data.date_last);
     this.requestGetData(data, question_word).then(res => {
-      color = ["#66CD00", "#4169E1", "#666666"]
+      color = ["#66CD00", "#4169E1", "#666666", "#AE0000", "#F00078", "#AE00AE", "#A23400", "#804040", "#808040", "#336666"]
       this.setPieOption(piechart, res.data, color, this.data.vlTitle)
     });
 
@@ -716,7 +716,7 @@ Page({
     //  piesolutionchart
     data = this.collectData(this.data.solutionField, this.data.date_begin, this.data.date_last);
     this.requestGetData(data, question_word).then(res => {
-      color = ["#9999CC", "#666666", "#000093"]
+      color = ["#9999CC", "#666666", "#000093", "#AE0000", "#F00078", "#AE00AE", "#A23400", "#804040", "#808040", "#336666"]
       this.setPieOption(piesolutionchart, res.data, color, this.data.solutionType)
     });
   },

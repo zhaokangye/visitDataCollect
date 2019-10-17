@@ -110,13 +110,16 @@ Page({
           else {
             console.log(res)
             var dialog = res.data.data.errMsg
-            that.openConfirm(dialog)
+            var url = 1;
+            that.openConfirm(dialog, url);
+            resolve(res.data)
           }
         },
         fail: function (res) {
           var dialog = res.data.data.errMsg
           console.log('requestGetDict', res)
-          that.openConfirm(dialog)
+          var url = 1;
+          that.openConfirm(dialog, url);
           reject(res)
         },
         complete: function (res) {
@@ -145,18 +148,25 @@ Page({
         data,
         success: function (res) {
           if (res.statusCode == 200) {
-            console.log('requestGetDict', res)
+            console.log('summitDictList', res)
+            var dialog = '提交成功';
+            var url = 1;
+            that.openConfirm(dialog, url);
             resolve(res.data)
           }
           else {
+            console.log('summitDictList', res)
             var dialog = res.data.data.errMsg
-            that.openConfirm(dialog)
+            var url = 0;
+            that.openConfirm(dialog, url);
+            resolve(res.data)
           }
         },
         fail: function (res) {
+          console.log('summitDictListFail', res)
           var dialog = res.data.data.errMsg
-          console.log('requestGetDict', res)
-          that.openConfirm(dialog)
+          var url = 1;
+          that.openConfirm(dialog, url);
           reject(res)
         },
         complete: function (res) {
@@ -171,8 +181,11 @@ Page({
 
   /**
    * 对话框
+   * url=0 保持在当前页面
+   * url=1 返回上一页面
    */
-  openConfirm: function (dialogContent) {
+  openConfirm: function (dialogContent, url) {
+    var that = this;
     wx.showModal({
       title: '提示',
       content: dialogContent,
@@ -180,11 +193,14 @@ Page({
       showCancel: false,
       success: function (res) {
         console.log(res);
-        if (res.confirm) {
-          console.log('用户点击确定');
+        if (res.confirm && url == 1) {
+          console.log('用户点击确定')
           wx.navigateBack({
-            delta: 1,
+            delta: url,
           })
+        }
+        else {
+          console.log('用户点击确定，但不跳转')
         }
       }
     });
@@ -222,19 +238,16 @@ Page({
     this.setData({
       dictListforshow: this.data.dictListforshowTmp
     });
-    var code = 0;
     var dictListforshow = this.data.dictListforshow;
     for (var x in dictListforshow) {
-      if (x == dictListforshow.length - 1) {
+      if(x == dictListforshow.length - 1){
         if (dictListforshow[x].isExist && dictListforshow[x].dictName != '') {
-          dictValues = dictValues + code + ':' + dictListforshow[x].dictName;
-          code += 1;
+          dictValues = dictValues + dictListforshow[x].code + ':' + dictListforshow[x].dictName;
         }
       }
       else {
         if (dictListforshow[x].isExist && dictListforshow[x].dictName != '') {
-          dictValues = dictValues + code + ':' + dictListforshow[x].dictName + ',';
-          code += 1;
+          dictValues = dictValues + dictListforshow[x].code + ':' + dictListforshow[x].dictName + ',';
         }
       }
     }
@@ -247,18 +260,25 @@ Page({
    */
   showTopTips: function (e) {
     var url, data, that = this;
-    if(that.data.isCreateDictType){
-      url = that.data.addDictUrl;
-      data = that.addDictCollectData();
+    if (this.codeRepetition() == true) {
+      if (that.data.isCreateDictType) {
+        url = that.data.addDictUrl;
+        data = that.addDictCollectData();
+      }
+      else {
+        url = that.data.updateDictUrl;
+        data = that.updateDictCollectData();
+      }
+      that.summitDictList(data, url).then(res => {
+        console.log('提交成功，其内容为', res)
+      })
     }
     else {
-      url = that.data.updateDictUrl;
-      data = that.updateDictCollectData();
+      var dialog = '编号重复，请重新输入'
+      var dialogUrl = 0;
+      that.openConfirm(dialog, dialogUrl);
     }
-    that.summitDictList(data, url).then(res => {
-      console.log('提交成功，其内容为', res)
-      that.openConfirm('提交成功')
-    })
+    
   },
 
   /**
@@ -277,7 +297,8 @@ Page({
   getCurTargetId: function (e) {
     console.log('currentTarget.id', e.currentTarget);
     this.setData({
-      curTargetId: e.currentTarget.id
+      curTargetId: e.currentTarget.id,
+      dictListforshow: this.data.dictListforshowTmp
     })
   },
 
@@ -296,7 +317,23 @@ Page({
   },
 
   /**
-   * 询问是否执行对话框
+   * 编号变化
+   */
+  codeChange: function (e) {
+    console.log('codeChange', e)
+    var curid = this.data.curTargetId;
+    var record = 'dictListforshowTmp[' + curid + '].code';
+    var code = e.detail.value;
+    if(code<=99&&code>=0){
+      this.setData({
+        [record]: code,
+      })
+    }
+    console.log(this.data.dictListforshowTmp[curid])
+  },
+
+  /**
+   * 询问是否执行 对话框
    */
   executeConfirm: function (dialogContent) {
     return new Promise((resolve, reject) => {
@@ -399,5 +436,34 @@ Page({
 
     console.log(that.data.dictListforshowTmp)
     console.log(that.data.dictListforshow)
+  },
+
+  /**
+   * 选项修改使用手册
+   */
+  userManual: function () {
+    wx.navigateTo({
+      url: 'userManual',
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
+    })
+  },
+
+  /**
+   * 验证code是否重复
+   */
+  codeRepetition: function () {
+    var data = this.data.dictListforshow;
+    for (var x in data) {
+      for (var y in data) {
+        if (data[x].isExist && data[x].dictName != '' && data[y].isExist && data[y].dictName != '') {
+          if (x != y && data[x].code == data[y].code) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
   },
 })

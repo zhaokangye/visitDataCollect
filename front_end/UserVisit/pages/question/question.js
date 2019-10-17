@@ -55,7 +55,11 @@ Page({
     getDictListUrl: '/dict/getDictListForQuestion',
 
     isEmpty: false,
+
     isAbroad: 1,
+    isAbroadType: '国内外',
+    isAbroadField: 'isAbroad',
+    isAbroadContent: '',
 
     date: "",
     localdate: "",
@@ -233,6 +237,7 @@ Page({
     this.qtGetNC();
     this.vlGetNC();
     this.solutionGetNC();
+    this.isAbroadGetNC();
   },
 
   /**
@@ -253,6 +258,7 @@ Page({
     that.getOption(that.data.ageField).then(res => {
       that.setData({
         age: res,
+        ageType: res[0].dictType,
       })
     })
   },
@@ -261,6 +267,7 @@ Page({
     that.getOption(that.data.genderField).then(res => {
       that.setData({
         gender: res,
+        genderType: res[0].dictType,
       })
     })
   },
@@ -269,6 +276,7 @@ Page({
     that.getOption(that.data.isvField).then(res => {
       that.setData({
         isv: res,
+        isvType: res[0].dictType,
       })
     })
   },
@@ -277,6 +285,7 @@ Page({
     that.getOption(that.data.vtField).then(res => {
       that.setData({
         vt: res,
+        vtType: res[0].dictType,
       })
     })
   },
@@ -285,14 +294,17 @@ Page({
     that.getOption(that.data.qtField).then(res => {
       that.setData({
         qt: res,
+        qtType: res[0].dictType,
       })
     })
   },
   vlGetNC: function () {
     var that = this
     that.getOption(that.data.vlField).then(res => {
+      console.log(res)
       that.setData({
         vl: res,
+        vlType: res[0].dictType
       })
     })
   },
@@ -301,6 +313,16 @@ Page({
     that.getOption(that.data.solutionField).then(res => {
       that.setData({
         solution: res,
+        solutionType: res[0].dictType,
+      })
+    })
+  },
+  isAbroadGetNC: function () {
+    var that = this
+    that.getOption(that.data.isAbroadField).then(res => {
+      that.setData({
+        isAbroadContent: res,
+        isAbroadType: res[0].dictType,
       })
     })
   },

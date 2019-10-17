@@ -3,20 +3,31 @@
 <view class="page">
   <view class="page__hd">
     <block wx:if="{{isAbroad==0}}">
-      <view class="page__title">国内用户</view>
+      <view class="page__title">{{isAbroadContent[isAbroad].dictName}}用户</view>
     </block>
     <block wx:elif="{{isAbroad==1}}">
-      <view class="page__title">外籍用户</view>
+      <view class="page__title">{{isAbroadContent[isAbroad].dictName}}用户</view>
     </block>
   </view>
   <view class="page__bd">
     <view class="weui-toptips weui-toptips_warn" wx:if="{{isEmpty}}">错误提示</view>
     <view class="weui-cells__title">请填写或选择以下内容</view>
     <view class="weui-cells weui-cells_after-title">
+      <!-- 国内外/isAbroad -->
+      <view class="weui-cell weui-cell_select">
+          <view class="weui-cell__hd weui-cell__hd_in-select-after">
+              <view class="weui-label">{{isAbroadType}}</view>
+          </view>
+          <view class="weui-cell__bd">
+              <picker bindchange="bindIsAbroadChange" value="{{isAbroad}}" range="{{isAbroadContent}}" range-key="dictName">
+                  <view class="weui-select weui-select_in-select-after">{{isAbroadContent[isAbroad].dictName}}</view>
+              </picker>
+          </view>
+      </view>
       <!-- 年龄段/age -->
       <view class="weui-cell weui-cell_select" wx:if="{{isAbroad==0||isAbroad==2}}">
           <view class="weui-cell__hd weui-cell__hd_in-select-after">
-              <view class="weui-label">年龄段</view>
+              <view class="weui-label">{{ageType}}</view>
           </view>
           <view class="weui-cell__bd">
               <picker bindchange="bindAgeChange" value="{{ageIndex}}" range="{{age}}" range-key="dictName">
@@ -27,7 +38,7 @@
       <!-- 性别/gender -->
       <view class="weui-cell weui-cell_select">
           <view class="weui-cell__hd weui-cell__hd_in-select-after">
-              <view class="weui-label">性别</view>
+              <view class="weui-label">{{genderType}}</view>
           </view>
           <view class="weui-cell__bd">
             <picker bindchange="bindGenderChange" value="{{genderIndex}}" range="{{gender}}" range-key="dictName">
@@ -65,7 +76,7 @@
       <!-- 问题类别/question_type -->
       <view class="weui-cell weui-cell_select">
           <view class="weui-cell__hd weui-cell__hd_in-select-after">
-              <view class="weui-label">问题类别</view>
+              <view class="weui-label">{{qtType}}</view>
           </view>
           <view class="weui-cell__bd">
               <picker bindchange="bindQtChange" value="{{qtIndex}}" range="{{qt}}" range-key="dictName">
@@ -76,7 +87,7 @@
       <!-- 来访位置/visit_location -->
       <view class="weui-cell weui-cell_select">
           <view class="weui-cell__hd weui-cell__hd_in-select-after">
-              <view class="weui-label">来访位置</view>
+              <view class="weui-label">{{vlType}}</view>
           </view>
           <view class="weui-cell__bd">
               <picker bindchange="bindVlChange" value="{{vlIndex}}" range="{{vl}}" range-key="dictName">
@@ -87,7 +98,7 @@
       <!-- 是否为特殊上访/is_special_visit -->
       <view class="weui-cell weui-cell_select">
           <view class="weui-cell__hd weui-cell__hd_in-select-after">
-              <view class="weui-label">是否为特殊申诉</view>
+              <view class="weui-label">{{isvType}}</view>
           </view>
           <view class="weui-cell__bd">
               <picker bindchange="bindIsvChange" value="{{isvIndex}}" range="{{isv}}" range-key="dictName">
@@ -98,7 +109,7 @@
       <!-- 来访类型/visitType -->
       <view class="weui-cell weui-cell_select">
           <view class="weui-cell__hd weui-cell__hd_in-select-after">
-              <view class="weui-label">来访类型</view>
+              <view class="weui-label">{{vtType}}</view>
           </view>
           <view class="weui-cell__bd">
               <picker bindchange="bindVtChange" value="{{vtIndex}}" range="{{vt}}" range-key="dictName">
@@ -109,7 +120,7 @@
       <!-- 解决方式/solution -->
       <view class="weui-cell weui-cell_select">
           <view class="weui-cell__hd weui-cell__hd_in-select-after">
-              <view class="weui-label">解决方式</view>
+              <view class="weui-label">{{solutionType}}</view>
           </view>
           <view class="weui-cell__bd">
               <picker bindchange="bindSolutionChange" value="{{solutionIndex}}" range="{{solution}}" range-key="dictName">
@@ -133,6 +144,7 @@
     <!-- 按钮 -->
     <view class="weui-btn-area">
       <button class="weui-btn" type="primary" bindtap="showTopTips">确定</button>
+      <button class="weui-btn" type="warn" bindtap="bindDeleteQuestion">删除</button>
     </view>
   </view>
 </view>

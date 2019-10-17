@@ -57,9 +57,15 @@ Page({
     nationality: "",
 
     getDictListUrl: '/dict/getDictListForQuestion',
+    deleteQuestionUrl: '/question/deleteQuestion',
+    updateQuestionUrl: '/question/updateQuestion',
 
     isEmpty: false,
+
     isAbroad: 2,
+    isAbroadType: '国内外',
+    isAbroadField: 'isAbroad',
+    isAbroadContent: '',
 
     date: "",
     localdate: "",
@@ -150,6 +156,13 @@ Page({
     })
   },
 
+  bindIsAbroadChange: function (e) {
+    console.log('picker isAbroad 发生选择改变，携带值为', e.detail.value);
+    this.setData({
+      isAbroad: e.detail.value
+    })
+  },
+  
   /**
    * 提交按钮
    */
@@ -162,45 +175,44 @@ Page({
       console.log("nationality null");
       dialogContent = "国籍不能为空";
       url = 0;
+      // 弹出消息框
+      console.log(dialogContent);
+      that.openConfirm(dialogContent, url);
     }
     else if (this.data.question.accompanyNumber == "") {
       console.log("accompanyNumber null");
       dialogContent = "来访人数不能为空";
       url = 0;
+      // 弹出消息框
+      console.log(dialogContent);
+      that.openConfirm(dialogContent, url);
     }
     else if (this.data.question.permanentResidence == "") {
       console.log("permanentResidence null");
       dialogContent = "常住地不能为空";
       url = 0;
+      // 弹出消息框
+      console.log(dialogContent);
+      that.openConfirm(dialogContent, url);
     }
     else {
-      wx.request({
-        url: 'http://47.101.143.247:8080/visit-0.0.1-SNAPSHOT/question/updateQuestion',
-        data: {
-          question: JSON.stringify(this.data.question)
-        },
-        method: 'POST',
-        header: {
-          "Content-type": "application/x-www-form-urlencoded",
-          "Authorization": wx.getStorageSync('token'),
-        },
-        success: function (res) {
-          console.log('success')
-
-        },
-        fail: function (res) {
-          console.log('connect fail');
-          console.log(res);
-          // dialogContent = "请勿重复提交";
-
-        },
-      })
-      dialogContent = '提交成功';
-      url = 1;
+      this.summitQuestion(this.data.question, this.data.updateQuestionUrl)
+        // dialogContent = '提交成功';
+        // url = 1;
+        // // 弹出消息框
+        // console.log(dialogContent);
+        // that.openConfirm(dialogContent, url);
+      // })
     }
-    // 弹出消息框
-    console.log(dialogContent);
-    that.openConfirm(dialogContent, url);
+    
+  },
+
+  /**
+   * 删除按钮
+   */
+  bindDeleteQuestion: function () {
+    var that = this;
+    this.deleteQuestion(that.data.question.id, that.data.deleteQuestionUrl);
   },
 
   helloTest: function () {
@@ -209,6 +221,8 @@ Page({
 
   /**
    * 对话框
+   * url=0 保持在当前页面
+   * url=1 返回上一页面
    */
   openConfirm: function (dialogContent, url) {
     var that = this;
@@ -254,6 +268,7 @@ Page({
     });
     this.isvGetNC();
     this.vtGetNC();
+    this.isAbroadGetNC();
   },
 
   /**
@@ -280,6 +295,7 @@ Page({
     that.getOption(that.data.ageField).then(res => {
       that.setData({
         age: res,
+        ageType: res[0].dictType,
       })
       console.log('age', res);
       // 设置初始index
@@ -294,6 +310,7 @@ Page({
     that.getOption(that.data.genderField).then(res => {
       that.setData({
         gender: res,
+        genderType: res[0].dictType,
       })
       // 设置初始index
       that.setData({
@@ -307,6 +324,7 @@ Page({
     that.getOption(that.data.qtField).then(res => {
       that.setData({
         qt: res,
+        qtType: res[0].dictType,
       })
       // 设置初始index
       that.setData({
@@ -319,6 +337,7 @@ Page({
     that.getOption(that.data.vlField).then(res => {
       that.setData({
         vl: res,
+        vlType: res[0].dictType,
       })
       // 设置初始index
       that.setData({
@@ -331,6 +350,7 @@ Page({
     that.getOption(that.data.solutionField).then(res => {
       that.setData({
         solution: res,
+        solutionType: res[0].dictType,
       })
       // 设置初始index
       that.setData({
@@ -343,6 +363,7 @@ Page({
     that.getOption(that.data.isvField).then(res => {
       that.setData({
         isv: res,
+        isvType: res[0].dictType,
       })
       // 设置初始index
       that.setData({
@@ -355,10 +376,117 @@ Page({
     that.getOption(that.data.vtField).then(res => {
       that.setData({
         vt: res,
+        vtType: res[0].dictType,
       })
       // 设置初始index
       that.setData({
         vtIndex: that.setIndexForPicker(that.data.vt, that.data.question.visitType),
+      })
+    })
+  },
+  isAbroadGetNC: function () {
+    var that = this
+    that.getOption(that.data.isAbroadField).then(res => {
+      that.setData({
+        isAbroadContent: res,
+        isAbroadType: res[0].dictType,
+      })
+      console.log(that.data.isAbroadType, that.data.isAbroadContent[that.data.isAbroad])
+    })
+  },
+
+  /**
+   * 提交更改
+   */
+  summitQuestion: function (data, url) {
+    var that = this;
+    return new Promise(function (resolve, reject) {
+      wx.request({
+        url: 'http://47.101.143.247:8080/visit-0.0.1-SNAPSHOT' + url,
+        header: {
+          "Content-type": "application/x-www-form-urlencoded",
+          "Authorization": wx.getStorageSync('token'),
+        },
+        method: 'POST',
+        data: {
+          question: JSON.stringify(data)
+        },
+        success: function (res) {
+          if (res.statusCode == 200) {
+            console.log('summitQuestion', res)
+            var dialog = '提交成功';
+            var url = 1;
+            that.openConfirm(dialog, url);
+            resolve(res.data)
+          }
+          else {
+            var dialog = res.data.data.errMsg;
+            var url = 0;
+            that.openConfirm(dialog, url)
+            resolve(res.data)
+          }
+        },
+        fail: function (res) {
+          var dialog = res.data.data.errMsg
+          console.log('summitQuestion', res)
+          var url = 0;
+          that.openConfirm(dialog, url)
+          reject(res)
+        },
+        complete: function (res) {
+          if (res.data.status == 'fail') {
+            console.log(res.data.data.errMsg)
+          }
+          console.log("complete")
+        },
+      })
+    })
+  },
+
+  /**
+   * 删除记录
+   */
+  deleteQuestion: function (questionId, url) {
+    var that = this;
+    return new Promise(function (resolve, reject) {
+      wx.request({
+        url: 'http://47.101.143.247:8080/visit-0.0.1-SNAPSHOT' + url,
+        header: {
+          "Content-type": "application/x-www-form-urlencoded",
+          "Authorization": wx.getStorageSync('token'),
+        },
+        method: 'POST',
+        data: {
+          questionId: questionId,
+        },
+        success: function (res) {
+          if (res.statusCode == 200) {
+            console.log('deleteQuestion', res)
+            var dialog = '删除成功';
+            var url = 1;
+            that.openConfirm(dialog, url);
+            resolve(res.data)
+          }
+          else {
+            var dialog = res.data.data.errMsg
+            var url = 0;
+            that.openConfirm(dialog, url)
+            resolve(res.data)
+          }
+        },
+        fail: function (res) {
+          var dialog = res.data.data.errMsg
+          var url = 0;
+          console.log('deleteQuestion', res)
+          that.openConfirm(dialog, url)
+          reject(res)
+        },
+        complete: function (res) {
+          if (res.data.status == 'fail') {
+            console.log(res.data.data.errMsg)
+          }
+          console.log("complete")
+        },
       })
     })
   },
@@ -383,13 +511,23 @@ Page({
         method: 'POST',
 
         success: function (res) {
-          console.log(res)
-          console.log("success")
-          resolve(res.data.data)
+          if (res.statusCode == 200) {
+            console.log("getOption", res)
+            resolve(res.data.data)
+          }
+          else {
+            var dialog = res.data.data.errMsg
+            var url = 0;
+            that.openConfirm(dialog)
+            resolve(res.data)
+          }
+          
         },
         fail: function (res) {
-          console.log(res)
-          console.log('fail')
+          var dialog = res.data.data.errMsg
+          var url = 0;
+          console.log('getOption', res)
+          that.openConfirm(dialog, url)
           reject(res)
         },
         complete: function (res) {
