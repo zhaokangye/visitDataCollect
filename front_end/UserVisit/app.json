@@ -9,7 +9,8 @@
     "pages/authorityList/authorityList",
     "pages/authorityChange/authorityChange",
     "pages/optionChange/optionChange",
-    "pages/optionList/optionList"
+    "pages/optionList/optionList",
+    "pages/optionChange/userManual"
   ],
   "window": {
     "backgroundTextStyle": "light",
