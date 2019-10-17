@@ -216,9 +216,14 @@ Page({
         method: 'POST',
 
         success: function (res) {
-          console.log("success")
-          console.log(res.data)
-          resolve(res.data)
+          if (res.statusCode == 200 && res.data.status == 'success') {
+            console.log(res.data)
+            resolve(res.data)
+          }
+          else {
+            var dialog = res.data.data.errMsg;
+            that.openConfirm(dialog);
+          }
         },
         fail: function (res) {
           console.log(res)
@@ -255,9 +260,15 @@ Page({
         method: 'POST',
 
         success: function (res) {
-          console.log(res)
-          console.log("success")
-          resolve(res.data.data)
+          if (res.statusCode == 200 && res.data.status == 'success') {
+            console.log(res)
+            console.log("success")
+            resolve(res.data.data)
+          }
+          else {
+            var dialog = res.data.data.errMsg;
+            that.openConfirm(dialog)
+          }
         },
         fail: function (res) {
           console.log(res)

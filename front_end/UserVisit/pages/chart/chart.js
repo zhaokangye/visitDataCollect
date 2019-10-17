@@ -593,8 +593,16 @@ Page({
 
         success: function (res) {
           // console.log("success")
-          console.log('得到图的数据', res.data)
-          resolve(res.data)
+          if (res.statusCode == 200 && res.data.status == 'success'){
+            console.log('得到图的数据', res.data)
+            resolve(res.data)
+          }
+          else {
+            console.log(res.data.data.errMsg)
+            var dialog = res.data.data.errMsg;
+            var url = 0;
+            that.openConfirm(dialog, url)
+          }
         },
         fail: function (res) {
           console.log(res)
@@ -738,12 +746,21 @@ Page({
         method: 'POST',
 
         success: function (res) {
-          console.log('得到' + type + '字典', res)
-          resolve(res.data.data)
+          if (res.statusCode == 200 && res.data.status == 'success'){
+            console.log('得到' + type + '字典', res)
+            resolve(res.data.data)
+          }
+          else {
+            var dialog = res.data.data.errMsg;
+            var url = 0;
+            that.openConfirm(dialog, url)
+          }
         },
         fail: function (res) {
           console.log(res)
-          console.log('fail')
+          var dialog = res.data.data.errMsg;
+          var url = 0;
+          that.openConfirm(dialog, url)
           reject(res)
         },
         complete: function (res) {

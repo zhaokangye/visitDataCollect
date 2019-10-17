@@ -103,7 +103,7 @@ Page({
           dictType: dictType
         },
         success: function (res) {
-          if (res.statusCode == 200) {
+          if (res.statusCode == 200 && res.data.status == 'success') {
             console.log('requestGetDict', res)
             resolve(res.data)
           }
@@ -147,7 +147,7 @@ Page({
         method: 'POST',
         data,
         success: function (res) {
-          if (res.statusCode == 200) {
+          if (res.statusCode == 200 && res.data.status == 'success') {
             console.log('summitDictList', res)
             var dialog = '提交成功';
             var url = 1;

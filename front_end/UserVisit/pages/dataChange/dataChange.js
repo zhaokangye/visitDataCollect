@@ -412,7 +412,7 @@ Page({
           question: JSON.stringify(data)
         },
         success: function (res) {
-          if (res.statusCode == 200) {
+          if (res.statusCode == 200 && res.data.status == 'success') {
             console.log('summitQuestion', res)
             var dialog = '提交成功';
             var url = 1;
@@ -460,7 +460,7 @@ Page({
           questionId: questionId,
         },
         success: function (res) {
-          if (res.statusCode == 200) {
+          if (res.statusCode == 200 && res.data.status == 'success') {
             console.log('deleteQuestion', res)
             var dialog = '删除成功';
             var url = 1;
@@ -511,7 +511,7 @@ Page({
         method: 'POST',
 
         success: function (res) {
-          if (res.statusCode == 200) {
+          if (res.statusCode == 200 && res.data.status == 'success') {
             console.log("getOption", res)
             resolve(res.data.data)
           }

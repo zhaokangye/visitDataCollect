@@ -143,8 +143,8 @@
     
     <!-- 按钮 -->
     <view class="weui-btn-area">
-      <button class="weui-btn" type="primary" bindtap="showTopTips">确定</button>
-      <button class="weui-btn" type="warn" bindtap="bindDeleteQuestion">删除</button>
+      <button class="weui-btn" type="primary" bindtap="showTopTips">提交修改</button>
+      <button class="weui-btn" type="warn" bindtap="bindDeleteQuestion">删除问卷</button>
     </view>
   </view>
 </view>

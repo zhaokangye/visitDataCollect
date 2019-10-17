@@ -133,7 +133,7 @@ Page({
         method: 'POST',
 
         success: function (res) {
-          if (res.statusCode == 200) {
+          if (res.statusCode == 200 && res.data.status == 'success') {
             console.log('requestGetDict', res)
             resolve(res.data)
           }

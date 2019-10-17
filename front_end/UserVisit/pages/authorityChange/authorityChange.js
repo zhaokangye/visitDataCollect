@@ -89,9 +89,12 @@ Page({
           "Authorization": wx.getStorageSync('token'),
         },
         success: function (res) {
-          if(res.statusCode == 200){
+          if(res.statusCode == 200 && res.data.status == 'success'){
             dialogContent = '提交成功';
             url = 1;
+            // 弹出消息框
+            console.log(dialogContent);
+            that.openConfirm(dialogContent, url);
             resolve(res)
           }
           else{
@@ -100,6 +103,10 @@ Page({
             // dialogContent = "请勿重复提交";
             dialogContent = '网络波动，请重试'
             url = 0;
+            // 弹出消息框
+            console.log(dialogContent);
+            that.openConfirm(dialogContent, url);
+            resolve(res)
           }
         },
         fail: function (res) {
@@ -108,15 +115,13 @@ Page({
           // dialogContent = "请勿重复提交";
           dialogContent = '网络波动，请重试'
           url = 0;
+          // 弹出消息框
+          console.log(dialogContent);
+          that.openConfirm(dialogContent, url);
           reject(res)
         },
       })
-    }).then(res => {
-      // 弹出消息框
-      console.log(dialogContent);
-      that.openConfirm(dialogContent, url);
     })
-    
     
   },
 

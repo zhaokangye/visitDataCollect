@@ -156,16 +156,25 @@ Page({
       console.log("nationality null");
       dialogContent = "国籍不能为空";
       url = 0;
+      // 弹出消息框
+      console.log(dialogContent);
+      that.openConfirm(dialogContent, url);
     }
     else if(this.data.question.accompanyNumber == ""){
       console.log("accompanyNumber null");
       dialogContent = "来访人数不能为空";
       url = 0;
+      // 弹出消息框
+      console.log(dialogContent);
+      that.openConfirm(dialogContent, url);
     }
     else if(this.data.question.permanentResidence == ""){
       console.log("permanentResidence null");
       dialogContent = "常住地不能为空";
       url = 0;
+      // 弹出消息框
+      console.log(dialogContent);
+      that.openConfirm(dialogContent, url);
     }
     else{
       wx.request({
@@ -179,22 +188,35 @@ Page({
           "Authorization": wx.getStorageSync('token'),
         },
         success: function (res) {
-          console.log('success')
-          
+          if(res.statusCode==200 && res.data.status == 'success'){
+            dialogContent = '提交成功';
+            url = 1;
+            // 弹出消息框
+            console.log(dialogContent);
+            that.openConfirm(dialogContent, url);
+          }
+          else {
+            console.log('提交出错', res)
+            dialogContent = res.data.data.errMsg;
+            url = 0;
+            // 弹出消息框
+            console.log(dialogContent);
+            that.openConfirm(dialogContent, url);
+          }
         },
         fail: function (res) {
           console.log('connect fail');
           console.log(res);
+          var dialog = res.data.data.errMsg;
+          var url = 0;
+          that.openConfirm(dialog, url)
           // dialogContent = "请勿重复提交";
           
         },
       })
-      dialogContent = '提交成功';
-      url = 1;
+      
     }
-    // 弹出消息框
-    console.log(dialogContent);
-    that.openConfirm(dialogContent, url);
+    
   },
 
   helloTest:function(){
@@ -343,13 +365,26 @@ Page({
           method: 'POST',
 
           success: function (res) {
-            console.log(res)
-            console.log("success")
-            resolve(res.data.data)
+            if(res.statusCode==200 && res.data.status=='success'){
+              console.log('getOption', res)
+              resolve(res.data.data)
+            }
+            else {
+              console.log('getOption', res)
+              dialogContent = res.data.data.errMsg;
+              url = 0;
+              // 弹出消息框
+              console.log(dialogContent);
+              that.openConfirm(dialogContent, url);
+            }
           },
           fail: function (res) {
-            console.log(res)
-            console.log('fail')
+            console.log('getOption', res)
+            dialogContent = res.data.data.errMsg;
+            url = 0;
+            // 弹出消息框
+            console.log(dialogContent);
+            that.openConfirm(dialogContent, url);
             reject(res)
           },
           complete: function (res) {
@@ -378,14 +413,9 @@ Page({
     // 获取日期与具体时间
     var visitDate;
     if(this.data.date==this.data.localdate){
-      // visitDate = this.data.date + ' ' + util.formatTime(new Date());
       visitDate = util.formatRealTime(new Date(this.data.date + ' ' + util.formatTime(new Date())))
-      // var hour = visitDate.substring(11,13);
-      // hour = parseInt(hour) + 8;
-
     }
     else{
-      // visitDate = this.data.date + ' ' + '00:00:00';
       visitDate = util.formatRealTime(new Date(this.data.date + ' ' + '00:00:00'))
     }
     console.log(visitDate);
