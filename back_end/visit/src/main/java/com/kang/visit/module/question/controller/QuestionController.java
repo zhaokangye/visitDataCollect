@@ -10,13 +10,15 @@ import com.kang.visit.module.question.entity.Question;
 import com.kang.visit.core.response.CommonReturnType;
 import com.alibaba.fastjson.JSONObject;
 import com.kang.visit.module.question.entity.QuestionParams;
+import com.kang.visit.module.question.entity.QuestionVo;
 import com.kang.visit.module.question.service.QuestionService;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -33,18 +35,31 @@ public class QuestionController extends BaseController {
     @RequestMapping("/saveQuestion")
     @ResponseBody
     public CommonReturnType saveQuestion(@RequestParam String question){
-        Question questionEntity= JSONObject.parseObject(question,Question.class);
+        QuestionVo questionVoEntity= JSONObject.parseObject(question,QuestionVo.class);
+        Question questionEntity=new Question();
+        BeanUtils.copyProperties(questionVoEntity,questionEntity);
         questionEntity.setUserId(shiroKit.getId());
+        questionEntity.setCreateTime(new Date());
         questionService.createVisit(questionEntity);
         return CommonReturnType.create(questionEntity.getId());
+    }
+
+    @RequiresRoles("reception")
+    @RequestMapping("/deleteQuestion")
+    @ResponseBody
+    public CommonReturnType deleteQuestion(@RequestParam Integer questionId){
+        return CommonReturnType.create(questionService.deleteQuestion(questionId));
     }
 
     @RequiresRoles("reception")
     @RequestMapping("/updateQuestion")
     @ResponseBody
     public CommonReturnType updateQuestion(@RequestParam String question){
-        Question questionEntity= JSONObject.parseObject(question,Question.class);
+        QuestionVo questionVoEntity= JSONObject.parseObject(question,QuestionVo.class);
+        Question questionEntity=new Question();
+        BeanUtils.copyProperties(questionVoEntity,questionEntity);
         questionEntity.setUpdateBy(shiroKit.getId());
+        questionEntity.setUpdateTime(new Date());
         return CommonReturnType.create(questionService.updateQuestion(questionEntity));
     }
 

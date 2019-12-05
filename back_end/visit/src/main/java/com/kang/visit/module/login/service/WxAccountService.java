@@ -4,10 +4,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.kang.visit.config.jwt.JwtConfig;
 import com.kang.visit.core.entity.Token;
 import com.kang.visit.core.util.CommonTools;
+import com.kang.visit.core.util.constants.Constants;
 import com.kang.visit.module.login.dao.WxAccountRepository;
 import com.kang.visit.module.login.entity.Code2SessionResponse;
 import com.kang.visit.module.login.entity.WxAccount;
+import com.kang.visit.module.manager.dao.ManagerMapper;
+import com.kang.visit.module.manager.entity.Role;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.tomcat.util.bcel.Const;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,10 +23,6 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.Resource;
 import java.util.Date;
 
-/**
- * Created by EalenXie on 2018/11/26 10:50.
- * 实体 行为描述
- */
 @Service
 public class WxAccountService {
 
@@ -39,6 +40,9 @@ public class WxAccountService {
 
     @Resource
     private JwtConfig jwtConfig;
+
+    @Autowired
+    private ManagerMapper managerMapper;
 
     /**
      * 微信的 code2session 接口 获取微信用户信息
@@ -62,18 +66,24 @@ public class WxAccountService {
         String resultJson = code2Session(code);
         //2 . 解析数据
         Code2SessionResponse response = JSONObject.parseObject(resultJson, Code2SessionResponse.class);
-        if (!response.getErrcode().equals("0"))
+        if (!response.getErrcode().equals("0")) {
             throw new AuthenticationException("code2session失败 : " + response.getErrmsg());
-        else {
+        }else {
             //3 . 先从本地数据库中查找用户是否存在
             WxAccount wxAccount = wxAccountRepository.findByWxOpenid(response.getOpenid());
             if (wxAccount == null) {
+                // 不存在就新建用户
                 wxAccount = new WxAccount();
-                wxAccount.setWxOpenid(response.getOpenid());    //不存在就新建用户
+                wxAccount.setWxOpenid(response.getOpenid());
                 wxAccount.setSessionKey(response.getSession_key());
                 wxAccount.setLastTime(new Date());
                 wxAccount.setNickName(nickName);
                 wxAccountRepository.insert(wxAccount);
+                // 默认赋予接待员权限
+                Role role=new Role();
+                role.setUserId(wxAccount.getId());
+//                role.setRoles(Constants.ADMIN+","+Constants.RECEPTION);
+                managerMapper.insert(role);
             }else {
                 //4 . 更新sessionKey和 登陆时间
                 wxAccount.setSessionKey(response.getSession_key());

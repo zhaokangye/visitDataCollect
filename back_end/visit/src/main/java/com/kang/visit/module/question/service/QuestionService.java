@@ -12,6 +12,8 @@ import com.kang.visit.module.question.entity.QuestionParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -31,11 +33,20 @@ public class QuestionService {
     }
 
     public Boolean updateQuestion(Question question){
-        this.questionMapper.updateById(question);
-        return true;
+        if(this.questionMapper.updateById(question).equals(1)){
+            return true;
+        };
+        return false;
     }
 
-    // ${}会带来sql注入的威胁，使用枚举检查参数
+    public Boolean deleteQuestion(Integer questionId){
+        if(this.questionMapper.deleteById(questionId).equals(1)){
+            return true;
+        };
+        return false;
+    }
+
+    // ${}会带来sql注入的威胁
     public List<Map<String,Object>> countGroupByField(ChartsParams params)  {
         if(Constants.QUESTION_TABLE_FIELDS.containsKey(params.getField())){
             String dictType=(String)Constants.QUESTION_TABLE_FIELDS.get(params.getField());

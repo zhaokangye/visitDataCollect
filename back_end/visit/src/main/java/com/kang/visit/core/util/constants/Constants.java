@@ -12,13 +12,13 @@ public class Constants {
 
     public final static Map QUESTION_TABLE_FIELDS = new HashMap();
     static {
-        QUESTION_TABLE_FIELDS.put("visitLocation", "来访位置");
-        QUESTION_TABLE_FIELDS.put("questionType", "问题类型");
-        QUESTION_TABLE_FIELDS.put("isSpecialVisit", "是否特殊申诉");
-        QUESTION_TABLE_FIELDS.put("visitType", "来访类型");
-        QUESTION_TABLE_FIELDS.put("isAbroad","国内外");
+        QUESTION_TABLE_FIELDS.put("visitLocation", "visitLocation");
+        QUESTION_TABLE_FIELDS.put("questionType", "questionType");
+        QUESTION_TABLE_FIELDS.put("isSpecialVisit", "isSpecialVisit");
+        QUESTION_TABLE_FIELDS.put("visitType", "visitType");
+        QUESTION_TABLE_FIELDS.put("isAbroad","isAbroad");
         QUESTION_TABLE_FIELDS.put("accompanyNumber", null);
-        QUESTION_TABLE_FIELDS.put("solution", "解决方式");
+        QUESTION_TABLE_FIELDS.put("solution", "solution");
         QUESTION_TABLE_FIELDS.put("questionnairesNumber",null);
     }
 

@@ -10,11 +10,6 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
-
-/**
- * Created by EalenXie on 2018/11/26 10:44.
- * 小程序后台 某 API
- */
 @RestController
 @RequestMapping("/")
 public class WxAppletController {

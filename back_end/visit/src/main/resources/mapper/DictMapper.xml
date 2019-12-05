@@ -7,6 +7,26 @@
         from dict
     </select>
 
+    <select id="getDictList" resultType="com.kang.visit.module.dict.entity.DictEntity">
+        select *
+        from dict
+        where dictType=#{dictType}
+        order by code+0
+    </select>
+
+    <select id="getDictListForQuestion" resultType="com.kang.visit.module.dict.entity.DictEntity">
+        select *
+        from dict
+        where field=#{field}
+        order by code+0
+    </select>
+
+    <select id="checkDuplicateDict" resultType="int">
+        select count(1) as count
+        from dict
+        where dictType=#{dictType} or field=#{field}
+    </select>
+
 </mapper>
 
 

@@ -14,12 +14,11 @@
 
     <select id="countGroupByField" resultType="java.util.Map">
         <if test="field =='accompanyNumber'">
-            select sum(accompanyNumber) as value
+            select IFNULL(sum(accompanyNumber),0) as value
             from question
             <if test="startDate != null and startDate!='' and endDate!= null and endDate!=''">
                 where visitDate between #{startDate} and #{endDate}
             </if>
-            group by NULL
         </if>
         <if test="field =='questionnairesNumber'">
             select count(1) as value
@@ -39,7 +38,7 @@
             </if>
             group by ${field}) as table1
             on dict.code=table1.name
-            where dictType=#{dictType}
+            where field=#{dictType}
         </if>
     </select>
 

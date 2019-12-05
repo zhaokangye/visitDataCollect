@@ -7,11 +7,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-/**
- * Created by EalenXie on 2018/11/26 10:26.
- * 实体 属性描述 这里只是简单示例，你可以自定义相关用户信息
- */
-
 @TableName("wxAccount")
 public class WxAccount {
 

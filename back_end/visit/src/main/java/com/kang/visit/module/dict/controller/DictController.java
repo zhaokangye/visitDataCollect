@@ -1,5 +1,6 @@
 package com.kang.visit.module.dict.controller;
 
+import com.kang.visit.core.controller.BaseController;
 import com.kang.visit.core.error.BusinessException;
 import com.kang.visit.core.error.EmBusinessError;
 import com.kang.visit.core.response.CommonReturnType;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/dict")
-public class DictController {
+public class DictController extends BaseController {
 
     @Autowired
     private DictService dictService;
@@ -35,17 +36,30 @@ public class DictController {
         return CommonReturnType.create(dictEntityList);
     }
 
+    @RequestMapping("/getDictListForQuestion")
+    @ResponseBody
+    public CommonReturnType getDictListForQuestion(@RequestParam String field){
+        List<DictEntity> dictEntityList=dictService.getDictListForQuestion(field);
+        if(dictEntityList.size()==0){
+            throw new BusinessException(EmBusinessError.DATA_NOT_FOUND);
+        }
+        return CommonReturnType.create(dictEntityList);
+    }
+
     @RequiresRoles("admin")
     @RequestMapping("/addDict")
     @ResponseBody
-    public CommonReturnType addDict(@RequestParam String dictType,@RequestParam String dictValues){
-        return CommonReturnType.create(dictService.addDict(dictType,dictValues));
+    public CommonReturnType addDict(@RequestParam String dictType,@RequestParam String dictValues,@RequestParam String field){
+        return CommonReturnType.create(dictService.addDict(dictType,dictValues,field));
     }
 
     @RequiresRoles("admin")
     @RequestMapping("/updateDict")
     @ResponseBody
     public CommonReturnType updateDict(@RequestParam String prevDictType,@RequestParam String currentDictType,@RequestParam String dictValues){
+        if(currentDictType.isEmpty()&&dictValues.isEmpty()){
+            throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
+        }
         return CommonReturnType.create(dictService.updateDict(prevDictType,currentDictType,dictValues));
     }
 

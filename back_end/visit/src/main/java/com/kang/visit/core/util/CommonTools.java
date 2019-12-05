@@ -27,7 +27,7 @@ public class CommonTools {
         for(String value:values){
             String[] forMap=value.split(":");
             if (forMap.length!=2){
-                throw new BusinessException(EmBusinessError.UNKNOW_ERROR);
+                throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
             }
             Map<String,Object> map=new HashMap<>();
             // 待处理全角空格
@@ -44,6 +44,5 @@ public class CommonTools {
     }
 
     public static void main(String[] args) {
-
     }
 }

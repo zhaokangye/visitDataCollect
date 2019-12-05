@@ -4,6 +4,7 @@ import com.kang.visit.core.error.BusinessException;
 import com.kang.visit.core.error.EmBusinessError;
 import com.kang.visit.core.response.CommonReturnType;
 import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
